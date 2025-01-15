@@ -1,2 +1,64 @@
 <h1>{{title}}</h1>
 <p>Welcome to {{title}}</p>
+
+<div style="height: 2rem;"></div>
+
+{{!-- buatkan kode tabel yang menampilkan nip dan nama anggota --}}
+<table class="table table-striped">
+    <tr class="bg-gray-200 border border-gray-600">
+        <th class="border px-4 py-2 text-center align-middle">No</th>
+        <th class="border px-4 py-2 text-center align-middle">NIP</th>
+        <th class="border px-4 py-2 text-center align-middle">Nama</th>
+        <th class="border px-4 py-2 text-center align-middle">Email</th>
+        <th class="border px-4 py-2 text-center align-middle">Role</th>
+        <th class="border px-4 py-2 text-center align-middle">Jabatan</th>
+        <th class="border px-4 py-2 text-center align-middle">Status</th>
+    </tr>
+    {{#each anggota}}
+    <tr>
+        <td class="border px-4 py-2 text-center align-middle">{{@index}}</td>
+        <td class="border px-4 py-2 text-center align-middle">{{nip}}</td>
+        <td class="border px-4 py-2 text-center align-middle">{{nama}}</td>
+        <td class="border px-4 py-2 text-center align-middle">{{email}}</td>
+        <td class="border px-4 py-2 text-center align-middle">{{role}}</td>
+        <td class="border px-4 py-2 text-center align-middle">{{jabatan}}</td>
+        <td class="border px-4 py-2 text-center align-middle">{{status_anggota}}</td>
+    </tr>
+    {{/each}}
+</table>
+<div style="height: 1rem;"></div>
+
+{{!-- buatkan kode tabel yang menampilkan no, periode_id, dan nama_periode --}}
+<table class="table table-striped">
+    <tr class="bg-gray-200 border border-gray-600">
+        <th class="border px-4 py-2 text-center align-middle">No</th>
+        <th class="border px-4 py-2 text-center align-middle">Periode ID</th>
+        <th class="border px-4 py-2 text-center align-middle">Nama Periode</th>
+    </tr>
+    {{#each periode}}
+    <tr>
+        <td class="border px-4 py-2 text-center align-middle">{{@index}}</td>
+        <td class="border px-4 py-2 text-center align-middle">{{periode_id}}</td>
+        <td class="border px-4 py-2 text-center align-middle">{{nama_periode}}</td>
+    </tr>
+    {{/each}}
+</table>
+<div style="height: 1rem;"></div>
+
+{{!-- buatkan kode tabel yang menampilkan no, indikator_id, nama_indikator dan tipe_indikator --}}
+<table class="table table-striped">
+    <tr class="bg-gray-200 border border-gray-600">
+        <th class="border px-4 py-2 text-center align-middle">No</th>
+        <th class="border px-4 py-2 text-center align-middle">Indikator ID</th>
+        <th class="border px-4 py-2 text-center align-middle">Isi Indikator</th>
+        <th class="border px-4 py-2 text-center align-middle">Tipe Indikator</th>
+    </tr>
+    {{#each indikator}}
+    <tr>
+        <td class="border px-4 py-2 text-center align-middle">{{@index}}</td>
+        <td class="border px-4 py-2 text-center align-middle">{{indikator_id}}</td>
+        <td class="border px-4 py-2 text-center align-middle">{{isi_indikator}}</td>
+        <td class="border px-4 py-2 text-center align-middle">{{tipe_indikator}}</td>
+    </tr>
+    {{/each}}
+</table>
