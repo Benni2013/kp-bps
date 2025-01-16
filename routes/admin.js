@@ -14,4 +14,5 @@ router.get('/manajemen_kriteria', function(req, res, next) {
   res.render('admin/manajemen_kriteria', { title: 'Express' });
 });
 
+
 module.exports = router;
