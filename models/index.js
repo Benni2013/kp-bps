@@ -40,4 +40,6 @@ Object.keys(db).forEach(modelName => {
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 
+console.log('Berhasil konek ke database');
+
 module.exports = db;

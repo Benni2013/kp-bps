@@ -1,37 +1,64 @@
-<div class="flex flex-col self-stretch my-auto text-black max-md:mt-10 max-md:max-w-full">
-              <h1 class="self-start text-5xl font-bold leading-none max-md:max-w-full">
-                Panduan Penggunaan Aplikasi
-              </h1>
-              <article class="flex flex-col px-14 py-11 mt-10 leading-8 rounded-xl border border-solid border-cyan-950 max-md:px-5 max-md:max-w-full">
-                <h2 class="mr-20 text-2xl font-bold max-md:mr-2.5 max-md:max-w-full">
-                  Selamat Datang di Aplikasi Website Pemilihan Pegawai Terbaik di Badan Pusat Statistik Kota Padang
-                </h2>
-                <div class="mt-6 text-base max-md:max-w-full">
-                  Berikut adalah langkah-langkah untuk melakukan voting:
-                  <ol class="list-decimal pl-5 space-y-2">
-                    <li>
-                      Lakukan voting tahap 1 dengan mengklik menu
-                      <span class="font-bold">'voting'</span>
-                      dan memilih tiga pegawai yang dianggap paling mencerminkan BERAKHLAK, disiplin, dan kinerja yang baik dari pilihan kandidat yang ada (yang sudah difilter berdasarkan rata-rata nilai kinerja/CKP dan absensi pegawai
-                      selama triwulan)
-                    </li>
-                    <li>Setiap pemilihan memiliki bobot nilai berbeda:</li>
-                    <ul class="list-disc pl-8 space-y-1">
-                      <li>Pilihan pertama: 3 poin</li>
-                      <li>Pilihan kedua: 2 poin</li>
-                      <li>Pilihan ketiga: 1 poin</li>
-                    </ul>
-                  </ol>
-                  <p class="my-4">
-                    Poin tersebut akan dijumlahkan untuk setiap pegawai yang dipilih dan tiga pegawai dengan poin tertinggi akan menjadi nominasi pada pemilihan pegawai teladan tahap akhir.
-                  </p>
-                  <ol class="list-decimal pl-5" start="3">
-                    <li>
-                      Ketiga kandidat atau nominator yang terpilih dari hasil pemilihan tahap pertama, akan dinilai oleh seluruh pegawai berdasarkan 21 indikator BERAKHLAK pada tahap
-                      <span class="font-bold">'penilaian kriteria'</span>
-                      . Kandidat dengan skor total tertinggi akan terpilih sebagai Pegawai Teladan
-                    </li>
-                  </ol>
-                </div>
-              </article>
-            </div>
+<h1>{{title}}</h1>
+<p>Welcome to {{title}}</p>
+
+<div style="height: 2rem;"></div>
+
+{{!-- buatkan kode tabel yang menampilkan nip dan nama anggota --}}
+<table class="table table-striped">
+    <tr class="bg-gray-200 border border-gray-600">
+        <th class="border px-4 py-2 text-center align-middle">No</th>
+        <th class="border px-4 py-2 text-center align-middle">NIP</th>
+        <th class="border px-4 py-2 text-center align-middle">Nama</th>
+        <th class="border px-4 py-2 text-center align-middle">Email</th>
+        <th class="border px-4 py-2 text-center align-middle">Role</th>
+        <th class="border px-4 py-2 text-center align-middle">Jabatan</th>
+        <th class="border px-4 py-2 text-center align-middle">Status</th>
+    </tr>
+    {{#each anggota}}
+    <tr>
+        <td class="border px-4 py-2 text-center align-middle">{{@index}}</td>
+        <td class="border px-4 py-2 text-center align-middle">{{nip}}</td>
+        <td class="border px-4 py-2 text-center align-middle">{{nama}}</td>
+        <td class="border px-4 py-2 text-center align-middle">{{email}}</td>
+        <td class="border px-4 py-2 text-center align-middle">{{role}}</td>
+        <td class="border px-4 py-2 text-center align-middle">{{jabatan}}</td>
+        <td class="border px-4 py-2 text-center align-middle">{{status_anggota}}</td>
+    </tr>
+    {{/each}}
+</table>
+<div style="height: 1rem;"></div>
+
+{{!-- buatkan kode tabel yang menampilkan no, periode_id, dan nama_periode --}}
+<table class="table table-striped">
+    <tr class="bg-gray-200 border border-gray-600">
+        <th class="border px-4 py-2 text-center align-middle">No</th>
+        <th class="border px-4 py-2 text-center align-middle">Periode ID</th>
+        <th class="border px-4 py-2 text-center align-middle">Nama Periode</th>
+    </tr>
+    {{#each periode}}
+    <tr>
+        <td class="border px-4 py-2 text-center align-middle">{{@index}}</td>
+        <td class="border px-4 py-2 text-center align-middle">{{periode_id}}</td>
+        <td class="border px-4 py-2 text-center align-middle">{{nama_periode}}</td>
+    </tr>
+    {{/each}}
+</table>
+<div style="height: 1rem;"></div>
+
+{{!-- buatkan kode tabel yang menampilkan no, indikator_id, nama_indikator dan tipe_indikator --}}
+<table class="table table-striped">
+    <tr class="bg-gray-200 border border-gray-600">
+        <th class="border px-4 py-2 text-center align-middle">No</th>
+        <th class="border px-4 py-2 text-center align-middle">Indikator ID</th>
+        <th class="border px-4 py-2 text-center align-middle">Isi Indikator</th>
+        <th class="border px-4 py-2 text-center align-middle">Tipe Indikator</th>
+    </tr>
+    {{#each indikator}}
+    <tr>
+        <td class="border px-4 py-2 text-center align-middle">{{@index}}</td>
+        <td class="border px-4 py-2 text-center align-middle">{{indikator_id}}</td>
+        <td class="border px-4 py-2 text-center align-middle">{{isi_indikator}}</td>
+        <td class="border px-4 py-2 text-center align-middle">{{tipe_indikator}}</td>
+    </tr>
+    {{/each}}
+</table>
