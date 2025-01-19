@@ -1,0 +1,125 @@
+<div class="w-full max-w-[1200px] mx-auto p-4">
+  <!-- Header -->
+  <h1 class="text-2xl font-bold mb-6">Hasil Penilaian Pegawai</h1>
+
+  <!-- Table Card -->
+  <div class="bg-white rounded-xl border p-6">
+    <!-- Search and Filter -->
+    <div class="flex justify-between items-center mb-4">
+      <!-- Search -->
+      <div class="relative w-1/2">
+        <input
+          type="text"
+          id="search"
+          placeholder="Search"
+          class="py-3 pl-10 pr-4 block w-full border border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500"
+        >
+        <span class="absolute inset-y-0 left-3 flex items-center text-gray-400">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-4.35-4.35m2.7-5.4a7.2 7.2 0 11-14.4 0 7.2 7.2 0 0114.4 0z" />
+          </svg>
+        </span>
+      </div>
+
+      <!-- Filters Button -->
+      <button
+        type="button"
+        class="py-2 px-4 flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-gray-200 text-gray-500 hover:border-gray-300 hover:text-gray-600"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v3a1 1 0 01-1 1h-5l-4 4-4-4H4a1 1 0 01-1-1V4z" />
+          <path stroke-linecap="round" stroke-linejoin="round" d="M7 13h10l4 4H3l4-4z" />
+        </svg>
+        Filters
+      </button>
+    </div>
+
+    <!-- Table -->
+    <div class="overflow-x-auto">
+      <table class="table-auto w-full border-collapse border border-gray-200 rounded-lg">
+        <thead class="bg-gray-50">
+          <tr>
+            <th class="px-4 py-2 text-left text-sm font-semibold text-gray-600">NO</th>
+            <th class="px-4 py-2 text-left text-sm font-semibold text-gray-600">NAMA/NIP</th>
+            <th class="px-4 py-2 text-left text-sm font-semibold text-gray-600">JABATAN</th>
+            <th class="px-4 py-2 text-left text-sm font-semibold text-gray-600">CKP</th>
+            <th class="px-4 py-2 text-left text-sm font-semibold text-gray-600">ABSEN</th>
+            <th class="px-4 py-2 text-left text-sm font-semibold text-gray-600">TOTAL SKOR</th>
+            <th class="px-4 py-2 text-left text-sm font-semibold text-gray-600">STATUS</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-t">
+            <td class="px-4 py-2 text-sm text-gray-600">1</td>
+            <td class="px-4 py-2 text-sm text-gray-600">Frizqya Dela Pratiwi <br> 192312345678900</td>
+            <td class="px-4 py-2 text-sm text-gray-600">Analis Pengelolaan Keuangan APBN Ahli Muda</td>
+            <td class="px-4 py-2 text-sm text-gray-600">100</td>
+            <td class="px-4 py-2 text-sm text-gray-600">100</td>
+            <td class="px-4 py-2 text-sm text-gray-600">100</td>
+            <td class="px-4 py-2 text-sm text-gray-600">
+              <span class="inline-flex items-center gap-x-2">
+                <span class="h-3 w-3 rounded-full bg-green-500"></span>
+                Memenuhi
+              </span>
+            </td>
+          </tr>
+          <tr class="border-t">
+            <td class="px-4 py-2 text-sm text-gray-600">2</td>
+            <td class="px-4 py-2 text-sm text-gray-600">John Doe <br> 192312345678900</td>
+            <td class="px-4 py-2 text-sm text-gray-600">Asisten Statistisi Terampil</td>
+            <td class="px-4 py-2 text-sm text-gray-600">98</td>
+            <td class="px-4 py-2 text-sm text-gray-600">98</td>
+            <td class="px-4 py-2 text-sm text-gray-600">98</td>
+            <td class="px-4 py-2 text-sm text-gray-600">
+              <span class="inline-flex items-center gap-x-2">
+                <span class="h-3 w-3 rounded-full bg-green-500"></span>
+                Memenuhi
+              </span>
+            </td>
+          </tr>
+          <tr class="border-t">
+            <td class="px-4 py-2 text-sm text-gray-600">3</td>
+            <td class="px-4 py-2 text-sm text-gray-600">Albert Einstein <br> 192312345678900</td>
+            <td class="px-4 py-2 text-sm text-gray-600">Pustakawan Terampil</td>
+            <td class="px-4 py-2 text-sm text-gray-600">95</td>
+            <td class="px-4 py-2 text-sm text-gray-600">95</td>
+            <td class="px-4 py-2 text-sm text-gray-600">95</td>
+            <td class="px-4 py-2 text-sm text-gray-600">
+              <span class="inline-flex items-center gap-x-2">
+                <span class="h-3 w-3 rounded-full bg-red-500"></span>
+                Tidak Memenuhi
+              </span>
+            </td>
+          </tr>
+          <tr class="border-t">
+            <td class="px-4 py-2 text-sm text-gray-600">4</td>
+            <td class="px-4 py-2 text-sm text-gray-600">Jasmine <br> 192312345678900</td>
+            <td class="px-4 py-2 text-sm text-gray-600">Pranata Keuangan APBN Terampil</td>
+            <td class="px-4 py-2 text-sm text-gray-600">90</td>
+            <td class="px-4 py-2 text-sm text-gray-600">90</td>
+            <td class="px-4 py-2 text-sm text-gray-600">90</td>
+            <td class="px-4 py-2 text-sm text-gray-600">
+              <span class="inline-flex items-center gap-x-2">
+                <span class="h-3 w-3 rounded-full bg-red-500"></span>
+                Tidak Memenuhi
+              </span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Save Button -->
+    <div class="mt-6 flex justify-end">
+      <button
+        type="button"
+        class="py-2 px-4 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-black text-white hover:bg-gray-800"
+      >
+        Simpan Kandidat Eligible
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+        </svg>
+      </button>
+    </div>
+  </div>
+</div>
