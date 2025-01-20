@@ -34,6 +34,10 @@ router.get('/manajemen_pemilihan/hasil_penilaian', function (req, res, next) {
   res.render('admin/hasil_penilaian', { title: 'Hasil Penilaian' });
 });
 
+router.get('/manajemen_pemilihan/hasil_kandidat', function (req, res, next) {
+  res.render('admin/hasil_kandidat', { title: 'Hasil Kandidat' });
+});
+
 router.get('/manajemen_kriteria', function(req, res, next) {
   res.render('admin/manajemen_kriteria', { title: 'Express' });
 });
