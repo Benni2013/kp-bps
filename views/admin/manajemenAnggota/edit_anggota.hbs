@@ -1,0 +1,119 @@
+<!-- Card Section -->
+<div class="max-w-3xl px-4 py-10 sm:px-6 lg:px-8 lg:py-14 mx-auto">
+  <!-- Card -->
+  <div class="bg-white rounded-xl shadow p-4 sm:p-7">
+
+    <form>
+      <!-- Section -->
+      <div class="pt-6 first:pt-0 last:pb-0 border-t first:border-transparent border-gray-200">
+        <label for="nama_anggota" class="inline-block text-sm font-medium">
+          Nama Anggota
+        </label>
+
+        <div class="mt-2 space-y-3">
+          <input
+            id="nama_anggota"
+            type="text"
+            class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none"
+            placeholder="Nama Lengkap"
+          />
+        </div>
+      </div>
+      <div class="py-2 first:pt-0 last:pb-0">
+        <label for="NIP" class="inline-block text-sm font-medium">
+          NIP
+        </label>
+
+        <div class="space-y-3">
+          <input id="NIP" type="text" class="px-3 pe-11 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none" placeholder="NIP" />
+        </div>
+      </div>
+
+      <div class="py-2 first:pt-0 last:pb-0">
+        <label for="Jabatan" class="inline-block text-sm font-medium">
+          Jabatan
+        </label>
+
+        <div class="space-y-3">
+          <input id="Jabatan" type="text" class="px-3 pe-11 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none" placeholder="Jabatan" />
+        </div>
+      </div>
+      <div class="py-2 first:pt-0 last:pb-0">
+        <label for="Divisi" class="inline-block text-sm font-medium">
+          Divisi
+        </label>
+
+        <select class="py-2 px-3 pe-9 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none">
+          <option selected>Pilih Bidang</option>
+          <option>Gold</option>
+          <option>Mid 2</option>
+          <option>Exp 3</option>
+        </select>
+      </div>
+      <div class="py-2 first:pt-0 last:pb-0">
+        <label for="Email" class="inline-block text-sm font-medium">
+          Email
+        </label>
+
+        <div class="space-y-3">
+          <input id="Email" type="text" class="px-3 pe-11 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none" placeholder="Email" />
+        </div>
+      </div>
+      <div class="py-2 first:pt-0 last:pb-0">
+        <label for="Jenis Kelamin" class="inline-block text-sm font-medium">
+          Jenis Kelamin
+        </label>
+
+        <select class="py-2 px-3 pe-9 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none">
+          <option selected>Pilih Jenis Kelamin</option>
+          <option>pria</option>
+          <option>jantan</option>
+          <option>liverpool</option>
+        </select>
+      </div>
+      <div class="py-2 first:pt-0 last:pb-0">
+        <label for="Foto Profil" class="inline-block text-sm font-medium mb-2">
+          Foto Profil
+        </label>
+
+        <div class="sm:col-span-9 flex flex-col items-center pb-5">
+          <!-- Gambar Profil -->
+          <img
+            loading="lazy"
+            src="https://cdn.builder.io/api/v1/image/assets/TEMP/d51e6353f840d11b0b9228a36ee2f6a2a8681b6398bb794bd0d91b1d1b155d92?apiKey=0eb9abb28bf34cd7be47a2dfb2f311cb&"
+            class="object-cover rounded-lg w-40 h-30 border border-gray-300 mb-4"
+            alt="Employee Profile Picture"
+          />
+
+          <!-- Tombol Pilih Foto -->
+          <label for="file-upload" class="px-4 py-2 bg-blue-500 text-white font-bold rounded-lg cursor-pointer hover:bg-blue-600 transition duration-200">
+            Edit Foto
+          </label>
+
+          <!-- Input File (Hidden) -->
+          <input type="file" id="file-upload" class="hidden" />
+        </div>
+      </div>
+
+      <!-- End Section -->
+
+    </form>
+
+    <div class="mt-5 flex justify-end gap-x-2">
+      <button
+        type="button"
+        class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 focus:outline-none focus:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none"
+      >
+        Cancel
+      </button>
+      <button
+        type="button"
+        class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none"
+      >
+        Save changes
+      </button>
+    </div>
+  </div>
+  <!-- End Card -->
+</div>
+<!-- End Card Section -->
