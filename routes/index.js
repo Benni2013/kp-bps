@@ -8,16 +8,16 @@ router.get('/', function(req, res, next) {
 
 /* GET beranda page */
 router.get('/beranda', function (req, res, next) {
-  res.render('beranda', { title: 'Beranda' });
+  res.render('user/beranda', { layout: 'layouts/layout' });
 });
 
 /* GET voting page. */
 router.get('/voting', function (req, res, next) {
-  res.render('voting', { title: 'Voting Tahap 1' });
+  res.render('user/voting', { layout: 'layouts/layout' });
 });
 
 router.get('/hasil-voting', function (req, res, next) {
-  res.render('hasil-voting', { title: 'Hasil Voting' });
+  res.render('user/hasil-voting', { layout: 'layouts/layout' });
 });
 
 router.get('/penilaian', function (req, res, next) {
@@ -27,12 +27,39 @@ router.get('/penilaian', function (req, res, next) {
     { category: 'Kemampuan Kerjasama', indicator: 'Kemampuan kerjasama tim' },
     // Tambahkan hingga 21 baris
   ];
-  res.render('penilaian_kriteria', { title: 'Penilaian Kriteria', rows });
+  res.render('user/penilaian_kriteria', { layout: 'layouts/layout', rows });
 });
 
 router.get('/thank-you', function (req, res, next) {
-  res.render('thank-you', { title: 'Terima Kasih' });
+  res.render('user/thank-you', { layout: 'layouts/layout' });
+});
+
+router.get('/belum', function (req, res, next) {
+  res.render('user/penilaian_belum', { layout: 'layouts/layout' });
+});
+
+router.get('/riwayat', function (req, res, next) {
+  res.render('user/riwayat', { layout: 'layouts/layout' });
+});
+
+router.get('/login', function (req, res, next) {
+  res.render('auth/login', { layout: 'layouts/layout_login' });
+});
+
+router.post('/login', function (req, res, next) {
+  res.redirect('/beranda');
+});
+
+//router.get('/profile', function (req, res, next) {
+  //res.render('user/profile', { title: 'Profil' });
+//}); bagian dela
+
+router.get('/change-password', function (req, res, next) {
+  res.render('user/change_password', { layout: 'layouts/layout_change_password' });
 });
 
 
+router.get('/logout', function (req, res, next) {
+  res.redirect('/login'); // Redirect ke halaman login
+});
 module.exports = router;
