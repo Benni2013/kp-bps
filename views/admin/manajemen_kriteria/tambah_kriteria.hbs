@@ -1,0 +1,62 @@
+<!-- Card Section -->
+<div class="flex flex-wrap gap-5 justify-between w-full max-md:max-w-full">
+  <h1 class="text-4xl font-extrabold leading-none text-black">
+    Tambah Kriteria
+  </h1>
+</div>
+<div class="max-w-3xl px-4 py-10 sm:px-6 lg:px-8 lg:py-7 mx-auto">
+  <!-- Card -->
+  <div class="bg-white rounded-xl shadow p-4 sm:p-7">
+
+    <form>
+
+      <div class="pt-6 first:pt-0 last:pb-0 border-t first:border-transparent border-gray-200">
+        <label for="tambah_kriteria" class="inline-block text-sm font-medium">
+          Masukkan Kriteria
+        </label>
+
+        <div class="mt-2 space-y-3">
+          <input
+            id="tambah_kriteria"
+            type="text"
+            class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none"
+            placeholder="Masukkan Kriteria"
+          />
+        </div>
+      </div>
+      <div class="py-2 first:pt-0 last:pb-0">
+        <label for="pilih_kategori" class="inline-block text-sm font-medium">
+          Berorientasi Pelayanan
+        </label>
+
+        <select class="py-2 px-3 pe-9 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none">
+          <option selected>Pilih Kategori</option>
+          <option>pria</option>
+          <option>jantan</option>
+          <option>liverpool</option>
+        </select>
+
+      </div>
+
+      <!-- End Section -->
+
+    </form>
+
+    <div class="mt-5 flex justify-end gap-x-2">
+      <button
+        type="button"
+        class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 focus:outline-none focus:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none"
+      >
+        Batal
+      </button>
+      <button
+        type="button"
+        class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-gray-900 text-white hover:bg-gray-700 focus:outline-none focus:bg-gray-600 disabled:opacity-50 disabled:pointer-events-none"
+      >
+        Simpan
+      </button>
+    </div>
+  </div>
+  <!-- End Card -->
+</div>
+<!-- End Card Section -->
