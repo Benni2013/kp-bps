@@ -34,7 +34,7 @@ router.get('/pemilihan', function(req, res, next) {
   res.render('admin/pemilihan', { title: 'Pemilihan' });
 });
 
-router.get('/pemilihan-berlangsung', function(req, res, next) {
+router.get('/pemilihan_berlangsung', function(req, res, next) {
   res.render('admin/pemilihan_berlangsung', { title: 'Pemilihan Berlangsung' });
 });
 
@@ -42,7 +42,7 @@ router.get('/buat', function(req, res, next) {
   res.render('admin/buat_pemilihan', { title: 'Buat Pemilihan' });
 });
 
-router.get('/input-penilaian', function(req, res, next) {
+router.get('/input_penilaian', function(req, res, next) {
   res.render('admin/input_penilaian', { title: 'Input Penilaian' });
 });
 
