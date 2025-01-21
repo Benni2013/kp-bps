@@ -1,0 +1,132 @@
+<div class="max-w-[85rem] px-4 py-10 sm:px-6 lg:px-8 lg:py-2 mx-auto">
+    <!-- Header dengan Filter -->
+    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
+        <h2 class="text-2xl font-bold text-gray-800">Riwayat Pemilihan</h2>
+        <div class="flex gap-3">
+            <!-- Dropdown Triwulan -->
+            <div class="relative">
+                <button type="button" id="triwulanDropdown" class="py-2 px-4 inline-flex items-center gap-2 text-sm bg-white border border-gray-300 rounded-lg shadow-sm hover:bg-gray-50">
+                    <span id="triwulanText">Triwulan 1</span>
+                    <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                    </svg>
+                </button>
+                <div id="triwulanMenu" class="hidden absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-lg shadow-lg z-10">
+                    <div class="p-2 space-y-1">
+                        <button class="w-full text-left px-4 py-2 text-sm hover:bg-gray-100 rounded-lg" onclick="selectTriwulan('Triwulan 1')">Triwulan 1</button>
+                        <button class="w-full text-left px-4 py-2 text-sm hover:bg-gray-100 rounded-lg" onclick="selectTriwulan('Triwulan 2')">Triwulan 2</button>
+                        <button class="w-full text-left px-4 py-2 text-sm hover:bg-gray-100 rounded-lg" onclick="selectTriwulan('Triwulan 3')">Triwulan 3</button>
+                        <button class="w-full text-left px-4 py-2 text-sm hover:bg-gray-100 rounded-lg" onclick="selectTriwulan('Triwulan 4')">Triwulan 4</button>
+                        <button class="w-full text-left px-4 py-2 text-sm hover:bg-gray-100 rounded-lg" onclick="selectTriwulan('Semester 1')">Semester 1</button>
+                        <button class="w-full text-left px-4 py-2 text-sm hover:bg-gray-100 rounded-lg" onclick="selectTriwulan('Semester 2')">Semester 2</button>
+                        <button class="w-full text-left px-4 py-2 text-sm hover:bg-gray-100 rounded-lg" onclick="selectTriwulan('Tahunan')">Tahunan</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Dropdown Tahun -->
+            <div class="relative">
+                <button type="button" id="tahunDropdown" class="py-2 px-4 inline-flex items-center gap-2 text-sm bg-white border border-gray-300 rounded-lg shadow-sm hover:bg-gray-50">
+                    <span id="tahunText">2024</span>
+                    <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                    </svg>
+                </button>
+                <div id="tahunMenu" class="hidden absolute right-0 mt-2 w-32 bg-white border border-gray-200 rounded-lg shadow-lg z-10">
+                    <div class="p-2 space-y-1" id="tahunOptions">
+                        <!-- Years will be populated by JavaScript -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- List Pemilihan -->
+    <div class="space-y-4">
+        {{#each riwayatData}}
+        <div class="bg-green-100 rounded-xl p-4">
+            <div class="mb-2">
+                <!-- Updated header layout -->
+                <div class="flex justify-between items-start mb-2">
+                    <h3 class="text-lg font-semibold text-gray-800">{{this.judul}}</h3>
+                    <span class="inline-flex items-center gap-1.5 py-1.5 px-3 rounded-full text-xs font-medium bg-green-200 text-green-800">Selesai</span>
+                </div>
+                <div class="flex items-center gap-2 text-sm text-gray-500">
+                    <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5" />
+                    </svg>
+                    <span>{{this.tanggal}}</span>
+                </div>
+                
+            </div>
+
+            <div class="bg-white rounded-lg p-4 border border-gray-100">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-3">
+                        <div class="bg-yellow-100 p-2 rounded-lg">
+                            <svg class="w-5 h-5 text-yellow-400" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                            </svg>
+                        </div>
+                        <div>
+                            <p class="font-semibold text-gray-800">{{this.pemenang}}</p>
+                            <p class="text-sm text-gray-500">Posisi {{this.posisi}}</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <a href="/admin/riwayat_pemilihan/detail/{{this.id}}" class="py-2 px-4 inline-flex justify-center items-center gap-2 rounded-lg bg-black text-white text-sm font-semibold hover:bg-gray-900">
+                            Lihat Detail
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {{/each}}
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Toggle dropdowns
+    document.getElementById('triwulanDropdown').addEventListener('click', function() {
+        document.getElementById('triwulanMenu').classList.toggle('hidden');
+        document.getElementById('tahunMenu').classList.add('hidden');
+    });
+
+    document.getElementById('tahunDropdown').addEventListener('click', function() {
+        document.getElementById('tahunMenu').classList.toggle('hidden');
+        document.getElementById('triwulanMenu').classList.add('hidden');
+    });
+
+    // Close dropdowns when clicking outside
+    document.addEventListener('click', function(event) {
+        if (!event.target.closest('.relative')) {
+            document.getElementById('triwulanMenu').classList.add('hidden');
+            document.getElementById('tahunMenu').classList.add('hidden');
+        }
+    });
+
+    // Populate years
+    const currentYear = new Date().getFullYear();
+    const tahunOptions = document.getElementById('tahunOptions');
+    for (let year = currentYear; year >= 2024; year--) {
+        const button = document.createElement('button');
+        button.className = 'w-full text-left px-4 py-2 text-sm hover:bg-gray-100 rounded-lg';
+        button.textContent = year;
+        button.onclick = () => selectTahun(year);
+        tahunOptions.appendChild(button);
+    }
+});
+
+function selectTriwulan(value) {
+    document.getElementById('triwulanText').textContent = value;
+    document.getElementById('triwulanMenu').classList.add('hidden');
+    // Add your filter logic here
+}
+
+function selectTahun(value) {
+    document.getElementById('tahunText').textContent = value;
+    document.getElementById('tahunMenu').classList.add('hidden');
+    // Add your filter logic here
+}
+</script>

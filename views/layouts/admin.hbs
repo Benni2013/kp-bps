@@ -1,6 +1,6 @@
 <html>
   <head>
-    <title>DeOffice2</title>
+    <title>{{title}} - E-Voisy</title>
     <!-- Font -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lipis/flag-icons@7.2.3/css/flag-icons.min.css" />
@@ -168,7 +168,7 @@
               </li>
 
               <li>
-                <a class="w-full flex items-center gap-x-3.5 py-2 px-2.5 text-lg text-white rounded-lg hover:bg-gray-300" href="manajemen_anggota">
+                <a class="w-full flex items-center gap-x-3.5 py-2 px-2.5 text-lg text-white rounded-lg hover:bg-gray-300" href="/admin/manajemen_anggota">
                   <img
                     loading="lazy"
                     src="https://cdn.builder.io/api/v1/image/assets/TEMP/fb1967d1bd078cfbd13d85dce3340ac4ca83cd591a7dff4dac702c75adad1fe4?placeholderIfAbsent=true&apiKey=0eb9abb28bf34cd7be47a2dfb2f311cb"
@@ -182,7 +182,7 @@
                 </a>
               </li>
 
-              <li class="hs-accordion" id="account-accordion">
+              <li class="hs-accordion {{#if (isManajemenPemilihanPage)}}hs-accordion-active{{/if}}" id="account-accordion">
                 <button type="button" class="hs-accordion-toggle w-full flex items-center gap-x-4 py-2 px-3 text-lg text-white rounded-lg hover:bg-gray-300" aria-expanded="true" aria-controls="account-accordion-child">
                   <img
                     loading="lazy"
@@ -219,12 +219,12 @@
                   ><path d="m6 9 6 6 6-6" /></svg>
                 </button>
 
-                <div id="account-accordion-child" class="hs-accordion-content w-full overflow-hidden transition-[height] duration-300 hidden" role="region" aria-labelledby="account-accordion">
+                <div id="account-accordion-child" class="hs-accordion-content w-full overflow-hidden transition-[height] duration-300 {{#if (isManajemenPemilihanPage)}}block{{else}}hidden{{/if}}" role="region" aria-labelledby="account-accordion">
                   <ul class="ps-8 pt-1 space-y-1">
                     <li>
                       <a
                         class="flex items-center gap-x-3.5 py-2 px-2.5 text-base text-white rounded-lg hover:bg-white/10 focus:outline-none focus:bg-white/10 dark:bg-neutral-800 dark:text-neutral-400 dark:hover:text-neutral-300 dark:focus:text-neutral-300"
-                        href="#"
+                        href="/admin/manajemen_pemilihan/pemilihan"
                       >
                         Pemilihan
                       </a>
@@ -232,17 +232,9 @@
                     <li>
                       <a
                         class="flex items-center gap-x-3.5 py-2 px-2.5 text-base text-white rounded-lg hover:bg-white/10 focus:outline-none focus:bg-white/10 dark:bg-neutral-800 dark:text-neutral-400 dark:hover:text-neutral-300 dark:focus:text-neutral-300"
-                        href="#"
+                        href="/admin/manajemen_pemilihan/pemilihan-berlangsung"
                       >
-                        Pemilihan Berangsung
-                      </a>
-                    </li>
-                    <li>
-                      <a
-                        class="flex items-center gap-x-3.5 py-2 px-2.5 text-base text-white rounded-lg hover:bg-white/10 focus:outline-none focus:bg-white/10 dark:bg-neutral-800 dark:text-neutral-400 dark:hover:text-neutral-300 dark:focus:text-neutral-300"
-                        href="#"
-                      >
-                        History Pemilihan
+                        Pemilihan Berlangsung
                       </a>
                     </li>
                   </ul>
@@ -250,7 +242,7 @@
               </li>
 
               <li>
-                <a class="w-full flex items-center gap-x-3.5 py-2 px-2.5 text-lg text-white rounded-lg hover:bg-gray-300" href="manajemen_kriteria">
+                <a class="w-full flex items-center gap-x-3.5 py-2 px-2.5 text-lg text-white rounded-lg hover:bg-gray-300" href="/admin/manajemen_kriteria">
                   <img
                     loading="lazy"
                     src="https://cdn.builder.io/api/v1/image/assets/TEMP/c7906dd078058f59a80bddc5cd61010ad5cc94a5eca6ddfb391817dffd1e682a?placeholderIfAbsent=true&apiKey=0eb9abb28bf34cd7be47a2dfb2f311cb"
@@ -265,7 +257,7 @@
               </li>
 
               <li>
-                <a class="w-full flex items-center gap-x-3.5 py-2 px-2.5 text-lg text-white rounded-lg hover:bg-gray-300" href="#">
+                <a class="w-full flex items-center gap-x-3.5 py-2 px-2.5 text-lg text-white rounded-lg hover:bg-gray-300" href="riwayat_pemilihan">
                   <img
                     loading="lazy"
                     src="https://cdn.builder.io/api/v1/image/assets/TEMP/d9f2f603c77f71cc2dad067ede0ba6d29508485227eb5ed136ae6556e349d451?placeholderIfAbsent=true&apiKey=0eb9abb28bf34cd7be47a2dfb2f311cb"
@@ -273,7 +265,7 @@
                     alt="Description of image 7"
                   />
                   <div class="mt-3">
-                    Manajemen Laporan
+                    Riwayat Pemilihan
                   </div>
 
                 </a>
