@@ -1,0 +1,69 @@
+<div class="flex flex-col lg:ml-10 lg:mt-8">
+  <h1 class="text-5xl font-bold">Penilaian Kriteria</h1>
+  <p class="mt-4 text-base leading-6">
+    Pada penilaian kriteria, kandidat yang telah terpilih pada tahap voting akan dinilai berdasarkan 21 kriteria. Setiap kriteria akan diberikan penilaian dengan skala:
+    <br />
+    1 (Sangat Tidak Sesuai), 2 (Tidak Sesuai), 3 (Sesuai), 4 (Sangat Sesuai).
+  </p>
+  <p class="mt-4 text-base leading-6">
+    Penilaian ini bertujuan untuk memberikan evaluasi yang objektif dalam menentukan hasil akhir sesuai dengan kriteria yang telah ditetapkan.
+  </p>
+
+  <!-- Form Penilaian -->
+  <form class="mt-8 bg-white rounded-xl border border-gray-300 shadow-sm p-6 space-y-6 overflow-auto" style="max-height: 60vh;">
+    <!-- Tabel Penilaian -->
+    <table class="table-auto w-full text-left border-collapse">
+      <thead>
+        <tr>
+          <th class="px-4 py-2 border-b-2 border-gray-300">Kategori</th>
+          <th class="px-4 py-2 border-b-2 border-gray-300">Indikator</th>
+          <th class="px-4 py-2 border-b-2 border-gray-300">Frizqya Dela Pratiwi</th>
+          <th class="px-4 py-2 border-b-2 border-gray-300">Annisa Nurul Hakim</th>
+          <th class="px-4 py-2 border-b-2 border-gray-300">Muhammad Raihan Alghifari</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#each rows as |row index|}}
+        <tr>
+          <td class="px-4 py-2 border-b border-gray-200">{{row.category}}</td>
+          <td class="px-4 py-2 border-b border-gray-200">{{row.indicator}}</td>
+          <td class="px-4 py-2 border-b border-gray-200">
+            <ol class="space-y-1">
+              <li><label><input type="radio" name="criteria-{{index}}-frizqya" value="1" /> 1</label></li>
+              <li><label><input type="radio" name="criteria-{{index}}-frizqya" value="2" /> 2</label></li>
+              <li><label><input type="radio" name="criteria-{{index}}-frizqya" value="3" /> 3</label></li>
+              <li><label><input type="radio" name="criteria-{{index}}-frizqya" value="4" /> 4</label></li>
+            </ol>
+          </td>
+          <td class="px-4 py-2 border-b border-gray-200">
+            <ol class="space-y-1">
+              <li><label><input type="radio" name="criteria-{{index}}-annisa" value="1" /> 1</label></li>
+              <li><label><input type="radio" name="criteria-{{index}}-annisa" value="2" /> 2</label></li>
+              <li><label><input type="radio" name="criteria-{{index}}-annisa" value="3" /> 3</label></li>
+              <li><label><input type="radio" name="criteria-{{index}}-annisa" value="4" /> 4</label></li>
+            </ol>
+          </td>
+          <td class="px-4 py-2 border-b border-gray-200">
+            <ol class="space-y-1">
+              <li><label><input type="radio" name="criteria-{{index}}-muhammad" value="1" /> 1</label></li>
+              <li><label><input type="radio" name="criteria-{{index}}-muhammad" value="2" /> 2</label></li>
+              <li><label><input type="radio" name="criteria-{{index}}-muhammad" value="3" /> 3</label></li>
+              <li><label><input type="radio" name="criteria-{{index}}-muhammad" value="4" /> 4</label></li>
+            </ol>
+          </td>
+        </tr>
+        {{/each}}
+      </tbody>
+    </table>
+
+    <!-- Button Simpan -->
+    <button
+  type="button"
+  onclick="window.location.href='/thank-you'"
+  class="mt-4 px-4 py-2 bg-green-600 text-white font-semibold text-sm rounded-lg shadow-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
+>
+  Simpan Penilaian
+</button>
+
+  </form>
+</div>
