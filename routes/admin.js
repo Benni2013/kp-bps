@@ -6,6 +6,7 @@ router.get("/", function (req, res, next) {
   res.render("admin/dashboard", { title: "Express" });
 });
 
+// MANAJEMEN ANGGOTA
 router.get("/manajemen_anggota", function (req, res, next) {
   res.render("admin/manajemen_anggota/manajemen_anggota", { title: "Express" });
 });
@@ -26,6 +27,9 @@ router.get("/ubahpw_anggota", function (req, res, next) {
   res.render("admin/manajemen_anggota/ubahpw_anggota", { title: "Express" });
 });
 
+
+
+// MANAJEMEN PEMILIHAN
 router.get("/manajemen_pemilihan", function (req, res, next) {
   res.render("admin/manajemen_pemilihan", { title: "Manajemen Pemilihan" });
 });
@@ -54,6 +58,8 @@ router.get("/hasil_kandidat", function (req, res, next) {
   res.render("admin/hasil_kandidat", { title: "Hasil Kandidat" });
 });
 
+
+// MANAJEMEN KRITERIA
 router.get("/manajemen_kriteria", function (req, res, next) {
   res.render("admin/manajemen_kriteria/manajemen_kriteria", { title: "Express" });
 });
@@ -66,16 +72,15 @@ router.get("/edit_kriteria", function (req, res, next) {
   res.render("admin/manajemen_kriteria/edit_kriteria", { title: "Express" });
 });
 
+
+
+//RIWAYAT PEMILIHAN
 router.get("/riwayat_pemilihan", function (req, res, next) {
   res.render("admin/riwayat_pemilihan/riwayat_pemilihan", { title: "Express" });
 });
 
 router.get("/detail_riwayat", function (req, res, next) {
   res.render("admin/riwayat_pemilihan/detail_riwayat", { title: "Express" });
-});
-
-router.get("/riwayat_pemilihan", function (req, res, next) {
-  res.render("admin/riwayat_pemilihan", { title: "Express" });
 });
 
 module.exports = router;
