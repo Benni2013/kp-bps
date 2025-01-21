@@ -1,64 +1,188 @@
-<h1>{{title}}</h1>
-<p>Welcome to {{title}}</p>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E-Voisy</title>
+    <!-- Tailwind and other styles -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lipis/flag-icons@7.2.3/css/flag-icons.min.css">
+    <link rel="stylesheet" href="https://preline.co/assets/css/main.min.css?v=1.0.0">
+    
+    <style>
+        .hero-section {
+            min-height: calc(100vh - 80px);
+        }
+        .features-section {
+            background-color: #f8fafc;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="sticky top-0 inset-x-0 flex flex-wrap md:justify-start md:flex-nowrap z-[48] w-full bg-blue-800 border-b text-sm py-2.5">
+    <nav class="px-4 sm:px-6 flex justify-between items-center w-full mx-auto">
+        <div class="flex items-center gap-4">
+            <img
+                src="https://cdn.builder.io/api/v1/image/assets/TEMP/319b9647e2045b7d8407f404b3cc9c52f67087cb963b149f7055c1aa9a11b77e?apiKey=b968644d66b542249f51acc2390675a8&"
+                alt="BPS Logo"
+                class="h-12 w-auto"
+            />
+            <div class="flex flex-col max-md:max-w-full text-white">
+                <div class="self-start font-black font-bold text-2xl py-1 italic">E-Voisy</div>
+                <div class="font-medium max-md:max-w-full text-xl italic">
+                    BADAN PUSAT STATISTIK KOTA PADANG
+                </div>
+            </div>
+        </div>
+        <div class="flex items-center gap-4">
+            <a href="login">
+    <button class="bg-white text-blue-800 px-6 py-2 rounded-lg font-semibold hover:bg-blue-50 transition">
+        LOGIN
+    </button>
+</a>
+        </div>
+    </nav>
+</header>
+    <!-- Main Content Area -->
+    <main>
+      <!-- Hero Section -->
+<section class="hero-section flex items-center">
+    <div class="container mx-auto px-4">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+            <div>
+                <h1 class="text-5xl font-bold mb-4">Selamat Datang</h1>
+                <p class="text-gray-800 mb-6">
+                    Di E-Voisy, Website Pemilihan Pegawai Terbaik Badan Pusat Statistik Kota Padang.
+                    Silahkan login untuk memilih kandidat
+                </p>
+                <a href="login" class="inline-block bg-blue-800 text-white px-8 py-3 rounded-lg font-semibold hover:bg-blue-700 transition">
+                    LOGIN UNTUK MEMILIH
+                </a>
+            </div>
+            <div class="flex justify-center">
+                <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/2535b2a7713694d5c401391f9139b81f0c8d87ebee57935a1e4f28adae39e718?apiKey=b968644d66b542249f51acc2390675a8&" alt="Voting Illustration" class="max-w-full">
+            </div>
+        </div>
+    </div>
+</section>
 
-<div style="height: 2rem;"></div>
+<!-- Features Section -->
+<section class="features-section py-16">
+    <div class="container mx-auto px-4">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+            <div>
+                <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/51758c872ce7d753c8884eb5d5c7d15c59221639a5e1b0c735ac0e1b1710b74f?apiKey=b968644d66b542249f51acc2390675a8&" alt="BPS Building" class="rounded-lg shadow-lg w-full">
+            </div>
+            <div>
+                <h2 class="text-3xl font-bold mb-6">
+                    Kami memberikan kemudahan dalam pemilihan pegawai terbaik secara digital.
+                </h2>
+                <p class="text-gray-600 mb-8">
+                    Pemilihan pegawai terbaik menjadi lebih transparan dan efisien dengan sistem kami.
+                    Dapatkan pengalaman terbaik dalam proses penilaian kinerja di BPS Kota Padang.
+                </p>
+                <ul class="space-y-4">
+                    <li class="flex items-center gap-3">
+                        <svg class="h-5 w-5 text-blue-800" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                        </svg>
+                        <span>Minimalis & efektif untuk memudahkan pengguna</span>
+                    </li>
+                    <li class="flex items-center gap-3">
+                        <svg class="h-5 w-5 text-blue-800" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                        </svg>
+                        <span>Optimalisasi Fitur</span>
+                    </li>
+                    <li class="flex items-center gap-3">
+                        <svg class="h-5 w-5 text-blue-800" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                        </svg>
+                        <span>User Experience Design</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+    </main>
 
-{{!-- buatkan kode tabel yang menampilkan nip dan nama anggota --}}
-<table class="table table-striped">
-    <tr class="bg-gray-200 border border-gray-600">
-        <th class="border px-4 py-2 text-center align-middle">No</th>
-        <th class="border px-4 py-2 text-center align-middle">NIP</th>
-        <th class="border px-4 py-2 text-center align-middle">Nama</th>
-        <th class="border px-4 py-2 text-center align-middle">Email</th>
-        <th class="border px-4 py-2 text-center align-middle">Role</th>
-        <th class="border px-4 py-2 text-center align-middle">Jabatan</th>
-        <th class="border px-4 py-2 text-center align-middle">Status</th>
-    </tr>
-    {{#each anggota}}
-    <tr>
-        <td class="border px-4 py-2 text-center align-middle">{{@index}}</td>
-        <td class="border px-4 py-2 text-center align-middle">{{nip}}</td>
-        <td class="border px-4 py-2 text-center align-middle">{{nama}}</td>
-        <td class="border px-4 py-2 text-center align-middle">{{email}}</td>
-        <td class="border px-4 py-2 text-center align-middle">{{role}}</td>
-        <td class="border px-4 py-2 text-center align-middle">{{jabatan}}</td>
-        <td class="border px-4 py-2 text-center align-middle">{{status_anggota}}</td>
-    </tr>
-    {{/each}}
-</table>
-<div style="height: 1rem;"></div>
+    <!-- Footer -->
+    <footer class="bg-blue-800 text-white py-12">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Company Info -->
+                <div>
+                    <div class="flex items-center mb-4">
+                        <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/befd2e64e54fd7a8ae9ef1614d7a9d870a896659a28381b2db0f62470189d471?apiKey=0eb9abb28bf34cd7be47a2dfb2f311cb&" alt="E-Voisy Logo" class="h-8 mr-2">
+                        <h3 class="font-bold text-xl">E-Voisy</h3>
+                    </div>
+                    <p class="text-sm">
+                        E-Voisy adalah sistem voting digital yang mendukung Badan Pusat Statistik Kota Padang dalam proses pemilihan dan evaluasi pegawai terbaik secara transparan dan efisien.
+                    </p>
+                </div>
 
-{{!-- buatkan kode tabel yang menampilkan no, periode_id, dan nama_periode --}}
-<table class="table table-striped">
-    <tr class="bg-gray-200 border border-gray-600">
-        <th class="border px-4 py-2 text-center align-middle">No</th>
-        <th class="border px-4 py-2 text-center align-middle">Periode ID</th>
-        <th class="border px-4 py-2 text-center align-middle">Nama Periode</th>
-    </tr>
-    {{#each periode}}
-    <tr>
-        <td class="border px-4 py-2 text-center align-middle">{{@index}}</td>
-        <td class="border px-4 py-2 text-center align-middle">{{periode_id}}</td>
-        <td class="border px-4 py-2 text-center align-middle">{{nama_periode}}</td>
-    </tr>
-    {{/each}}
-</table>
-<div style="height: 1rem;"></div>
+                <!-- Website Links -->
+                <div>
+                    <h4 class="font-bold text-lg mb-4">WEBSITE</h4>
+                    <ul>
+    <li>
+        <a href="https://instagram.com/thisis.annisa/" target="_blank" class="flex items-center space-x-2">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png" alt="Instagram" class="w-5 h-5">
+            <span>Annisa Nurul Hakim</span>
+        </a>
+    </li>
+    <li>
+        <a href="https://instagram.com/frizqyadela" target="_blank" class="flex items-center space-x-2">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png" alt="Instagram" class="w-5 h-5">
+            <span>Frizqya Dela Pratiwi</span>
+        </a>
+    </li>
+    <li>
+        <a href="https://instagram.com/benni_chaniago28/" target="_blank" class="flex items-center space-x-2">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png" alt="Instagram" class="w-5 h-5">
+            <span>Benni Putra Chaniago</span>
+        </a>
+    </li>
+    <li>
+        <a href="https://instagram.com/mralghifr_" target="_blank" class="flex items-center space-x-2">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png" alt="Instagram" class="w-5 h-5">
+            <span>Muhammad Raihan Alghifari</span>
+        </a>
+    </li>
+    <li>
+        <a href="https://instagram.com/feyyy_fz" target="_blank" class="flex items-center space-x-2">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png" alt="Instagram" class="w-5 h-5">
+            <span>Faiz Hadyan</span>
+        </a>
+    </li>
+</ul>
 
-{{!-- buatkan kode tabel yang menampilkan no, indikator_id, nama_indikator dan tipe_indikator --}}
-<table class="table table-striped">
-    <tr class="bg-gray-200 border border-gray-600">
-        <th class="border px-4 py-2 text-center align-middle">No</th>
-        <th class="border px-4 py-2 text-center align-middle">Indikator ID</th>
-        <th class="border px-4 py-2 text-center align-middle">Isi Indikator</th>
-        <th class="border px-4 py-2 text-center align-middle">Tipe Indikator</th>
-    </tr>
-    {{#each indikator}}
-    <tr>
-        <td class="border px-4 py-2 text-center align-middle">{{@index}}</td>
-        <td class="border px-4 py-2 text-center align-middle">{{indikator_id}}</td>
-        <td class="border px-4 py-2 text-center align-middle">{{isi_indikator}}</td>
-        <td class="border px-4 py-2 text-center align-middle">{{tipe_indikator}}</td>
-    </tr>
-    {{/each}}
-</table>
+                </div>
+
+                <!-- Contact Info -->
+                <div>
+                    <h4 class="font-bold text-lg mb-4">CONTACT US</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li>Mailbox: bps1371@bps.go.id</li>
+                        <li>Telp. (0751) 498515</li>
+                        <li>
+                            Jl. By Pass KM. 13 Kel. Sungai Sapih Kec. Kuranji
+                            Padang 25159
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="border-t border-blue-700 mt-8 pt-8 text-center text-sm">
+                <p>We're part of Badan Pusat Statistik Kota Padang.</p>
+                <p>© 2025 Bepeesaja. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://preline.co/assets/vendor/preline/dist/index.js?v=1.0.0"></script>
+</body>
+</html>

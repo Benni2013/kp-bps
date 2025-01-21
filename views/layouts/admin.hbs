@@ -1,6 +1,6 @@
 <html>
   <head>
-    <title>KP_BPS</title>
+    <title>{{title}} | E-Voisy</title>
     <!-- Font -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lipis/flag-icons@7.2.3/css/flag-icons.min.css" />
@@ -134,6 +134,7 @@
         <div class="px-6 pt-4 flex items-center">
           <!-- Logo -->
           <img
+            onclick="window.location.href = '/admin/'"
             loading="lazy"
             src="https://cdn.builder.io/api/v1/image/assets/TEMP/befd2e64e54fd7a8ae9ef1614d7a9d870a896659a28381b2db0f62470189d471?apiKey=0eb9abb28bf34cd7be47a2dfb2f311cb&"
             class="object-contain aspect-[1.34] w-[203px]"
@@ -168,7 +169,7 @@
               </li>
 
               <li>
-                <a class="w-full flex items-center gap-x-3.5 mt-2 pb-3 px-2 text-lg text-white rounded-lg hover:bg-gray-300" href="manajemen_anggota">
+                <a class="w-full flex items-center gap-x-3.5 mt-2 pb-3 px-2 text-lg text-white rounded-lg hover:bg-gray-300" href="/admin/manajemen_anggota">
                   <img
                     loading="lazy"
                     src="https://cdn.builder.io/api/v1/image/assets/TEMP/fb1967d1bd078cfbd13d85dce3340ac4ca83cd591a7dff4dac702c75adad1fe4?placeholderIfAbsent=true&apiKey=0eb9abb28bf34cd7be47a2dfb2f311cb"
@@ -224,7 +225,7 @@
                     <li>
                       <a
                         class="flex items-center gap-x-3.5 py-2 px-2.5 text-base text-white rounded-lg hover:bg-white/10 focus:outline-none focus:bg-white/10 dark:bg-neutral-800 dark:text-neutral-400 dark:hover:text-neutral-300 dark:focus:text-neutral-300"
-                        href="/admin/manajemen_pemilihan/pemilihan"
+                        href="pemilihan"
                       >
                         Pemilihan
                       </a>
@@ -232,26 +233,18 @@
                     <li>
                       <a
                         class="flex items-center gap-x-3.5 py-2 px-2.5 text-base text-white rounded-lg hover:bg-white/10 focus:outline-none focus:bg-white/10 dark:bg-neutral-800 dark:text-neutral-400 dark:hover:text-neutral-300 dark:focus:text-neutral-300"
-                        href="/admin/manajemen_pemilihan/pemilihan-berlangsung"
+                        href="/admin/pemilihan_berlangsung"
                       >
                         Pemilihan Berangsung
                       </a>
                     </li>
-                    <li>
-                      <a
-                        class="flex items-center gap-x-3.5 py-2 px-2.5 text-base text-white rounded-lg hover:bg-white/10 focus:outline-none focus:bg-white/10 dark:bg-neutral-800 dark:text-neutral-400 dark:hover:text-neutral-300 dark:focus:text-neutral-300"
-                        href="#"
-                      >
-                        3in
-
-                      </a>
-                    </li>
+                    
                   </ul>
                 </div>
               </li>
 
               <li>
-                <a class="w-full flex items-center gap-x-3.5 py-2 px-2.5 text-lg text-white rounded-lg hover:bg-gray-300" href="manajemen_kriteria">
+                <a class="w-full flex items-center gap-x-3.5 py-2 px-2.5 text-lg text-white rounded-lg hover:bg-gray-300" href="/admin/manajemen_kriteria">
                   <img
                     loading="lazy"
                     src="https://cdn.builder.io/api/v1/image/assets/TEMP/c7906dd078058f59a80bddc5cd61010ad5cc94a5eca6ddfb391817dffd1e682a?placeholderIfAbsent=true&apiKey=0eb9abb28bf34cd7be47a2dfb2f311cb"
@@ -266,7 +259,7 @@
               </li>
 
               <li>
-                <a class="w-full flex items-center gap-x-3.5 py-2 px-2.5 text-lg text-white rounded-lg hover:bg-gray-300" href="riwayat_pemilihan">
+                <a class="w-full flex items-center gap-x-3.5 py-2 px-2.5 text-lg text-white rounded-lg hover:bg-gray-300" href="/admin/riwayat_pemilihan">
                   <img
                     loading="lazy"
                     src="https://cdn.builder.io/api/v1/image/assets/TEMP/d9f2f603c77f71cc2dad067ede0ba6d29508485227eb5ed136ae6556e349d451?placeholderIfAbsent=true&apiKey=0eb9abb28bf34cd7be47a2dfb2f311cb"
