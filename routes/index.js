@@ -3,13 +3,19 @@ var router = express.Router();
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
+  res.render('index', { layout: "index" });
+});
+
+router.get('/login', function(req, res, next) {
   res.render('auth/login', { layout: 'layouts/layout_login' });
 });
 
 /* GET beranda page */
 router.get('/beranda', function (req, res, next) {
+  let pegawaiTerbaik = true;
   res.render('user/beranda', { 
     title: 'Beranda',
+    pegawaiTerbaik: pegawaiTerbaik,
     layout: 'layouts/layout',
    });
 });
@@ -64,9 +70,9 @@ router.get('/riwayat', function (req, res, next) {
   });
 });
 
-router.get('/login', function (req, res, next) {
-  res.redirect('/');
-});
+// router.get('/login', function (req, res, next) {
+//   res.redirect('/');
+// });
 
 router.post('/login', function (req, res, next) {
   res.redirect('/beranda');
