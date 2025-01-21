@@ -1,1 +1,211 @@
-dashborad
+<h1 class="text-3xl font-bold">{{ title }}</h1>
+
+<p class="italic" style="margin-top: 1rem;">Pemilihan Pegawai Terbaik Triwulan 1 Tahun 2024</p>
+
+{{!-- Card Dashboard Admin --}}
+<!-- Card Section -->
+<div class="max-w-[85rem] px-4 py-2 sm:px-6 lg:px-8 lg:py-2 mx-auto">
+  <!-- Grid -->
+  <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+    <!-- Card -->
+    <div class="flex flex-col bg-white border border-gray-600 shadow-sm rounded-xl dark:bg-neutral-900 dark:border-neutral-800">
+      <div class="p-4 md:p-5 flex gap-x-4">
+        <div class="shrink-0 flex justify-center items-center size-[46px] bg-gray-10 rounded-lg dark:bg-neutral-800">
+          {{!-- <svg class="shrink-0 size-5 text-gray-600 dark:text-neutral-400" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg> --}}
+          <img src="/images/total_anggota.png" alt="Total Anggota">
+        </div>
+
+        <div class="grow">
+          <div class="flex items-center gap-x-2">
+            <p class="text-xs uppercase tracking-wide text-gray-500 dark:text-neutral-500">
+              Total Anggota
+            </p>
+            
+          </div>
+          <div class="mt-1 flex items-center gap-x-2">
+            <h3 class="text-xl sm:text-2xl font-medium text-gray-800 dark:text-neutral-200">
+              72,540
+            </h3>
+            
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- End Card -->
+
+    <!-- Card -->
+    <div class="flex flex-col bg-white border border-gray-600 shadow-sm rounded-xl dark:bg-neutral-900 dark:border-neutral-800">
+      <div class="p-4 md:p-5 flex gap-x-4">
+        <div class="shrink-0 flex justify-center items-center size-[46px] bg-gray-10 rounded-lg dark:bg-neutral-800">
+          {{!-- <svg class="shrink-0 size-5 text-gray-600 dark:text-neutral-400" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 22h14"/><path d="M5 2h14"/><path d="M17 22v-4.172a2 2 0 0 0-.586-1.414L12 12l-4.414 4.414A2 2 0 0 0 7 17.828V22"/><path d="M7 2v4.172a2 2 0 0 0 .586 1.414L12 12l4.414-4.414A2 2 0 0 0 17 6.172V2"/></svg> --}}
+          <img src="/images/kandidat_eligible.png" alt="Kandidat Eligible">
+        </div>
+
+        <div class="grow">
+          <div class="flex items-center gap-x-2">
+            <p class="text-xs uppercase tracking-wide text-gray-500 dark:text-neutral-500">
+              Kandidat Eligible
+            </p>
+          </div>
+          <div class="mt-1 flex items-center gap-x-2">
+            <h3 class="text-xl sm:text-2xl font-medium text-gray-800 dark:text-neutral-200">
+              72,540
+            </h3>
+            
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- End Card -->
+
+    <!-- Card -->
+    <div class="flex flex-col bg-white border border-gray-600 shadow-sm rounded-xl dark:bg-neutral-900 dark:border-neutral-800">
+      <div class="p-4 md:p-5 flex gap-x-4">
+        <div class="shrink-0 flex justify-center items-center size-[46px] bg-gray-10 rounded-lg dark:bg-neutral-800">
+          {{!-- <svg class="shrink-0 size-5 text-gray-600 dark:text-neutral-400" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h6"/><path d="m12 12 4 10 1.7-4.3L22 16Z"/></svg> --}}
+          <img src="/images/kandidat_tahap1.png" alt="Kandidat Tahap 1">
+        </div>
+
+        <div class="grow">
+          <div class="flex items-center gap-x-2">
+            <p class="text-xs uppercase tracking-wide text-gray-500 dark:text-neutral-500">
+              Kandidat Tahap 1
+            </p>
+          </div>
+          <div class="mt-1 flex items-center gap-x-2">
+            <h3 class="text-xl sm:text-2xl font-medium text-gray-800 dark:text-neutral-200">
+              72,540
+            </h3>
+            
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- End Card -->
+
+    <!-- Card -->
+    <div class="flex flex-col bg-white border border-gray-600 shadow-sm rounded-xl dark:bg-neutral-900 dark:border-neutral-800">
+      <div class="p-4 md:p-5 flex gap-x-4">
+        <div class="shrink-0 flex justify-center items-center size-[46px] bg-gray-10 rounded-lg dark:bg-neutral-800">
+          {{!-- <svg class="shrink-0 size-5 text-gray-600 dark:text-neutral-400" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12s2.545-5 7-5c4.454 0 7 5 7 5s-2.546 5-7 5c-4.455 0-7-5-7-5z"/><path d="M12 13a1 1 0 1 0 0-2 1 1 0 0 0 0 2z"/><path d="M21 17v2a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-2"/><path d="M21 7V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v2"/></svg> --}}
+          <img src="/images/total_kriteria.png" alt="Total Kriteria">
+        </div>
+
+        <div class="grow">
+          <div class="flex items-center gap-x-2">
+            <p class="text-xs uppercase tracking-wide text-gray-500 dark:text-neutral-500">
+              Total Kriteria
+            </p>
+            
+          </div>
+          <div class="mt-1 flex items-center gap-x-2">
+            <h3 class="text-xl sm:text-2xl font-medium text-gray-800 dark:text-neutral-200">
+              72,540
+            </h3>
+            
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- End Card -->
+  </div>
+  <!-- End Grid -->
+</div>
+<!-- End Card Section -->
+{{!-- Akhir Card Dashboard Admin --}}
+
+{{!-- Chart Progress Pemilihan Aktif --}}
+
+<div class="max-w-[85rem] px-4 py-5 sm:px-6 lg:px-8 lg:py-2 mx-auto">
+  <div class="border-2 border-solid border-gray-600 p-4 rounded-xl">
+    <h2 style="font-size: 16px; font-weight: bold; margin-bottom: 1px;">Progress Pemilihan Aktif</h2>
+    <!-- Chart Container -->
+    <div class="chart-container h-80 my-0.5 px-24 pt-2.5">
+      <canvas id="progressChart"></canvas>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const ctx = document.getElementById('progressChart').getContext('2d');
+    
+    new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: ['Input Nilai', 'Voting Tahap 1', 'Penilaian Kriteria'],
+            datasets: [{
+                data: [100, 75, 10],
+                backgroundColor: [
+                    '#82C15A',  // Hijau
+                    '#2E74B5',  // Biru
+                    '#694BDB',  // Kuning
+                ],
+                barThickness: 175
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            layout: {
+                padding: {
+                    top: 20,  // Menambah padding atas agar angka 100 tidak terpotong
+                    left: 50,
+                    right: 50,
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    max: 100,
+                    ticks: {
+                        stepSize: 25
+                    },
+                    grid: {
+                        drawBorder: false
+                    },
+                    title: {
+                        display: true,
+                        text: 'Persentase Progress',
+                        font: {
+                            size: 12,
+                            weight: 'bold'
+                        }
+                    }
+                },
+                x: {
+                    grid: {
+                        display: false
+                    }
+                }
+            },
+            plugins: {
+                legend: {
+                    display: false
+                },
+                tooltip: {
+                    enabled: true
+                }
+            }
+        },
+        plugins: [{
+            afterDraw: function(chart) {
+                var ctx = chart.ctx;
+                ctx.font = 'bold 12px Arial';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'bottom';
+                
+                chart.data.datasets.forEach(function(dataset, i) {
+                    chart.getDatasetMeta(i).data.forEach(function(bar, index) {
+                        var data = dataset.data[index];
+                        ctx.fillText(data + '%', bar.x, bar.y - 5);
+                    });
+                });
+            }
+        }]
+    });
+});
+</script>
+
+{{!-- Akhir Chart Progress Pemilihan Aktif --}}

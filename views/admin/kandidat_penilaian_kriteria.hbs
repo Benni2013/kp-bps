@@ -1,0 +1,56 @@
+<div class="max-w-[85rem] px-4 py-10 sm:px-6 lg:px-8 lg:py-2 mx-auto">
+    <div class="flex justify-between items-center mb-6">
+        <h2 class="text-2xl font-bold text-gray-800">{{title}}</h2>
+        <button 
+        onclick="window.location.href='/admin/download_hasil'"
+        type="button" 
+        class="py-2 px-4 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg bg-orange-500 text-white hover:bg-orange-600">
+            <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" />
+            </svg>
+            Download Laporan
+        </button>
+    </div>
+
+    <div class="bg-white border border-gray-200 rounded-xl shadow-sm">
+        <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th scope="col" class="px-6 py-3 text-start text-sm font-semibold text-gray-500">NO</th>
+                        <th scope="col" class="px-6 py-3 text-start text-sm font-semibold text-gray-500">NAMA/NIP</th>
+                        <th scope="col" class="px-6 py-3 text-center text-sm font-semibold text-gray-500">SKOR PILIHAN 1</th>
+                        <th scope="col" class="px-6 py-3 text-center text-sm font-semibold text-gray-500">SKOR PILIHAN 2</th>
+                        <th scope="col" class="px-6 py-3 text-center text-sm font-semibold text-gray-500">SKOR PILIHAN 3</th>
+                        <th scope="col" class="px-6 py-3 text-center text-sm font-semibold text-gray-500">TOTAL</th>
+                        <th scope="col" class="px-6 py-3 text-center text-sm font-semibold text-gray-500">TERPILIH</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-200">
+                    {{#each kandidat}}
+                    <tr>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-800">{{@index}}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800">{{nama}}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 text-center">{{skor1}}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 text-center">{{skor2}}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 text-center">{{skor3}}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 text-center">{{total}}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-center">
+                            <input type="checkbox" class="shrink-0 border-gray-700 rounded text-blue-600 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none">
+                        </td>
+                    </tr>
+                    {{/each}}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="mt-6 flex justify-end">
+        <a href="/admin/penilaian_kriteria" class="inline-flex items-center gap-x-2 py-2.5 px-4 text-sm font-semibold rounded-lg border border-transparent bg-black text-white hover:bg-gray-900 disabled:opacity-50 disabled:pointer-events-none">
+            Lanjutkan ke Penilaian Kriteria
+            <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+            </svg>
+        </a>
+    </div>
+</div>
