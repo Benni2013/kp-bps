@@ -13,6 +13,7 @@ router.get('/login', function(req, res, next) {
 /* GET beranda page */
 router.get('/beranda', function (req, res, next) {
   let pegawaiTerbaik = true;
+  
   res.render('user/beranda', { 
     title: 'Beranda',
     pegawaiTerbaik: pegawaiTerbaik,
