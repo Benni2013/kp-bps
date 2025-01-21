@@ -1,4 +1,3 @@
-
 <html>
   <head>
     <title>{{title}} | E-Voisy</title>
@@ -12,88 +11,59 @@
   <body class="bg-gray-50 dark:bg-neutral-900">
     <!-- ========== HEADER ========== -->
     <header class="sticky top-0 inset-x-0 flex flex-wrap md:justify-start md:flex-nowrap z-[48] w-full bg-white border-b text-sm py-2.5 lg:ps-[260px]">
-  <nav class="px-4 sm:px-6 flex justify-between items-center w-full mx-auto">
-    <div class="flex flex-col max-md:max-w-full">
-      <div class="self-start font-black font-bold text-2xl py-1 italic">E-Voisy</div>
-      <div class="font-medium max-md:max-w-full text-xl italic">
-        BADAN PUSAT STATISTIK KOTA PADANG
-      </div>
-    </div>
-    <div class="relative">
-      <!-- Gambar Profil -->
-      <button
-        id="profileDropdownButton"
-        type="button"
-        class="rounded-full border border-gray-300 flex items-center justify-center hover:bg-gray-100"
-        aria-expanded="false"
-        aria-haspopup="true"
-      >
-        <img
-          loading="lazy"
-          src="https://cdn.builder.io/api/v1/image/assets/TEMP/6f9353d5733ad1909ce73a65f15d002fb86917a5e023e3b7b986a42f3b3b23fe?apiKey=0eb9abb28bf34cd7be47a2dfb2f311cb&"
-          class="object-contain shrink-0 aspect-square w-[50px]"
-          alt="BPS Kota Padang Logo"
-        />
-      </button>
-
-      <!-- Dropdown Menu -->
-      <div
-        id="profileDropdownMenu"
-        class="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-lg shadow-lg hidden"
-      >
-        <div class="px-4 py-3 text-gray-600">
-          <p class="text-sm">Login sebagai</p>
-          <p class="text-sm font-bold">Frizqya Dela Pratiwi</p>
+      <nav class="px-4 sm:px-6 flex justify-between items-center w-full mx-auto">
+        <div class="flex flex-col max-md:max-w-full">
+          <div class="self-start font-black font-bold text-2xl py-1 italic">E-Voisy</div>
+          <div class="font-medium max-md:max-w-full text-xl italic">
+            BADAN PUSAT STATISTIK KOTA PADANG
+          </div>
         </div>
-        <div class="border-t border-gray-200"></div>
-        <a
-          href="/profile"
-          class="flex items-center px-4 py-2 text-gray-600 hover:bg-gray-100 hover:text-gray-900 text-sm"
-        >
-          <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l9-5-9-5-9 5 9 5z" />
-          </svg>
-          Lihat Profil
-        </a>
-        <a
-          href="/change-password"
-          class="flex items-center px-4 py-2 text-gray-600 hover:bg-gray-100 hover:text-gray-900 text-sm"
-        >
-          <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l9-5-9-5-9 5z" />
-          </svg>
-          Ganti Password
-        </a>
-        <a
-          href="/logout"
-          class="flex items-center px-4 py-2 text-gray-600 hover:bg-gray-100 hover:text-gray-900 text-sm"
-        >
-          <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l9-5-9-5-9 5z" />
-          </svg>
-          Log Out
-        </a>
-      </div>
-    </div>
-  </nav>
-</header>
+        <div class="relative">
+          <!-- Gambar Profil -->
+          <button id="profileDropdownButton" type="button" class="rounded-full border border-gray-300 flex items-center justify-center hover:bg-gray-100" aria-expanded="false" aria-haspopup="true">
+            <img
+              loading="lazy"
+              src="https://cdn.builder.io/api/v1/image/assets/TEMP/6f9353d5733ad1909ce73a65f15d002fb86917a5e023e3b7b986a42f3b3b23fe?apiKey=0eb9abb28bf34cd7be47a2dfb2f311cb&"
+              class="object-contain shrink-0 aspect-square w-[50px]"
+              alt="BPS Kota Padang Logo"
+            />
+          </button>
 
-<script>
-  // JavaScript untuk toggle dropdown
-  document.getElementById('profileDropdownButton').addEventListener('click', function () {
-    const dropdown = document.getElementById('profileDropdownMenu');
-    dropdown.classList.toggle('hidden');
-  });
+          <!-- Dropdown Menu -->
+          <div id="profileDropdownMenu" class="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-lg shadow-lg hidden">
+            <div class="px-4 py-3 text-gray-600">
+              <p class="text-sm">Login sebagai</p>
+              <p class="text-sm font-bold">Frizqya Dela Pratiwi</p>
+            </div>
+            <div class="border-t border-gray-200"></div>
+            <a href="/profile" class="flex items-center px-4 py-2 text-gray-600 hover:bg-gray-100 hover:text-gray-900 text-sm">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l9-5-9-5-9 5 9 5z" />
+              </svg>
+              Lihat Profil
+            </a>
+            <a href="/change-password" class="flex items-center px-4 py-2 text-gray-600 hover:bg-gray-100 hover:text-gray-900 text-sm">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l9-5-9-5-9 5z" />
+              </svg>
+              Ganti Password
+            </a>
+            <a href="/logout" class="flex items-center px-4 py-2 text-gray-600 hover:bg-gray-100 hover:text-gray-900 text-sm">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l9-5-9-5-9 5z" />
+              </svg>
+              Log Out
+            </a>
+          </div>
+        </div>
+      </nav>
+    </header>
 
-  // Menutup dropdown jika klik di luar
-  window.addEventListener('click', function (e) {
-    const button = document.getElementById('profileDropdownButton');
-    const dropdown = document.getElementById('profileDropdownMenu');
-    if (!button.contains(e.target) && !dropdown.contains(e.target)) {
-      dropdown.classList.add('hidden');
-    }
-  });
-</script>
+    <script>
+      // JavaScript untuk toggle dropdown document.getElementById('profileDropdownButton').addEventListener('click', function () { const dropdown = document.getElementById('profileDropdownMenu'); dropdown.classList.toggle('hidden'); }); //
+      Menutup dropdown jika klik di luar window.addEventListener('click', function (e) { const button = document.getElementById('profileDropdownButton'); const dropdown = document.getElementById('profileDropdownMenu'); if
+      (!button.contains(e.target) && !dropdown.contains(e.target)) { dropdown.classList.add('hidden'); } });
+    </script>
 
     <!-- ========== END HEADER ========== -->
 
@@ -153,7 +123,7 @@
         <div class="px-6 pt-4 flex items-center">
           <!-- Logo -->
           <img
-          onclick="window.location.href='beranda'"
+            onclick="window.location.href='beranda'"
             loading="lazy"
             src="https://cdn.builder.io/api/v1/image/assets/TEMP/befd2e64e54fd7a8ae9ef1614d7a9d870a896659a28381b2db0f62470189d471?apiKey=0eb9abb28bf34cd7be47a2dfb2f311cb&"
             class="object-contain aspect-[1.34] w-[203px]"
@@ -170,8 +140,6 @@
         <div class="h-full overflow-y-auto [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300">
           <nav class="hs-accordion-group p-3 w-full flex flex-col flex-wrap" data-hs-accordion-always-open>
             <ul class="flex flex-col space-y-1">
-
-             
 
               <li>
                 <a class="w-full flex items-center gap-x-3.5 py-2 px-2.5 text-lg text-white rounded-lg hover:bg-gray-100" href="beranda">
