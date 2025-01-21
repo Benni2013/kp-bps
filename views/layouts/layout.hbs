@@ -24,13 +24,13 @@
       <button
         id="profileDropdownButton"
         type="button"
-        class="rounded-full border border-gray-300 flex items-center justify-center hover:bg-gray-100"
+        class="rounded-full border border-gray-300 flex items-center justify-center"
         aria-expanded="false"
         aria-haspopup="true"
       >
         <img
           loading="lazy"
-          src="https://cdn.builder.io/api/v1/image/assets/TEMP/6f9353d5733ad1909ce73a65f15d002fb86917a5e023e3b7b986a42f3b3b23fe?apiKey=0eb9abb28bf34cd7be47a2dfb2f311cb&"
+          src="https://cdn.builder.io/api/v1/image/assets/TEMP/4d641352595175d999dd7026c66fd0cf4679bb7b5662e0e7b3943630f2fc2a64?apiKey=b968644d66b542249f51acc2390675a8&" 
           class="object-contain shrink-0 aspect-square w-[50px]"
           alt="BPS Kota Padang Logo"
         />
@@ -46,32 +46,17 @@
           <p class="text-sm font-bold">Frizqya Dela Pratiwi</p>
         </div>
         <div class="border-t border-gray-200"></div>
-        <a
-          href="/profile"
-          class="flex items-center px-4 py-2 text-gray-600 hover:bg-gray-100 hover:text-gray-900 text-sm"
-        >
-          <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l9-5-9-5-9 5 9 5z" />
-          </svg>
+        <a class="flex items-center gap-x-3.5 py-2 px-3 rounded-lg text-sm text-gray-800" href="profil">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-user"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="10" r="3"/><path d="M7 20.662V19a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v1.662"/></svg>
           Lihat Profil
         </a>
-        <a
-          href="/change-password"
-          class="flex items-center px-4 py-2 text-gray-600 hover:bg-gray-100 hover:text-gray-900 text-sm"
-        >
-          <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l9-5-9-5-9 5z" />
-          </svg>
+        <a class="flex items-center gap-x-3.5 py-2 px-3 rounded-lg text-sm text-gray-800" href="change-password">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-key-round"><path d="M2.586 17.414A2 2 0 0 0 2 18.828V21a1 1 0 0 0 1 1h3a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h1a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h.172a2 2 0 0 0 1.414-.586l.814-.814a6.5 6.5 0 1 0-4-4z"/><circle cx="16.5" cy="7.5" r=".5" fill="currentColor"/></svg>
           Ganti Password
         </a>
-        <a
-          href="/logout"
-          class="flex items-center px-4 py-2 text-gray-600 hover:bg-gray-100 hover:text-gray-900 text-sm"
-        >
-          <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l9-5-9-5-9 5z" />
-          </svg>
-          Log Out
+        <a class="flex items-center gap-x-3.5 py-2 px-3 rounded-lg text-sm text-gray-800" href="login">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-log-out"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" x2="9" y1="12" y2="12"/></svg>
+          Log out
         </a>
       </div>
     </div>
@@ -153,6 +138,7 @@
         <div class="px-6 pt-4 flex items-center">
           <!-- Logo -->
           <img
+          onclick="window.location.href='beranda'"
             loading="lazy"
             src="https://cdn.builder.io/api/v1/image/assets/TEMP/befd2e64e54fd7a8ae9ef1614d7a9d870a896659a28381b2db0f62470189d471?apiKey=0eb9abb28bf34cd7be47a2dfb2f311cb&"
             class="object-contain aspect-[1.34] w-[203px]"
@@ -218,7 +204,7 @@
               </li>
 
               <li>
-                <a class="w-full flex items-center gap-x-3.5 py-2 px-2.5 text-lg text-white rounded-lg hover:bg-gray-100" href="#">
+                <a class="w-full flex items-center gap-x-3.5 py-2 px-2.5 text-lg text-white rounded-lg hover:bg-gray-100" href="/riwayat">
                   <img
                     loading="lazy"
                     src="https://cdn.builder.io/api/v1/image/assets/TEMP/caa09c545cbdeaa50be9eb29bed2c06d653234f839108e06e10d0a51a75463ac?placeholderIfAbsent=true&apiKey=0eb9abb28bf34cd7be47a2dfb2f311cb"
