@@ -51,6 +51,15 @@ module.exports = {
         role: 'supervisor',
         jabatan: 'Kepala BPS Kabupaten/Kota',
         status_anggota: 'aktif'
+      },
+      {
+        nip: '101010',
+        nama: 'Admin',
+        email: 'admin@example.com',
+        password: defaultPassword,
+        role: 'admin',
+        jabatan: 'Admin WEB E-Voisy',
+        status_anggota: 'aktif'
       }
     ];
 

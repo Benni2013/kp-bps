@@ -1,8 +1,118 @@
+/* Reset dasar */
 body {
-  padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  margin: 0;
+  font-family: 'Arial', sans-serif;
+  background-color: #f3f4f6;
 }
 
-a {
-  color: #00B7FF;
+/* Sidebar */
+aside {
+  height: 100%;
+  background-color: #ffffff;
+}
+
+/* Header */
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: white;
+  height: 4rem;
+  padding: 0 1.5rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+header h1 {
+  margin: 0;
+}
+
+header p {
+  margin: 0;
+  font-size: 0.875rem;
+}
+
+/* Main content */
+main {
+  margin-left: 0; /* Default untuk layar kecil */
+  padding: 1rem; /* Padding default */
+}
+
+@media (min-width: 1024px) {
+  main {
+    margin-left: 30rem; /* Tambahkan lebih banyak margin kiri untuk memastikan jarak dari sidebar */
+    padding: 2rem; /* Padding tambahan */
+  }
+}
+
+/* Kontainer utama untuk konten */
+.container {
+  max-width: 1200px; /* Lebar maksimal konten */
+  margin: 0 auto; /* Tengah secara horizontal */
+}
+
+/* Artikel atau blok konten utama */
+article {
+  background-color: #ffffff;
+  padding: 1.5rem;
+  border-radius: 0.5rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e5e7eb;
+}
+
+/* Judul halaman */
+h1 {
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+  color: #1f2937;
+}
+
+/* Judul artikel */
+h2 {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+  color: #1f2937;
+}
+
+/* Teks paragraf */
+p {
+  font-size: 1rem;
+  line-height: 1.6;
+  color: #374151;
+}
+
+/* Daftar bernomor */
+ol {
+  padding-left: 1.25rem;
+  margin-bottom: 1rem;
+  list-style-type: decimal;
+}
+
+ol li {
+  margin-bottom: 0.5rem;
+  line-height: 1.5;
+}
+
+/* Daftar dengan bullet */
+ul {
+  padding-left: 1.25rem;
+  list-style-type: disc;
+}
+
+ul li {
+  margin-bottom: 0.5rem;
+  line-height: 1.5;
+}
+
+/* Responsif untuk layar kecil */
+@media (max-width: 768px) {
+  main {
+    margin-left: 70; /* Hilangkan margin kiri */
+    padding: 1rem; /* Padding lebih kecil */
+  }
+
+  .container {
+    padding: 1rem;
+  }
 }

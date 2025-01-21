@@ -1,3 +1,257 @@
+<<<<<<< HEAD
+<html>
+  <head>
+    <title>DeOffice2</title>
+    <!-- Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lipis/flag-icons@7.2.3/css/flag-icons.min.css" />
+
+    <!-- CSS HS -->
+    <link rel="stylesheet" href="https://preline.co/assets/css/main.min.css?v=1.0.0" />
+  </head>
+  <body class="bg-gray-50 dark:bg-neutral-900">
+    <!-- ========== HEADER ========== -->
+    <header class="sticky top-0 inset-x-0 flex flex-wrap md:justify-start md:flex-nowrap z-[48] w-full bg-white border-b text-sm py-2.5 lg:ps-[260px]">
+  <nav class="px-4 sm:px-6 flex justify-between items-center w-full mx-auto">
+    <div class="flex flex-col max-md:max-w-full">
+      <div class="self-start font-black font-bold text-2xl py-1 italic">E-Voisy</div>
+      <div class="font-medium max-md:max-w-full text-xl italic">
+        BADAN PUSAT STATISTIK KOTA PADANG
+      </div>
+    </div>
+    <div class="relative">
+      <!-- Gambar Profil -->
+      <button
+        id="profileDropdownButton"
+        type="button"
+        class="rounded-full border border-gray-300 flex items-center justify-center hover:bg-gray-100"
+        aria-expanded="false"
+        aria-haspopup="true"
+      >
+        <img
+          loading="lazy"
+          src="https://cdn.builder.io/api/v1/image/assets/TEMP/6f9353d5733ad1909ce73a65f15d002fb86917a5e023e3b7b986a42f3b3b23fe?apiKey=0eb9abb28bf34cd7be47a2dfb2f311cb&"
+          class="object-contain shrink-0 aspect-square w-[50px]"
+          alt="BPS Kota Padang Logo"
+        />
+      </button>
+
+      <!-- Dropdown Menu -->
+      <div
+        id="profileDropdownMenu"
+        class="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-lg shadow-lg hidden"
+      >
+        <div class="px-4 py-3 text-gray-600">
+          <p class="text-sm">Login sebagai</p>
+          <p class="text-sm font-bold">Frizqya Dela Pratiwi</p>
+        </div>
+        <div class="border-t border-gray-200"></div>
+        <a
+          href="/profile"
+          class="flex items-center px-4 py-2 text-gray-600 hover:bg-gray-100 hover:text-gray-900 text-sm"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l9-5-9-5-9 5 9 5z" />
+          </svg>
+          Lihat Profil
+        </a>
+        <a
+          href="/change-password"
+          class="flex items-center px-4 py-2 text-gray-600 hover:bg-gray-100 hover:text-gray-900 text-sm"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l9-5-9-5-9 5z" />
+          </svg>
+          Ganti Password
+        </a>
+        <a
+          href="/logout"
+          class="flex items-center px-4 py-2 text-gray-600 hover:bg-gray-100 hover:text-gray-900 text-sm"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l9-5-9-5-9 5z" />
+          </svg>
+          Log Out
+        </a>
+      </div>
+    </div>
+  </nav>
+</header>
+
+<script>
+  // JavaScript untuk toggle dropdown
+  document.getElementById('profileDropdownButton').addEventListener('click', function () {
+    const dropdown = document.getElementById('profileDropdownMenu');
+    dropdown.classList.toggle('hidden');
+  });
+
+  // Menutup dropdown jika klik di luar
+  window.addEventListener('click', function (e) {
+    const button = document.getElementById('profileDropdownButton');
+    const dropdown = document.getElementById('profileDropdownMenu');
+    if (!button.contains(e.target) && !dropdown.contains(e.target)) {
+      dropdown.classList.add('hidden');
+    }
+  });
+</script>
+
+    <!-- ========== END HEADER ========== -->
+
+    <!-- ========== MAIN CONTENT ========== -->
+    <div class="-mt-px">
+      <!-- Breadcrumb -->
+      <div class="sticky top-0 inset-x-0 z-20 bg-white border-y px-4 sm:px-6 lg:px-8 lg:hidden">
+        <div class="flex items-center py-2">
+          <!-- Navigation Toggle -->
+          <button
+            type="button"
+            class="size-8 flex justify-center items-center gap-x-2 border border-gray-200 text-gray-800 hover:text-gray-500 rounded-lg focus:outline-none focus:text-gray-500 disabled:opacity-50 disabled:pointer-events-none"
+            aria-haspopup="dialog"
+            aria-expanded="false"
+            aria-controls="hs-application-sidebar"
+            aria-label="Toggle navigation"
+            data-hs-overlay="#hs-application-sidebar"
+          >
+            <span class="sr-only">Toggle Navigation</span>
+            <svg class="shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect
+                width="18"
+                height="18"
+                x="3"
+                y="3"
+                rx="2"
+              /><path d="M15 3v18" /><path d="m8 9 3 3-3 3" /></svg>
+          </button>
+          <!-- End Navigation Toggle -->
+
+          <!-- Breadcrumb -->
+          <ol class="ms-3 flex items-center whitespace-nowrap">
+            <li class="flex items-center text-sm text-gray-800">
+              Application Layout
+              <svg class="shrink-0 mx-3 overflow-visible size-2.5 text-gray-400" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M5 1L10.6869 7.16086C10.8637 7.35239 10.8637 7.64761 10.6869 7.83914L5 14" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+              </svg>
+            </li>
+            <li class="text-sm font-semibold text-gray-800 truncate" aria-current="page">
+              Dashboard
+            </li>
+          </ol>
+          <!-- End Breadcrumb -->
+        </div>
+      </div>
+      <!-- End Breadcrumb -->
+    </div>
+
+    <!-- Sidebar -->
+    <div
+      id="hs-application-sidebar"
+      class="hs-overlay [--auto-close:lg] hs-overlay-open:translate-x-0 -translate-x-full transition-all duration-300 transform w-[260px] h-full hidden fixed inset-y-0 start-0 z-[60] bg-blue-800 border-e border-gray-200 lg:block lg:translate-x-0 lg:end-auto lg:bottom-0"
+      role="dialog"
+      tabindex="-1"
+      aria-label="Sidebar"
+    >
+      <div class="relative flex flex-col h-full max-h-full">
+        <div class="px-6 pt-4 flex items-center">
+          <!-- Logo -->
+          <img
+            loading="lazy"
+            src="https://cdn.builder.io/api/v1/image/assets/TEMP/befd2e64e54fd7a8ae9ef1614d7a9d870a896659a28381b2db0f62470189d471?apiKey=0eb9abb28bf34cd7be47a2dfb2f311cb&"
+            class="object-contain aspect-[1.34] w-[203px]"
+            alt="Navigation Header"
+          />
+          <!-- End Logo -->
+
+          <div class="hidden lg:block ms-2">
+
+          </div>
+        </div>
+
+        <!-- Content -->
+        <div class="h-full overflow-y-auto [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300">
+          <nav class="hs-accordion-group p-3 w-full flex flex-col flex-wrap" data-hs-accordion-always-open>
+            <ul class="flex flex-col space-y-1">
+
+             
+
+              <li>
+                <a class="w-full flex items-center gap-x-3.5 py-2 px-2.5 text-lg text-white rounded-lg hover:bg-gray-100" href="beranda">
+                  <img
+                    loading="lazy"
+                    src="https://cdn.builder.io/api/v1/image/assets/TEMP/103bfa26788a73223965779a9e96ffe602643a5ad173aa47ddcd31853c72522f?placeholderIfAbsent=true&apiKey=0eb9abb28bf34cd7be47a2dfb2f311cb"
+                    class="object-contain shrink-0 mt-1 aspect-square w-[30px]"
+                    alt="Navigation Icon 1"
+                  />
+                  <div class="mt-3">
+                    Beranda
+                  </div>
+
+                </a>
+              </li>
+
+              <li>
+                <a class="w-full flex items-center gap-x-3.5 py-2 px-2.5 text-lg text-white rounded-lg hover:bg-gray-100" href="voting">
+                  <img
+                    loading="lazy"
+                    src="https://cdn.builder.io/api/v1/image/assets/TEMP/a491624246eefa08cfd4516bfa658015008a456045771fa52cec7bb47c67b7e4?placeholderIfAbsent=true&apiKey=0eb9abb28bf34cd7be47a2dfb2f311cb"
+                    class="object-contain shrink-0 mt-1.5 aspect-square w-[30px]"
+                    alt="Navigation Icon 2"
+                  />
+                  <div class="mt-3">
+                    Voting
+                  </div>
+
+                </a>
+              </li>
+
+              <li>
+                <a class="w-full flex items-center gap-x-3.5 py-2 px-2.5 text-lg text-white rounded-lg hover:bg-gray-100" href="penilaian">
+                  <img
+                    loading="lazy"
+                    src="https://cdn.builder.io/api/v1/image/assets/TEMP/c7906dd078058f59a80bddc5cd61010ad5cc94a5eca6ddfb391817dffd1e682a?placeholderIfAbsent=true&apiKey=0eb9abb28bf34cd7be47a2dfb2f311cb"
+                    class="object-contain shrink-0 aspect-square w-[30px]"
+                    alt="Navigation Icon 4"
+                  />
+                  <div class="mt-3">
+                    Penilaian Kriteria
+                  </div>
+
+                </a>
+              </li>
+
+              <li>
+                <a class="w-full flex items-center gap-x-3.5 py-2 px-2.5 text-lg text-white rounded-lg hover:bg-gray-100" href="#">
+                  <img
+                    loading="lazy"
+                    src="https://cdn.builder.io/api/v1/image/assets/TEMP/caa09c545cbdeaa50be9eb29bed2c06d653234f839108e06e10d0a51a75463ac?placeholderIfAbsent=true&apiKey=0eb9abb28bf34cd7be47a2dfb2f311cb"
+                    class="object-contain shrink-0 aspect-square w-[30px]"
+                    alt="Navigation Icon 5"
+                  />
+                  <div class="mt-3">
+                    Riwayat
+                  </div>
+
+                </a>
+              </li>
+
+            </ul>
+          </nav>
+        </div>
+        <!-- End Content -->
+      </div>
+    </div>
+    <!-- End Sidebar -->
+
+    <!-- Content -->
+    <div class="w-full lg:ps-64">
+      <div class="p-4 sm:p-6 space-y-4 sm:space-y-6">
+        {{{body}}}
+      </div>
+    </div>
+    <!-- End Content -->
+    <!-- ========== END MAIN CONTENT ========== -->
+    <script src="https://preline.co/assets/vendor/preline/dist/index.js?v=1.0.0"></script>
+  </body>
+</html>
+=======
 <div class="flex flex-col self-stretch my-auto text-black max-md:mt-10 max-md:max-w-full">
               <h1 class="self-start text-5xl font-bold leading-none max-md:max-w-full">
                 Panduan Penggunaan Aplikasi
@@ -35,3 +289,4 @@
                 </div>
               </article>
             </div>
+>>>>>>> ad85f82df73ae39278eba440ff5f7d834d404b45
