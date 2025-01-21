@@ -1,0 +1,132 @@
+<!-- Card Section -->
+<div class="max-w-5xl px-4 py-10 sm:px-6 lg:px-8 lg:py-14 mx-auto">
+  <!-- Card -->
+  <div class="bg-white rounded-xl shadow p-4 sm:p-7">
+    <div class="text-center mb-8">
+      <h2 class="text-2xl md:text-3xl font-bold text-gray-800">
+        Tambah Anggota
+      </h2>
+
+    </div>
+
+    <form action="#" method="POST">
+      <!-- Section -->
+      <div class="pt-6 first:pt-0 last:pb-0 border-t first:border-transparent border-gray-200">
+        <label for="nama_anggota" class="inline-block text-sm font-medium">
+          Nama Anggota
+        </label>
+
+        <div class="mt-2 space-y-3">
+          <input
+            id="nama_anggota"
+            type="text"
+            class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none"
+            placeholder="Nama Lengkap"
+          />
+        </div>
+      </div>
+      <div class="py-2 first:pt-0 last:pb-0">
+        <label for="NIP" class="inline-block text-sm font-medium">
+          NIP
+        </label>
+
+        <div class="space-y-3">
+          <input id="NIP" type="text" class="px-3 pe-11 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none" placeholder="NIP" />
+        </div>
+      </div>
+
+      <div class="py-2 first:pt-0 last:pb-0">
+        <label for="Jabatan" class="inline-block text-sm font-medium">
+          Jabatan
+        </label>
+
+        <div class="space-y-3">
+          <input id="Jabatan" type="text" class="px-3 pe-11 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none" placeholder="Jabatan" />
+        </div>
+      </div>
+      <div class="py-2 first:pt-0 last:pb-0">
+        <label for="Divisi" class="inline-block text-sm font-medium">
+          Divisi
+        </label>
+
+        <select class="py-2 px-3 pe-9 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none">
+          <option selected>Pilih Bidang</option>
+          <option>Gold</option>
+          <option>Mid 2</option>
+          <option>Exp 3</option>
+        </select>
+      </div>
+      <div class="py-2 first:pt-0 last:pb-0">
+        <label for="Email" class="inline-block text-sm font-medium">
+          Email
+        </label>
+
+        <div class="space-y-3">
+          <input id="Email" type="text" class="px-3 pe-11 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none" placeholder="Email" />
+        </div>
+      </div>
+      <div class="py-2 first:pt-0 last:pb-0">
+        <label for="Jenis Kelamin" class="inline-block text-sm font-medium">
+          Jenis Kelamin
+        </label>
+
+        <select class="py-2 px-3 pe-9 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none">
+          <option selected>Pilih Jenis Kelamin</option>
+          <option>pria</option>
+          <option>jantan</option>
+          <option>liverpool</option>
+        </select>
+      </div>
+      <div class="py-2 first:pt-0 last:pb-0">
+        <label for="Foto Profil" class="inline-block text-sm font-medium">
+          Foto Profil
+        </label>
+
+        <div class="sm:col-span-9">
+          <label for="af-submit-application-resume-cv" class="sr-only">Choose file</label>
+          <input
+            type="file"
+            name="signed_file"
+            id="af-submit-application-resume-cv"
+            class="block w-full border border-gray-200 shadow-sm rounded-lg text-sm focus:z-10 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 file:bg-gray-50 file:border-0 file:bg-gray-100 file:me-4 file:py-2 file:px-4 dark:file:bg-neutral-700 dark:file:text-neutral-400"
+          />
+        </div>
+      </div>
+      <!-- End Section -->
+
+      <!-- Section -->
+      <div class="py-6 first:pt-0 last:pb-0 border-t first:border-transparent border-gray-200">
+        <label for="af-payment-billing-address" class="inline-block text-sm font-medium">
+          Password
+        </label>
+
+        <div class="mt-2 space-y-3">
+          <input
+            id="af-payment-billing-address"
+            type="password"
+            class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none"
+            placeholder="Masukkan Password"
+          />
+        </div>
+      </div>
+      <!-- End Section -->
+    </form>
+
+    <div class="mt-5 flex justify-end gap-x-2">
+      <button
+        type="button"
+        class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 focus:outline-none focus:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none"
+      >
+        Cancel
+      </button>
+      <button
+        type="button"
+        class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none"
+      >
+        Save changes
+      </button>
+    </div>
+  </div>
+  <!-- End Card -->
+</div>
+<!-- End Card Section -->
