@@ -1,5 +1,5 @@
 <!-- Card Section -->
-<div class="max-w-5xl px-4 py-10 sm:px-6 lg:px-8 lg:py-14 mx-auto">
+<div class="max-w-5xl px-4 py-10 sm:px-6 lg:px-8 lg:py-6 mx-auto">
   <!-- Card -->
   <div class="bg-white rounded-xl shadow p-4 sm:p-7">
     <div class="text-center mb-8">
@@ -9,7 +9,7 @@
 
     </div>
 
-    <form action="#" method="POST">
+    <form action="/admin/manajemen_anggota/tambah_anggota" method="POST">
       <!-- Section -->
       <div class="pt-6 first:pt-0 last:pb-0 border-t first:border-transparent border-gray-200">
         <label for="nama_anggota" class="inline-block text-sm font-medium">
@@ -110,22 +110,24 @@
         </div>
       </div>
       <!-- End Section -->
+
+      <div class="mt-5 flex justify-end gap-x-2">
+        <button
+          onclick="window.history.back()"
+          type="button"
+          class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 focus:outline-none focus:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none"
+        >
+          Batal
+        </button>
+        <button
+          type="submit"
+          class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none"
+        >
+          Simpan
+        </button>
+      </div>
     </form>
 
-    <div class="mt-5 flex justify-end gap-x-2">
-      <button
-        type="button"
-        class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 focus:outline-none focus:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none"
-      >
-        Cancel
-      </button>
-      <button
-        type="button"
-        class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none"
-      >
-        Save changes
-      </button>
-    </div>
   </div>
   <!-- End Card -->
 </div>

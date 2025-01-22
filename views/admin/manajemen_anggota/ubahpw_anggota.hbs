@@ -8,7 +8,7 @@
   <!-- Card -->
   <div class="bg-white rounded-xl shadow p-4 sm:p-7">
 
-    <form action="#" method="POST">
+    <form action="/admin/manajemen_anggota/ubahpw_anggota" method="POST">
       <div class="mt-2 bg-blue-100 border border-blue-200 text-sm text-blue-800 rounded-lg p-4 dark:bg-blue-800/10 dark:border-blue-900 dark:text-blue-500" role="alert" tabindex="-1" aria-labelledby="hs-soft-color-info-label">
         <span id="hs-soft-color-info-label" class="font-bold">Info</span>
         Anda akan mengganti password untuk anggota :
@@ -39,7 +39,7 @@
             id="Konfirmasi_Password_Baru"
             type="password"
             class="px-3 pe-11 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none"
-            placeholder="NIP"
+            placeholder="Konfirmasi Password Baru"
           />
         </div>
         <div
@@ -55,22 +55,25 @@
 
       <!-- End Section -->
 
+      <div class="mt-5 flex justify-end gap-x-2">
+        <button
+          onclick="window.history.back()"
+          type="button"
+          class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 focus:outline-none focus:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none"
+        >
+          Kembali
+        </button>
+        <button
+          type="submit"
+          class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-gray-900 text-white hover:bg-gray-700 focus:outline-none focus:bg-gray-600 disabled:opacity-50 disabled:pointer-events-none"
+        >
+          Reset Password
+        </button>
+      </div>
+
     </form>
 
-    <div class="mt-5 flex justify-end gap-x-2">
-      <button
-        type="button"
-        class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 focus:outline-none focus:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none"
-      >
-        Kembali
-      </button>
-      <button
-        type="button"
-        class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-gray-900 text-white hover:bg-gray-700 focus:outline-none focus:bg-gray-600 disabled:opacity-50 disabled:pointer-events-none"
-      >
-        Reset Password
-      </button>
-    </div>
+    
   </div>
   <!-- End Card -->
 </div>

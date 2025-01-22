@@ -3,7 +3,8 @@
     <h1 class="text-4xl font-extrabold leading-none text-black">
       Manajemen Anggota
     </h1>
-    <a class="flex items-start self-start mt-3 text-sm font-medium leading-none text-white rounded-lg" aria-label="Add Member" href="/admin/tambah_anggota">
+    <a class="flex items-start self-start mt-3 text-sm font-medium leading-none text-white rounded-lg" aria-label="Add Member" 
+    href="/admin/manajemen_anggota/tambah_anggota">
       <div class="flex overflow-hidden gap-2 justify-center items-center px-5 py-3 bg-blue-800 rounded-lg border border-gray-300 border-solid shadow-sm">
         <img
           loading="lazy"
@@ -49,86 +50,12 @@
 
 </div>
 <!-- Table Section -->
-<div class="max-w-[85rem] px-4 py-10 sm:px-6 lg:px-8 lg:py-14 mx-auto">
+<div class="max-w-[85rem] px-4 py-10 sm:px-6 lg:px-8 lg:py-2 mx-auto">
   <!-- Card -->
   <div class="flex flex-col">
     <div class="-m-1.5 overflow-x-auto">
       <div class="p-1.5 min-w-full inline-block align-middle">
         <div class="bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden">
-          <!-- Header -->
-          <div class="px-6 py-4 grid gap-3 md:flex md:justify-between md:items-center border-b border-gray-200">
-            <div>
-              <h2 class="text-xl font-semibold text-gray-800">
-                Invoices
-              </h2>
-              <p class="text-sm text-gray-600">
-                Create invoices, edit, download and more.
-              </p>
-            </div>
-
-            <div>
-              <div class="inline-flex gap-x-2">
-                <a
-                  class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 focus:outline-none focus:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none"
-                  href="#"
-                >
-                  View all
-                </a>
-
-                <a
-                  class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none"
-                  href="#"
-                >
-                  <svg class="shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path
-                      d="M5 12h14"
-                    /><path d="M12 5v14" /></svg>
-                  Create
-                </a>
-              </div>
-            </div>
-          </div>
-          <!-- End Header -->
-
-          <!-- Collapse -->
-          <div class="border-b border-gray-200 hover:bg-gray-50">
-            <button
-              type="button"
-              class="hs-collapse-toggle py-4 px-6 w-full flex items-center gap-2 font-semibold text-gray-800"
-              id="hs-as-table"
-              aria-expanded="false"
-              aria-controls="hs-as-table-label"
-              data-hs-collapse="#hs-as-table-label"
-            >
-              <svg
-                class="hs-collapse-open:rotate-90 size-4"
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              ><path d="m9 18 6-6-6-6" /></svg>
-              Insights
-            </button>
-            <div id="hs-as-table-label" class="hs-collapse hidden w-full overflow-hidden transition-[height] duration-300" aria-labelledby="hs-as-table">
-              <div class="pb-4 px-6">
-                <div class="flex items-center space-x-2">
-                  <span class="size-5 flex justify-center items-center rounded-full bg-blue-600 text-white">
-                    <svg class="shrink-0 size-3.5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline
-                        points="20 6 9 17 4 12"
-                      /></svg>
-                  </span>
-                  <span class="text-sm text-gray-800">
-                    There are no insights for this period.
-                  </span>
-                </div>
-              </div>
-            </div>
-          </div>
-          <!-- End Collapse -->
 
           <!-- Table -->
           <table class="min-w-full divide-y divide-gray-200">
@@ -139,28 +66,7 @@
                     <span class="text-xs font-semibold uppercase tracking-wide text-gray-800">
                       NO
                     </span>
-                    <div class="hs-tooltip">
-                      <div class="hs-tooltip-toggle">
-                        <svg
-                          class="shrink-0 size-4 text-gray-500"
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="24"
-                          height="24"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          stroke-width="2"
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                        ><circle cx="12" cy="12" r="10" /><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" /><path d="M12 17h.01" /></svg>
-                        <span
-                          class="hs-tooltip-content hs-tooltip-shown:opacity-100 hs-tooltip-shown:visible opacity-0 transition-opacity inline-block absolute invisible z-10 py-1 px-2 bg-gray-900 text-xs font-medium text-white rounded shadow-sm"
-                          role="tooltip"
-                        >
-                          Invoice number related popup
-                        </span>
-                      </div>
-                    </div>
+                    
                   </div>
                 </th>
 
@@ -209,172 +115,101 @@
             </thead>
 
             <tbody class="divide-y divide-gray-200">
-              <tr class="bg-white hover:bg-gray-50">
-                <td class="size-px whitespace-nowrap">
-                  <button type="button" class="block" aria-haspopup="dialog" aria-expanded="false" aria-controls="hs-ai-invoice-modal" data-hs-overlay="#hs-ai-invoice-modal">
-                    <span class="block px-6 py-2">
-                      <span class="font-mono text-sm text-blue-600">10</span>
-                    </span>
-                  </button>
-                </td>
-                <td class="size-px whitespace-nowrap">
-                  <button type="button" class="block text-start" aria-haspopup="dialog" aria-expanded="false" aria-controls="hs-ai-invoice-modal" data-hs-overlay="#hs-ai-invoice-modal">
-                    <span class="block px-6 py-2">
-                      <p class="text-sm font-bold text-gray-600">Muhammad Raihan Alghifari</p>
-                      <p class="text-sm text-gray-500">2211522031</p>
-                    </span>
-                  </button>
-                </td>
-
-                <td class="size-px whitespace-nowrap">
-                  <button type="button" class="block text-start" aria-haspopup="dialog" aria-expanded="false" aria-controls="hs-ai-invoice-modal" data-hs-overlay="#hs-ai-invoice-modal">
-                    <span class="block px-6 py-2">
-                      <span class="text-sm font-bold text-gray-600">Peraturan Umum Kegiatan Inti Masyarakat Antar Kota </span>
-                    </span>
-                  </button>
-                </td>
-
-                <td class="size-px whitespace-nowrap">
-                  <button type="button" class="block text-start" aria-haspopup="dialog" aria-expanded="false" aria-controls="hs-ai-invoice-modal" data-hs-overlay="#hs-ai-invoice-modal">
-                    <span class="block px-6 py-2">
-                      <span class="text-sm font-bold text-gray-600">Fullstack Web-developer</span>
-                    </span>
-                  </button>
-                </td>
-
-                <td class="size-px whitespace-nowrap">
-                  <button type="button" class="block" aria-haspopup="dialog" aria-expanded="false" aria-controls="hs-ai-invoice-modal" data-hs-overlay="#hs-ai-invoice-modal">
-                    <span class="block px-6 py-2">
-                      <span class="py-1 px-1.5 inline-flex items-center gap-x-1 text-xs font-medium bg-teal-100 text-teal-800 rounded-full">
-                        <svg class="size-2.5" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                          <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" />
-                        </svg>
-                        Aktif
+              {{#each dataAnggota }}
+                <tr class="bg-white hover:bg-gray-50">
+                  <td class="size-px whitespace-nowrap">
+                    <button type="button" class="block" aria-haspopup="dialog" aria-expanded="false" aria-controls="hs-ai-invoice-modal" data-hs-overlay="#hs-ai-invoice-modal">
+                      <span class="block px-6 py-2">
+                        <span class="font-mono text-sm text-blue-600">{{inc @index}}</span>
                       </span>
-                    </span>
-                  </button>
-                </td>
-
-                <td class="flex space-x-2 pt-4">
-                  <a href="/admin/detail_anggota" class="block">
-                    <img
-                      loading="lazy"
-                      src="https://cdn.builder.io/api/v1/image/assets/TEMP/7df477c4909d1d81c2a6c98f4dc2661eafcc7ec13a1bad8ec688f48f8d17b695?apiKey=0eb9abb28bf34cd7be47a2dfb2f311cb&"
-                      class="object-contain shrink-0 rounded-none aspect-square w-[25px]"
-                      alt="Grid item 9"
-                    />
-                  </a>
-                  <a href="/admin/edit_anggota" class="block">
-                    <img
-                      loading="lazy"
-                      src="https://cdn.builder.io/api/v1/image/assets/TEMP/0fe336745368fc2896cc5f48a0a41e930b8a14cd2f6ec3a94d596ab121911229?apiKey=0eb9abb28bf34cd7be47a2dfb2f311cb&"
-                      class="object-contain shrink-0 rounded-none aspect-square w-[25px]"
-                      alt="Grid item 10"
-                    />
-                  </a>
-                  <a href="/admin/ubahpw_anggota" class="block">
-                    <img
-                      loading="lazy"
-                      src="https://cdn.builder.io/api/v1/image/assets/TEMP/8f06f664e2fb7d1c726d403a71395d07e5c742fee0b1c8fd82897465315e91c9?apiKey=0eb9abb28bf34cd7be47a2dfb2f311cb&"
-                      class="object-contain shrink-0 rounded-none aspect-square w-[25px]"
-                      alt="Grid item 11"
-                    />
-                  </a>
-                  <a href="https://example.com/page4" class="block">
-                    <img
-                      loading="lazy"
-                      src="https://cdn.builder.io/api/v1/image/assets/TEMP/4b2b586f44984b67bb7814a0bec30a83ec480b698578cd88e4f7cff46da40007?apiKey=0eb9abb28bf34cd7be47a2dfb2f311cb&"
-                      class="object-contain shrink-0 rounded-none aspect-square w-[25px]"
-                      alt="Grid item 12"
-                    />
-                  </a>
-                </td>
-
-              </tr>
-              <tr class="bg-white hover:bg-gray-50">
-                <td class="size-px whitespace-nowrap">
-                  <button type="button" class="block" aria-haspopup="dialog" aria-expanded="false" aria-controls="hs-ai-invoice-modal" data-hs-overlay="#hs-ai-invoice-modal">
-                    <span class="block px-6 py-2">
-                      <span class="font-mono text-sm text-blue-600">10</span>
-                    </span>
-                  </button>
-                </td>
-                <td class="size-px whitespace-nowrap">
-                  <button type="button" class="block text-start" aria-haspopup="dialog" aria-expanded="false" aria-controls="hs-ai-invoice-modal" data-hs-overlay="#hs-ai-invoice-modal">
-                    <span class="block px-6 py-2">
-                      <p class="text-sm font-bold text-gray-600">Muhammad Raihan Alghifari</p>
-                      <p class="text-sm text-gray-500">2211522031</p>
-                    </span>
-                  </button>
-                </td>
-
-                <td class="size-px whitespace-nowrap">
-                  <button type="button" class="block text-start" aria-haspopup="dialog" aria-expanded="false" aria-controls="hs-ai-invoice-modal" data-hs-overlay="#hs-ai-invoice-modal">
-                    <span class="block px-6 py-2">
-                      <span class="text-sm font-bold text-gray-600">Peraturan Umum Kegiatan Inti Masyarakat Antar Kota </span>
-                    </span>
-                  </button>
-                </td>
-
-                <td class="size-px whitespace-nowrap">
-                  <button type="button" class="block text-start" aria-haspopup="dialog" aria-expanded="false" aria-controls="hs-ai-invoice-modal" data-hs-overlay="#hs-ai-invoice-modal">
-                    <span class="block px-6 py-2">
-                      <span class="text-sm font-bold text-gray-600">Fullstack Web-developer</span>
-                    </span>
-                  </button>
-                </td>
-
-                <td class="size-px whitespace-nowrap">
-                  <button type="button" class="block" aria-haspopup="dialog" aria-expanded="false" aria-controls="hs-ai-invoice-modal" data-hs-overlay="#hs-ai-invoice-modal">
-                    <span class="block px-6 py-2">
-                      <span class="inline-flex items-center gap-1.5 py-0.5 px-2 rounded-full text-xs font-medium bg-red-100 text-red-800">
-                        <svg class="size-2.5" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                          <path
-                            d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293 5.354 4.646z"
-                          />
-                        </svg>
-                        Tdk aktif
+                    </button>
+                  </td>
+                  <td class="size-px whitespace-nowrap">
+                    <button type="button" class="block text-start" aria-haspopup="dialog" aria-expanded="false" aria-controls="hs-ai-invoice-modal" data-hs-overlay="#hs-ai-invoice-modal">
+                      <span class="block px-6 py-2">
+                        <p class="text-sm font-bold text-gray-600">{{nama}}</p>
+                        <p class="text-sm text-gray-500">{{nip}}</p>
                       </span>
-                    </span>
-                  </button>
-                </td>
+                    </button>
+                  </td>
 
-                <td class="flex space-x-2 pt-4">
-                  <button type="button">
-                    <img
-                      loading="lazy"
-                      src="https://cdn.builder.io/api/v1/image/assets/TEMP/7df477c4909d1d81c2a6c98f4dc2661eafcc7ec13a1bad8ec688f48f8d17b695?apiKey=0eb9abb28bf34cd7be47a2dfb2f311cb&"
-                      class="object-contain shrink-0 rounded-none aspect-square w-[25px]"
-                      alt="Grid item 9"
-                    />
-                  </button>
-                  <button type="button">
-                    <img
-                      loading="lazy"
-                      src="https://cdn.builder.io/api/v1/image/assets/TEMP/0fe336745368fc2896cc5f48a0a41e930b8a14cd2f6ec3a94d596ab121911229?apiKey=0eb9abb28bf34cd7be47a2dfb2f311cb&"
-                      class="object-contain shrink-0 rounded-none aspect-square w-[25px]"
-                      alt="Grid item 10"
-                    />
-                  </button>
-                  <button type="button">
-                    <img
-                      loading="lazy"
-                      src="https://cdn.builder.io/api/v1/image/assets/TEMP/8f06f664e2fb7d1c726d403a71395d07e5c742fee0b1c8fd82897465315e91c9?apiKey=0eb9abb28bf34cd7be47a2dfb2f311cb&"
-                      class="object-contain shrink-0 rounded-none aspect-square w-[25px]"
-                      alt="Grid item 11"
-                    />
-                  </button>
-                  <button type="button">
-                    <img
-                      loading="lazy"
-                      src="https://cdn.builder.io/api/v1/image/assets/TEMP/4b2b586f44984b67bb7814a0bec30a83ec480b698578cd88e4f7cff46da40007?apiKey=0eb9abb28bf34cd7be47a2dfb2f311cb&"
-                      class="object-contain shrink-0 rounded-none aspect-square w-[25px]"
-                      alt="Grid item 12"
-                    />
-                  </button>
-                </td>
+                  <td class="size-px whitespace-nowrap">
+                    <button type="button" class="block text-start" aria-haspopup="dialog" aria-expanded="false" aria-controls="hs-ai-invoice-modal" data-hs-overlay="#hs-ai-invoice-modal">
+                      <span class="block px-6 py-2">
+                        <span class="text-sm font-bold text-gray-600">{{jabatan}} </span>
+                      </span>
+                    </button>
+                  </td>
 
-              </tr>
+                  <td class="size-px whitespace-nowrap">
+                    <button type="button" class="block text-start" aria-haspopup="dialog" aria-expanded="false" aria-controls="hs-ai-invoice-modal" data-hs-overlay="#hs-ai-invoice-modal">
+                      <span class="block px-6 py-2">
+                        <span class="text-sm font-bold text-gray-600">{{tim}}</span>
+                      </span>
+                    </button>
+                  </td>
+
+                  <td class="size-px whitespace-nowrap">
+                    <button type="button" class="block" aria-haspopup="dialog" aria-expanded="false" aria-controls="hs-ai-invoice-modal" data-hs-overlay="#hs-ai-invoice-modal">
+                      <span class="block px-6 py-2">
+                        {{#if status}}
+                          <span class="py-1 px-1.5 inline-flex items-center gap-x-1 text-xs font-medium bg-teal-100 text-teal-800 rounded-full">
+                            <svg class="size-2.5" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                              <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" />
+                            </svg>
+                            Aktif
+                          </span>
+                        {{else}}
+                          <span class="inline-flex items-center gap-1.5 py-0.5 px-2 rounded-full text-xs font-medium bg-red-100 text-red-800">
+                            <svg class="size-2.5" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                              <path
+                                d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293 5.354 4.646z" />
+                            </svg>
+                            Tidak Aktif
+                          </span>
+                        {{/if}}
+                        
+                      </span>
+                    </button>
+                  </td>
+
+                  <td class="flex space-x-2 pt-4">
+                    <a href="/admin/manajemen_anggota/detail_anggota" class="block">
+                      <img
+                        loading="lazy"
+                        src="https://cdn.builder.io/api/v1/image/assets/TEMP/7df477c4909d1d81c2a6c98f4dc2661eafcc7ec13a1bad8ec688f48f8d17b695?apiKey=0eb9abb28bf34cd7be47a2dfb2f311cb&"
+                        class="object-contain shrink-0 rounded-none aspect-square w-[25px]"
+                        alt="detail anggota"
+                      />
+                    </a>
+                    <a href="/admin/manajemen_anggota/edit_anggota" class="block">
+                      <img
+                        loading="lazy"
+                        src="https://cdn.builder.io/api/v1/image/assets/TEMP/0fe336745368fc2896cc5f48a0a41e930b8a14cd2f6ec3a94d596ab121911229?apiKey=0eb9abb28bf34cd7be47a2dfb2f311cb&"
+                        class="object-contain shrink-0 rounded-none aspect-square w-[25px]"
+                        alt="edit anggota"
+                      />
+                    </a>
+                    <a href="/admin/manajemen_anggota/ubahpw_anggota" class="block">
+                      <img
+                        loading="lazy"
+                        src="https://cdn.builder.io/api/v1/image/assets/TEMP/8f06f664e2fb7d1c726d403a71395d07e5c742fee0b1c8fd82897465315e91c9?apiKey=0eb9abb28bf34cd7be47a2dfb2f311cb&"
+                        class="object-contain shrink-0 rounded-none aspect-square w-[25px]"
+                        alt="ubah password anggota"
+                      />
+                    </a>
+                    <a href="/admin/manajemen_anggota/hapus_anggota" class="block">
+                      <img
+                        loading="lazy"
+                        src="https://cdn.builder.io/api/v1/image/assets/TEMP/4b2b586f44984b67bb7814a0bec30a83ec480b698578cd88e4f7cff46da40007?apiKey=0eb9abb28bf34cd7be47a2dfb2f311cb&"
+                        class="object-contain shrink-0 rounded-none aspect-square w-[25px]"
+                        alt="hapus anggota"
+                      />
+                    </a>
+                  </td>
+
+                </tr>
+              {{/each}}
 
             </tbody>
           </table>

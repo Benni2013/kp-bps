@@ -14,7 +14,7 @@
   </p>
 
   <!-- Form Voting -->
-  <form class="mt-8 p-6 bg-white rounded-xl border border-gray-300 shadow-sm space-y-6">
+  <form action="/users/pemilihan/voting" method="POST" class="mt-8 p-6 bg-white rounded-xl border border-gray-300 shadow-sm space-y-6">
     <!-- Pilihan ke-1 -->
     <div>
       <h2 class="text-lg font-semibold">Pilihan ke-1</h2>
@@ -53,11 +53,11 @@
 
     <!-- Button Simpan -->
     <button
-  type="button"
-  onclick="window.location.href='/hasil-voting'"
-  class="mt-4 px-4 py-2 bg-green-600 text-white font-semibold text-sm rounded-lg shadow-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
->
-  Simpan Voting
-</button>
+      type="submit"
+      onclick="window.location.href='/hasil-voting'"
+      class="mt-4 px-4 py-2 bg-green-600 text-white font-semibold text-sm rounded-lg shadow-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
+    >
+      Simpan Voting
+    </button>
   </form>
 </div>

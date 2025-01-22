@@ -1,7 +1,13 @@
-var express = require('express');
-var router = express.Router();
+const express = require('express');
+const router = express.Router();
 
-/* GET home page. */
+const manajerAnggotaRouter = require('./manajerAnggota');
+const manajerKriteriaRouter = require('./manajerKriteria');
+const manajerPemilihanRouter = require('./manajerPemilihan');
+const pemilihanBerlangsungRouter = require('./pemilihanBerlangsung');
+const generateRouter = require('./generate');
+
+// Route untuk dashboard admin - GET
 router.get('/', function(req, res, next) {
   res.render('admin/dashboard', { 
     title: 'Dashboard Admin',
@@ -9,107 +15,22 @@ router.get('/', function(req, res, next) {
    });
 });
 
-router.get('/manajemen_anggota', function(req, res, next) {
-  res.render('admin/manajemen_anggota/manajemen_anggota', { 
-    title: 'Manajemen Anggota',
-    layout: 'layouts/admin.hbs',
-   });
-});
+// Route untuk manajemen anggota - USE
+router.use('/manajemen_anggota', manajerAnggotaRouter);
 
-router.get('/tambah_anggota', function(req, res, next) {
-  res.render('admin/manajemen_anggota/tambah_anggota', { 
-    title: 'Tambah Anggota',
-    layout: 'layouts/admin.hbs', 
-  });
-});
+// Route untuk manajemen kriteria - USE
+router.use('/manajemen_kriteria', manajerKriteriaRouter);
 
-router.get('/detail_anggota', function(req, res, next) {
-  res.render('admin/manajemen_anggota/detail_anggota', { 
-    title: 'Detail Anggota',
-    layout: 'layouts/admin.hbs', 
-  });
-});
+// Route untuk manajemen pemilihan - USE
+router.use('/manajemen_pemilihan', manajerPemilihanRouter);
 
-router.get('/edit_anggota', function(req, res, next) {
-  res.render('admin/manajemen_anggota/edit_anggota', { 
-    title: 'Edit Anggota',
-    layout: 'layouts/admin.hbs', 
-  });
-});
+// Route untuk pemilihan berlangsung - USE
+router.use('/pemilihan_berlangsung', pemilihanBerlangsungRouter);
 
-router.get('/ubahpw_anggota', function(req, res, next) {
-  res.render('admin/manajemen_anggota/ubahpw_anggota', { 
-    title: 'Ubah Password Anggota',
-    layout: 'layouts/admin.hbs',
-   });
-});
+// Router untuk generate file-file - USE
+router.use('/generate', generateRouter);
 
-router.get('/manajemen_pemilihan', function(req, res, next) {
-  res.render('admin/manajemen_pemilihan', { 
-    title: 'Manajemen Pemilihan',
-    layout: 'layouts/admin.hbs',
-   });
-});
-
-router.get('/pemilihan', function(req, res, next) {
-  res.render('admin/pemilihan', { 
-    title: 'Pemilihan',
-    layout: 'layouts/admin.hbs',
-   });
-});
-
-router.get('/pemilihan_berlangsung', function(req, res, next) {
-  res.render('admin/pemilihan_berlangsung', { 
-    title: 'Pemilihan Berlangsung',
-    layout: 'layouts/admin.hbs',
-   });
-});
-
-router.get('/buat', function(req, res, next) {
-  res.render('admin/buat_pemilihan', { 
-    title: 'Buat Pemilihan',
-    layout: 'layouts/admin.hbs',
-   });
-});
-
-router.get('/input_penilaian', function(req, res, next) {
-  res.render('admin/input_penilaian', { 
-    title: 'Input Penilaian',
-    layout: 'layouts/admin.hbs',
-   });
-});
-
-router.get('/hasil_penilaian', function (req, res, next) {
-  res.render('admin/hasil_penilaian', { 
-    title: 'Hasil Penilaian',
-    layout: 'layouts/admin.hbs',
-   });
-});
-
-router.get('/hasil_kandidat', function (req, res, next) {
-  res.render('admin/hasil_kandidat', { title: 'Hasil Kandidat' });
-});
-
-router.get('/manajemen_kriteria', function(req, res, next) {
-  res.render('admin/manajemen_kriteria/manajemen_kriteria', {  
-    title: 'Manajemen Kriteria',
-    layout: 'layouts/admin.hbs', });
-});
-
-router.get('/tambah_kriteria', function(req, res, next) {
-  res.render('admin/manajemen_kriteria/tambah_kriteria', { 
-    title: 'Tambah Kriteria',
-    layout: 'layouts/admin.hbs', 
-  });
-});
-
-router.get('/edit_kriteria', function(req, res, next) {
-  res.render('admin/manajemen_kriteria/edit_kriteria', { 
-    title: 'Edit Kriteria',
-    layout: 'layouts/admin.hbs', 
-  });
-});
-
+// Route untuk halaman riwayat pemilihan - GET
 router.get('/riwayat_pemilihan', function(req, res, next) {
   res.render('admin/riwayat_pemilihan/riwayat_pemilihan', { 
     title: 'Riwayat Pemilihan',
@@ -117,6 +38,7 @@ router.get('/riwayat_pemilihan', function(req, res, next) {
    });
 });
 
+// Route untuk halaman detail riwayat pemilihan - GET
 router.get('/detail_riwayat', function(req, res, next) {
   res.render('admin/riwayat_pemilihan/detail_riwayat', { 
     title: 'Detail Riwayat Pemilihan',
@@ -124,100 +46,12 @@ router.get('/detail_riwayat', function(req, res, next) {
    });
 });
 
-// data untuk monitor voting 1
-const voting1Status = {
-  isVotingOpen: true,
-  totalPemilih: 34,
-  sudahVote: 20,
-  belumVote: 4,
-  progressPercentage: 80,
-};
-
-// Route untuk monitor voting 1
-router.get('/monitor_voting1', function(req, res, next) {
-  // votingStatus.isVotingOpen = true;
-  const anggota = [
-      { no: 1, nama: "Frizqya Dela Pratiwi", sudahVote: true, waktu: "2024-01-15 09:30",
-      },
-      { no: 2, nama: "Annisa Nurul Hakim", sudahVote: true, waktu: "2024-01-15 10:45",
-      },
-      { no: 3, nama: "Muhammad Raihan Alghifari", sudahVote: false, waktu: "-",
-      },
-  ];
-  const hasilVoting = [
-    { nama: "Frizqya Dela Pratiwi", votes: 20, percentage: 60,
-    },
-    { nama: "Annisa Nurul Hakim", votes: 8, percentage: 24,
-    },
-    { nama: "Muhammad Raihan Alghifari", votes: 5, percentage: 16,
-    },
-  ];
-
-  res.render('admin/monitor_voting1', { 
-    title: 'Monitor Voting 1',
-    layout: 'layouts/admin.hbs',
-    anggota: anggota,
-    votingStatus: voting1Status,
-    hasilVoting: hasilVoting,
-   });
+// Route untuk download laporan 3 besar pemilihan - GET
+router.get('/download_hasil_pemilihan', (req, res) => {
+  // Implementasi download laporan bisa ditambahkan di sini
+  res.send('Download functionality to be implemented');
 });
 
-// Route untuk menghandle tutup voting 1
-router.post('/tutup_voting1', (req, res) => {
-  voting1Status.isVotingOpen = false;
-  res.json({ success: true, message: 'Voting berhasil ditutup', });
-});
-
-// Route untuk kandidat penilaian keriteria
-router.get('/kandidat_penilaian_kriteria', function(req, res, next) {
-  // Data dummy untuk kandidat
-  const kandidatData = [
-    { no: 1, nama: "Frizqya Dela Pratiwi", skor1: 45, skor2: 45, skor3: 45, total: 100, },
-    { no: 2, nama: "Annisa Nurul Hakim", skor1: 15, skor2: 15, skor3: 15, total: 99, },
-    { no: 3, nama: "Muhammad Raihan Alghifari", skor1: 15, skor2: 15, skor3: 15, total: 99, },
-    { no: 4, nama: "Benni Putra Chaniago", skor1: 3, skor2: 3, skor3: 3, total: 98, },
-    { no: 5, nama: "Faiz Hadyan", skor1: 3, skor2: 3, skor3: 3, total: 98, },
-  ];
-
-  res.render('admin/kandidat_penilaian_kriteria', { 
-    title: 'Kandidat Penilaian Kriteria',
-    layout: 'layouts/admin.hbs',
-    kandidat: kandidatData,
-   });
-});
-
-// data untuk monitor voting 2
-const voting2Status = {
-  isVotingOpen: true,
-  totalPengisi: 34,
-  sudahIsi: 20,
-  belumIsi: 4,
-  progressPercentage: 80,
-};
-
-// Route untuk monitor voting 2
-router.get('/penilaian_kriteria', function(req, res, next) {
-  // voting2Status.isVotingOpen = true;
-  // Data dummy untuk anggota
-  const anggota = [
-      { no: 1, nama: "Frizqya Dela Pratiwi", sudahMengisi: true, waktu: "2024-01-15 09:30", },
-      { no: 2, nama: "Annisa Nurul Hakim", sudahMengisi: true, waktu: "2024-01-15 10:45", },
-      { no: 3, nama: "Muhammad Raihan Alghifari", sudahMengisi: false, waktu: "-", },
-  ];
-
-  res.render('admin/monitor_voting2', { 
-    title: 'Monitor Voting 2',
-    layout: 'layouts/admin.hbs',
-    anggota: anggota,
-    votingStatus: voting2Status,
-   });
-});
-
-// Route untuk menghandle tutup voting 2
-router.post('/tutup_voting2', (req, res) => {
-  voting2Status.isVotingOpen = false;
-  res.json({ success: true, message: 'Penilaian Kriteria berhasil ditutup', });
-});
 
 // Route untuk riwayat pemilihan
 // router.get('/riwayat_pemilihan', function(req, res, next) {
@@ -275,12 +109,6 @@ router.post('/tutup_voting2', (req, res) => {
 //     riwayatDetailData: riwayatDetailData,
 //     });
 // });
-
-// Route untuk download laporan
-router.get('/download_hasil', (req, res) => {
-  // Implementasi download laporan bisa ditambahkan di sini
-  res.send('Download functionality to be implemented');
-});
 
 
 module.exports = router;
