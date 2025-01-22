@@ -45,8 +45,8 @@ router.post('/edit_kriteria', function(req, res, next) {
 });
 
 
-// Route untuk hapus kriteria - GET
-router.get('/hapus_kriteria', function(req, res, next) {
+// Route untuk hapus kriteria - POST
+router.post('/hapus_kriteria', function(req, res, next) {
   console.log('\nKriteria berhasil dihapus\n');
   res.redirect('/admin/manajemen_kriteria');
 });

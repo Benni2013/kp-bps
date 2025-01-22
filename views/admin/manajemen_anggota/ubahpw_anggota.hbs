@@ -66,6 +66,10 @@
         <button
           type="submit"
           class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-gray-900 text-white hover:bg-gray-700 focus:outline-none focus:bg-gray-600 disabled:opacity-50 disabled:pointer-events-none"
+          aria-haspopup="dialog"
+          aria-expanded="false"
+          aria-controls="hs-ai-invoice-modal"
+          data-hs-overlay="#hs-ai-invoice-modal"
         >
           Reset Password
         </button>
@@ -78,3 +82,23 @@
   <!-- End Card -->
 </div>
 <!-- End Card Section -->
+
+<!-- Modal -->
+<div id="hs-ai-invoice-modal" class="hs-overlay hidden size-full fixed top-0 start-0 z-[80] overflow-x-hidden overflow-y-auto pointer-events-none" role="dialog" tabindex="-1" aria-labelledby="hs-ai-invoice-modal-label">
+  <div class="hs-overlay-open:mt-7 hs-overlay-open:opacity-100 hs-overlay-open:duration-500 mt-0 opacity-0 ease-out transition-all sm:max-w-lg sm:w-full m-3 sm:mx-auto">
+    <div class="flex flex-col justify-center items-center px-20 py-12 bg-white rounded-lg max-w-[716px] max-md:px-5">
+      <div class="flex flex-col items-center">
+        <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/eb3f24795a2bd97bfa44b656b3f8be6e2b8154e88d387fb961bd100642b02adc?apiKey=0eb9abb28bf34cd7be47a2dfb2f311cb&" alt="Success Icon" class="w-28 h-28" />
+        <!-- Text -->
+        <p class="mt-6 text-xl font-bold text-black text-center">
+          Password Berhasil Diperbarui
+        </p>
+        <!-- Button -->
+        <button class="mt-8 px-4 py-2 bg-blue-800 text-white text-sm font-medium rounded-lg hover:bg-blue-700 focus:outline-none" onclick="closeModal()">
+          OKE
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- End Modal -->
