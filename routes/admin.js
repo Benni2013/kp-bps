@@ -54,6 +54,14 @@ router.get("/hasil_kandidat", function (req, res, next) {
   res.render("admin/hasil_kandidat", { title: "Hasil Kandidat" });
 });
 
+router.get("/hasil_kriteria", function (req, res, next) {
+  res.render("admin/hasil_kriteria", { title: "Hasil Kriteria" });
+});
+
+router.get("/kandidat_terpilih", function (req, res, next) {
+  res.render("admin/kandidat_terpilih", { title: "Kandidat Terpilih" });
+});
+
 router.get("/manajemen_kriteria", function (req, res, next) {
   res.render("admin/manajemen_kriteria/manajemen_kriteria", { title: "Express" });
 });
