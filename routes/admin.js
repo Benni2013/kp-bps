@@ -46,11 +46,6 @@ router.get('/detail_riwayat', function(req, res, next) {
    });
 });
 
-// Route untuk download laporan 3 besar pemilihan - GET
-router.get('/download_hasil_pemilihan', (req, res) => {
-  // Implementasi download laporan bisa ditambahkan di sini
-  res.send('Download functionality to be implemented');
-});
 
 
 // Route untuk riwayat pemilihan
