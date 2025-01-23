@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 const pemilihanRouter = require('./pemilihan');
+const generateRouter = require('./generate');
 
 // Route untuk halaman beranda - GET
 router.get('/beranda', function (req, res, next) {
@@ -38,6 +39,9 @@ router.get('/dashboard', function(req, res, next) {
 
 // Router untuk pemilihan - USE
 router.use('/pemilihan', pemilihanRouter);
+
+// Router untuk generate - USE
+router.use('/generate', generateRouter);
 
 // Route untuk halaman riwayat - GET
 router.get('/riwayat', function (req, res, next) {

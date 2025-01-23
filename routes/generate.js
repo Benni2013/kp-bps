@@ -1,6 +1,11 @@
 const express = require('express');
 const router = express.Router();
 
+// Router untuk download ucapan terimakasih (UNTUK ANGGOTA DAN SUPERVISOR) - GET
+router.get('/terimakasih', (req, res) => {
+  res.send('<h1>Terimakasih Karena Telah Memilih</h1>');
+});
+
 // Router untuk download template excel penilaian - GET
 router.get('/download-template', (req, res) => {
   res.send('<h1>Download Template Excel Penilaian</h1>');
