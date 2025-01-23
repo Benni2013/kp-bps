@@ -3,10 +3,18 @@ const router = express.Router();
 
 // Route untuk halaman manajemen pemilihan - GET
 router.get('/', function(req, res, next) {
+  // buatkan data pemilihan yang berisi atribut no, nama_pemilihan, periode, tahun, dan status
+  let dataPemilihan = [
+    {no: 1, nama_pemilihan: 'Pemilihan Pegawai Terbaik Triwulan 3 Tahun 2024', periode: 'Triwulan 3', tahun: 2024, status: true, },
+    {no: 2, nama_pemilihan: 'Pemilihan Pegawai Terbaik Triwulan 2 Tahun 2024', periode: 'Triwulan 2', tahun: 2024, status: false, },
+    {no: 3, nama_pemilihan: '	Pemilihan Pegawai Terbaik Triwulan 1 Tahun 2024', periode: 'Triwulan 1', tahun: 2024, status: false, },
+  ];
+
   res.render('admin/manajemen_pemilihan/pemilihan', { 
     title: 'Pemilihan',
     layout: 'layouts/admin.hbs',
-   });
+    dataPemilihan: dataPemilihan,
+  });
 });
 
 // Route untuk halaman buat pemilihan - GET

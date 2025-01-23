@@ -3,7 +3,7 @@ const router = express.Router();
 
 // Route untuk halaman pemilihan berlangsung - GET
 router.get('/', function(req, res, next) {
-  res.render('admin/pemilihan_berlangsung', { 
+  res.render('admin/pemilihan_berlangsung/pemilihan_berlangsung', { 
     title: 'Pemilihan Berlangsung',
     layout: 'layouts/admin.hbs',
    });
@@ -11,33 +11,34 @@ router.get('/', function(req, res, next) {
 
 // Router untuk halaman input penilaian - GET
 router.get('/input_penilaian', function(req, res, next) {
-  res.render('admin/input_penilaian', { 
+  res.render('admin/pemilihan_berlangsung/input_penilaian', { 
     title: 'Input Penilaian',
     layout: 'layouts/admin.hbs',
    });
 });
 
-// Router untuk download generate template input penilaian - GET
-router.get('/download_template', function(req, res, next) {
-  res.send('<h1>Download template penilaian</h1>');
+// Router untuk upload excel penilaian - POST
+router.post('/hasil_penilaian', function (req, res, next) {
+  console.log('\nFile Excel Penilaian Terunggah\n')
+
+  res.redirect('/admin/pemilihan_berlangsung//hasil_penilaian')
+  
 });
 
-// Router untuk upload hasil penilaian + untuk halaman hasil penilaian - POST
-router.post('/hasil_penilaian', function (req, res, next) {
-  res.render('admin/hasil_penilaian', { 
-    title: 'Hasil Penilaian',
-    layout: 'layouts/admin.hbs',
-   });
+// Router untuk halaman hasil penilaian - GET
+router.get('/hasil_penilaian', function(req, res, next) {
+  res.render('admin/pemilihan_berlangsung/hasil_penilaian', { 
+   title: 'Hasil Penilaian',
+   layout: 'layouts/admin.hbs',
+  });
 });
 
 // Router untuk halaman hasil kandidat eligible - GET
 router.get('/hasil_kandidat', function (req, res, next) {
-  res.render('admin/hasil_kandidat', { title: 'Hasil Kandidat' });
-});
-
-// Router untuk download excel laporan hasil kandidat eligible - GET
-router.get('/download_kandidat_eligible', function (req, res, next) {
-  res.send('<h1>Download laporan kandidat eligible</h1>');
+  res.render('admin/pemilihan_berlangsung/hasil_kandidat', { 
+    title: 'Hasil Kandidat', 
+    layout: 'layouts/admin.hbs',
+  });
 });
 
 // data dummy untuk monitor voting 1
@@ -70,7 +71,7 @@ router.get('/monitor_voting1', function(req, res, next) {
     },
   ];
 
-  res.render('admin/monitor_voting1', { 
+  res.render('admin/pemilihan_berlangsung/monitor_voting1', { 
     title: 'Monitor Voting 1',
     layout: 'layouts/admin.hbs',
     anggota: anggota,
@@ -82,9 +83,10 @@ router.get('/monitor_voting1', function(req, res, next) {
 // Route untuk menghandle tutup voting 1 - POST
 router.post('/tutup_voting1', (req, res) => {
   voting1Status.isVotingOpen = false;
-  res
-  .redirect('/admin/pemilihan_berlangsung/monitor_voting1')
-  .json({ success: true, message: 'Voting berhasil ditutup', });
+
+  console.log('\nVoting 1 berhasil ditutup\n');
+
+  res.json({ success: true, message: 'Voting berhasil ditutup', });
 });
 
 // Route untuk halaman kandidat penilaian keriteria - GET
@@ -98,24 +100,19 @@ router.get('/kandidat_penilaian_kriteria', function(req, res, next) {
     { no: 5, nama: "Faiz Hadyan", skor1: 3, skor2: 3, skor3: 3, total: 98, },
   ];
 
-  res.render('admin/kandidat_penilaian_kriteria', { 
+  res.render('admin/pemilihan_berlangsung/kandidat_penilaian_kriteria', { 
     title: 'Kandidat Penilaian Kriteria',
     layout: 'layouts/admin.hbs',
     kandidat: kandidatData,
    });
 });
 
-// Router untuk download excel laporan hasil voting 1 - GET
-router.get('/download_laporan_hasil_voting1', (req, res) => {
-  res.send('<h1>Download laporan hasil voting 1</h1>');
-});
-
-// Route untuk simpan kanidat penilaian kriteria - POST
+// Route untuk simpan kandidat penilaian kriteria - POST
 router.post('/simpan_kandidat_penilaian_kriteria', (req, res) => {
 
-  res
-  .redirect('/admin/pemilihan_berlangsung/monitor_voting2')
-  .json({ success: true, message: 'Data kandidat berhasil disimpan', });
+  console.log('\nData kandidat penilaian kriteria berhasil disimpan\n');
+
+  res.redirect('/admin/pemilihan_berlangsung/monitor_voting2');
 });
 
 // data untuk monitor voting 2
@@ -138,7 +135,7 @@ router.get('/monitor_voting2', function(req, res, next) {
       { no: 3, nama: "Muhammad Raihan Alghifari", sudahMengisi: false, waktu: "-", },
   ];
 
-  res.render('admin/monitor_voting2', { 
+  res.render('admin/pemilihan_berlangsung/monitor_voting2', { 
     title: 'Monitor Voting 2',
     layout: 'layouts/admin.hbs',
     anggota: anggota,
@@ -150,25 +147,40 @@ router.get('/monitor_voting2', function(req, res, next) {
 router.post('/tutup_voting2', (req, res) => {
   voting2Status.isVotingOpen = false;
 
-  res
-  .redirect('/admin/pemilihan_berlangsung/monitor_voting2')
-  .json({ success: true, message: 'Penilaian Kriteria berhasil ditutup', });
+  console.log('\nPenilaian Kriteria berhasil ditutup\n');
+
+  res.json({ success: true, message: 'Penilaian Kriteria berhasil ditutup', });
 });
 
-// Router untuk halaman hasil voting 2 - GET
-router.get('/hasil_voting2', (req, res) => {
-  res.render('admin/hasil_voting2', {
-      title: 'Hasil Voting 2',
-      layout: 'layouts/admin.hbs',
+// Router untuk halaman hasil voting 2
+router.get("/hasil_kriteria", function (req, res, next) {
+  res.render("admin/pemilihan_berlangsung/hasil_kriteria", { 
+    title: "Hasil Kriteria", 
+    layout: 'layouts/admin.hbs',
   });
 });
 
-// Route untuk halaman pegawai terbaik - GET
-router.get('/pegawai_terbaik', (req, res) => {
-  res.render('admin/pegawai_terbaik', {
-      title: 'Pegawai Terbaik',
-      layout: 'layouts/admin.hbs',
+router.get("/kandidat_terpilih", function (req, res, next) {
+  res.render("admin/pemilihan_berlangsung/kandidat_terpilih", { 
+    title: "Kandidat Terpilih",
+    layout: 'layouts/admin.hbs',
   });
 });
+
+// // Router untuk halaman hasil voting 2 - GET
+// router.get('/hasil_voting2', (req, res) => {
+//   res.render('admin/hasil_voting2', {
+//       title: 'Hasil Voting 2',
+//       layout: 'layouts/admin.hbs',
+//   });
+// });
+
+// // Route untuk halaman pegawai terbaik - GET
+// router.get('/pegawai_terbaik', (req, res) => {
+//   res.render('admin/pegawai_terbaik', {
+//       title: 'Pegawai Terbaik',
+//       layout: 'layouts/admin.hbs',
+//   });
+// });
 
 module.exports = router;

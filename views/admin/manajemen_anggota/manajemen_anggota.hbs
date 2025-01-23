@@ -198,14 +198,21 @@
                         alt="ubah password anggota"
                       />
                     </a>
-                    <a href="/admin/manajemen_anggota/hapus_anggota" class="block">
+                    <button 
+                      type="button" 
+                      class="block text-start" 
+                      aria-haspopup="dialog" 
+                      aria-expanded="false" 
+                      aria-controls="hs-ai-invoice-modal" 
+                      data-hs-overlay="#hs-ai-invoice-modal"
+                    >
                       <img
                         loading="lazy"
                         src="https://cdn.builder.io/api/v1/image/assets/TEMP/4b2b586f44984b67bb7814a0bec30a83ec480b698578cd88e4f7cff46da40007?apiKey=0eb9abb28bf34cd7be47a2dfb2f311cb&"
                         class="object-contain shrink-0 rounded-none aspect-square w-[25px]"
                         alt="hapus anggota"
                       />
-                    </a>
+                    </button>
                   </td>
 
                 </tr>
@@ -278,7 +285,7 @@
         <a href="" class="px-6 mb-4 flex items-center justify-center text-black border border-black rounded-lg hover:bg-gray-100 focus:outline-none">
           Batal
         </a>
-        <form method="POST" action="hapusanggota">
+        <form method="post" action="/admin/manajemen_anggota/hapus_anggota">
           <button type="submit" class="px-6 py-2 text-white bg-black rounded-lg hover:bg-gray-800 focus:outline-none">
             Hapus
           </button>

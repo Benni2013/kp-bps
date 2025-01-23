@@ -67,8 +67,8 @@ router.post('/ubahpw_anggota', function(req, res, next) {
   res.redirect('/admin/manajemen_anggota');
 });
 
-// Router untuk proses hapus anggota - GET
-router.get('/hapus_anggota', function(req, res, next) {
+// Router untuk proses hapus anggota - POST
+router.post('/hapus_anggota', function(req, res, next) {
   console.log('\nAnggota berhasil dihapus \n');
   res.redirect('/admin/manajemen_anggota');
 });

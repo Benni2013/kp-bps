@@ -1,8 +1,9 @@
 <div class="max-w-[85rem] px-4 py-10 sm:px-6 lg:px-8 lg:py-2 mx-auto">
+  <form action="/admin/pemilihan_berlangsung/simpan_kandidat_penilaian_kriteria" method="POST">
     <div class="flex justify-between items-center mb-6">
         <h2 class="text-2xl font-bold text-gray-800">{{title}}</h2>
         <button 
-        onclick="window.location.href='/admin/download_hasil'"
+        onclick="window.location.href='/admin/generate/download_laporan_voting_1'"
         type="button" 
         class="py-2 px-4 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg bg-orange-500 text-white hover:bg-orange-600">
             <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
@@ -29,14 +30,17 @@
                 <tbody class="divide-y divide-gray-200">
                     {{#each kandidat}}
                     <tr>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-800">{{@index}}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-800">{{inc @index}}</td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800">{{nama}}</td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 text-center">{{skor1}}</td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 text-center">{{skor2}}</td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 text-center">{{skor3}}</td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 text-center">{{total}}</td>
                         <td class="px-6 py-4 whitespace-nowrap text-center">
-                            <input type="checkbox" class="shrink-0 border-gray-700 rounded text-blue-600 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none">
+                            <input 
+                            type="checkbox" 
+                            name="kandidat_{{id}}"
+                            class="shrink-0 border-gray-700 rounded text-blue-600 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none">
                         </td>
                     </tr>
                     {{/each}}
@@ -46,11 +50,13 @@
     </div>
 
     <div class="mt-6 flex justify-end">
-        <a href="/admin/penilaian_kriteria" class="inline-flex items-center gap-x-2 py-2.5 px-4 text-sm font-semibold rounded-lg border border-transparent bg-black text-white hover:bg-gray-900 disabled:opacity-50 disabled:pointer-events-none">
+        <button type="submit" 
+        class="inline-flex items-center gap-x-2 py-2.5 px-4 text-sm font-semibold rounded-lg border border-transparent bg-black text-white hover:bg-gray-900 disabled:opacity-50 disabled:pointer-events-none">
             Lanjutkan ke Penilaian Kriteria
             <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
             </svg>
-        </a>
+        </button>
     </div>
+  </form>
 </div>
