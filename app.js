@@ -3,11 +3,12 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+const hbs = require('hbs');
 
 var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
-var adminsRouter = require('./routes/admin');
-var supervisorsRouter = require('./routes/supervisor');
+// var usersRouter = require('./routes/users');
+// var adminsRouter = require('./routes/admin');
+// var supervisorsRouter = require('./routes/supervisor');
 
 var app = express();
 
@@ -22,11 +23,18 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+// Routing
 app.use('/', indexRouter);
-app.use('/users', usersRouter);
-app.use('/admin', adminsRouter);
-app.use('/supervisor', supervisorsRouter);
+// app.use('/users', usersRouter);
+// app.use('/admin', adminsRouter);
+// app.use('/supervisor', supervisorsRouter);
 
+// Daftarkan helper
+// helper cek role
+hbs.registerHelper('eq', (a, b) => a === b);
+
+// helper index + 1
+hbs.registerHelper('inc', (a) => a + 1);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

@@ -1,0 +1,104 @@
+<!-- Content -->
+<main class="p-8">
+    <div class="mb-8">
+        <div class="flex justify-between items-center mb-4">
+            <h2 class="text-2xl font-bold">Hasil Penilaian Kriteria</h2>
+            <button type="button" 
+              onclick="window.location.href='/admin/generate/laporan_hasil_pemilihan'"
+              class="inline-flex items-center px-4 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600">
+                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
+                </svg>
+                Download Laporan
+            </button>
+        </div>
+
+        <!-- Search and Filter -->
+        <div class="flex justify-between mb-4">
+            <div class="relative">
+                <input type="text" placeholder="Search" class="pl-10 pr-4 py-2 border rounded-lg w-64">
+                <svg class="w-5 h-5 absolute left-3 top-2.5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                </svg>
+            </div>
+            <button class="inline-flex items-center px-4 py-2 border rounded-lg">
+                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"></path>
+                </svg>
+                Filters
+            </button>
+        </div>
+
+        <!-- Results Table -->
+        <div class="bg-white rounded-lg shadow-sm overflow-hidden">
+            <table class="w-full">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Posisi</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Nama/NIP</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Jumlah Poin</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Rata-rata</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-200">
+                    <tr>
+                        <td class="px-6 py-4">1</td>
+                        <td class="px-6 py-4">
+                            <div>Frizqya Dela Pratiwi</div>
+                            <div class="text-sm text-gray-500">192312345678900</div>
+                        </td>
+                        <td class="px-6 py-4">2520</td>
+                        <td class="px-6 py-4">90,91</td>
+                    </tr>
+                    <tr>
+                        <td class="px-6 py-4">2</td>
+                        <td class="px-6 py-4">
+                            <div>Annisa Nurul Hakim</div>
+                            <div class="text-sm text-gray-500">192312345678900</div>
+                        </td>
+                        <td class="px-6 py-4">2462</td>
+                        <td class="px-6 py-4">88,82</td>
+                    </tr>
+                    <tr>
+                        <td class="px-6 py-4">3</td>
+                        <td class="px-6 py-4">
+                            <div>Muhammad Raihan Alghifari</div>
+                            <div class="text-sm text-gray-500">192312345678900</div>
+                        </td>
+                        <td class="px-6 py-4">2442</td>
+                        <td class="px-6 py-4">80,10</td>
+                    </tr>
+                    <tr>
+                        <td class="px-6 py-4">4</td>
+                        <td class="px-6 py-4">
+                            <div>Muhammad Raihan Alghifari</div>
+                            <div class="text-sm text-gray-500">192312345678900</div>
+                        </td>
+                        <td class="px-6 py-4">2442</td>
+                        <td class="px-6 py-4">80,10</td>
+                    </tr>
+                    <tr>
+                        <td class="px-6 py-4">5</td>
+                        <td class="px-6 py-4">
+                            <div>Muhammad Raihan Alghifari</div>
+                            <div class="text-sm text-gray-500">192312345678900</div>
+                        </td>
+                        <td class="px-6 py-4">2442</td>
+                        <td class="px-6 py-4">80,10</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Action Button -->
+        <div class="flex justify-end mt-6">
+            <a href="/admin/pemilihan_berlangsung/kandidat_terpilih" class="inline-flex items-center px-4 py-2 bg-black text-white rounded-lg hover:bg-gray-800">
+                Simpan Kandidat Terpilih
+                <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path d="M9 5l7 7-7 7"></path>
+                </svg>
+            </a>
+        </div>
+    </div>
+</main>
+

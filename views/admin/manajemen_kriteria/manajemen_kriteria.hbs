@@ -1,9 +1,10 @@
 <div class="flex flex-col rounded-none max-w-[965px]" role="region" aria-label="Member Management Section">
   <div class="flex flex-wrap gap-5 justify-between w-full max-md:max-w-full">
     <h1 class="text-4xl font-extrabold leading-none text-black">
-      Manajemen Anggota
+      Manajemen Kriteria
     </h1>
-    <a class="flex items-start self-start mt-3 text-sm font-medium leading-none text-white rounded-lg" aria-label="Add Kriteria" href="/admin/tambah_kriteria">
+    <a class="flex items-start self-start mt-3 text-sm font-medium leading-none text-white rounded-lg" aria-label="Add Kriteria" 
+    href="/admin/manajemen_kriteria/tambah_kriteria">
       <div class="flex overflow-hidden gap-2 justify-center items-center px-5 py-3 bg-blue-800 rounded-lg border border-gray-300 border-solid shadow-sm">
         <img
           loading="lazy"
@@ -65,28 +66,7 @@
                     <span class="text-xs font-semibold uppercase tracking-wide text-gray-800">
                       NO
                     </span>
-                    <div class="hs-tooltip">
-                      <div class="hs-tooltip-toggle">
-                        <svg
-                          class="shrink-0 size-4 text-gray-500"
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="24"
-                          height="24"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          stroke-width="2"
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                        ><circle cx="12" cy="12" r="10" /><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" /><path d="M12 17h.01" /></svg>
-                        <span
-                          class="hs-tooltip-content hs-tooltip-shown:opacity-100 hs-tooltip-shown:visible opacity-0 transition-opacity inline-block absolute invisible z-10 py-1 px-2 bg-gray-900 text-xs font-medium text-white rounded shadow-sm"
-                          role="tooltip"
-                        >
-                          Invoice number related popup
-                        </span>
-                      </div>
-                    </div>
+                    
                   </div>
                 </th>
 
@@ -118,45 +98,56 @@
             </thead>
 
             <tbody class="divide-y divide-gray-200">
-              <tr class="bg-white hover:bg-gray-50">
-                <td class="size-px whitespace-nowrap">
-                  <span class="block px-6 py-2">
-                    <span class="font-mono text-sm text-blue-600">10</span>
-                  </span>
-                </td>
+              {{#each dataKriteria }}
+                <tr class="bg-white hover:bg-gray-50">
+                  <td class="size-px whitespace-nowrap">
+                    <button type="button" class="block" aria-haspopup="dialog" aria-expanded="false" aria-controls="hs-ai-invoice-modal" data-hs-overlay="#hs-ai-invoice-modal">
+                      <span class="block px-6 py-2">
+                        <span class="font-mono text-sm text-blue-600">{{inc @index}}</span>
+                      </span>
+                    </button>
+                  </td>
 
-                <td class="size-px whitespace-nowrap">
-                  <span class="block px-6 py-2">
-                    <span class="text-sm font-bold text-gray-600">Memahami dan memenuhi kebutuhan masyarakat</span>
-                  </span>
-                </td>
+                  <td class="size-px whitespace-nowrap">
+                    <button type="button" class="block text-start" aria-haspopup="dialog" aria-expanded="false" aria-controls="hs-ai-invoice-modal" data-hs-overlay="#hs-ai-invoice-modal">
+                      <span class="block px-6 py-2">
+                        <span class="text-sm font-bold text-gray-600">{{isi_kriteria}}</span>
+                      </span>
+                    </button>
+                  </td>
 
-                <td class="size-px whitespace-nowrap">
-                  <span class="block px-6 py-2">
-                    <span class="text-sm font-bold text-gray-600">Berorientasi Pelayanan</span>
-                  </span>
-                </td>
+                  <td class="size-px whitespace-nowrap">
+                    <button type="button" class="block text-start" aria-haspopup="dialog" aria-expanded="false" aria-controls="hs-ai-invoice-modal" data-hs-overlay="#hs-ai-invoice-modal">
+                      <span class="block px-6 py-2">
+                        <span class="text-sm font-bold text-gray-600">{{kategori}}</span>
+                      </span>
+                    </button>
+                  </td>
 
-                <td class="flex space-x-2 pt-4 ps-5">
-                  <a href="/admin/edit_kriteria" class="block">
-                    <img
-                      loading="lazy"
-                      src="https://cdn.builder.io/api/v1/image/assets/TEMP/0fe336745368fc2896cc5f48a0a41e930b8a14cd2f6ec3a94d596ab121911229?apiKey=0eb9abb28bf34cd7be47a2dfb2f311cb&"
-                      class="object-contain shrink-0 rounded-none aspect-square w-[25px]"
-                      alt="Grid item 10"
-                    />
-                  </a>
+                  <td class="flex space-x-2 pt-2 ps-5">
+                    <a href="/admin/manajemen_kriteria/edit_kriteria" class="block">
+                      <img
+                        loading="lazy"
+                        src="https://cdn.builder.io/api/v1/image/assets/TEMP/0fe336745368fc2896cc5f48a0a41e930b8a14cd2f6ec3a94d596ab121911229?apiKey=0eb9abb28bf34cd7be47a2dfb2f311cb&"
+                        class="object-contain shrink-0 rounded-none aspect-square w-[25px]"
+                        alt="edit kriteria"
+                      />
+                    </a>
 
-                  <button type="button" class="block text-start" aria-haspopup="dialog" aria-expanded="false" aria-controls="hs-ai-invoice-modal" data-hs-overlay="#hs-ai-invoice-modal">
-                    <img
-                      loading="lazy"
-                      src="https://cdn.builder.io/api/v1/image/assets/TEMP/4b2b586f44984b67bb7814a0bec30a83ec480b698578cd88e4f7cff46da40007?apiKey=0eb9abb28bf34cd7be47a2dfb2f311cb&"
-                      class="object-contain shrink-0 rounded-none aspect-square w-[25px]"
-                      alt="Grid item 12"
-                    />
-                  </button>
-                </td>
-              </tr>
+                    <button type="button" class="block text-start" aria-haspopup="dialog" aria-expanded="false" aria-controls="hs-ai-invoice-modal" data-hs-overlay="#hs-ai-invoice-modal">
+                      <img
+                        loading="lazy"
+                        src="https://cdn.builder.io/api/v1/image/assets/TEMP/4b2b586f44984b67bb7814a0bec30a83ec480b698578cd88e4f7cff46da40007?apiKey=0eb9abb28bf34cd7be47a2dfb2f311cb&"
+                        class="object-contain shrink-0 rounded-none aspect-square w-[25px]"
+                        alt="hapus kriteria"
+                      />
+                    </button>
+                  </td>
+
+                </tr>
+              {{/each}}
+              
+
             </tbody>
           </table>
           <!-- End Table -->
@@ -224,7 +215,7 @@
         <a href="" class="px-6 mb-4 flex items-center justify-center text-black border border-black rounded-lg hover:bg-gray-100 focus:outline-none">
           Batal
         </a>
-        <form method="POST" action="hapuskriteria">
+        <form method="POST" action="/admin/manajemen_kriteria/hapus_kriteria">
           <button type="submit" class="px-6 py-2 text-white bg-black rounded-lg hover:bg-gray-800 focus:outline-none">
             Hapus
           </button>

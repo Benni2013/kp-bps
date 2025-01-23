@@ -1,7 +1,7 @@
 <!-- Layout utama -->
 <div class="max-w-[85rem] px-4 py-10 sm:px-6 lg:px-8 lg:py-2 mx-auto">
     {{#if votingStatus.isVotingOpen}}
-    <!-- Card Progress untuk Voting Terbuka -->
+    <!-- Card Progress untuk Voting 1 masih dibuka -->
     <div class="bg-white border border-black rounded-xl shadow-sm p-4 md:p-5 mb-6">
         <div class="flex justify-between items-center mb-6">
             <h2 class="text-2xl font-bold text-gray-800">Progress Voting Tahap 1</h2>
@@ -68,7 +68,7 @@
                 <tbody class="divide-y divide-gray-200">
                     {{#each anggota}}
                     <tr>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-800">{{@index}}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-800">{{inc @index}}</td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800">{{nama}}</td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm">
                             {{#if sudahVote}}
@@ -84,8 +84,9 @@
             </table>
         </div>
     </div>
+    {{!-- Akhir Card Progress untuk Voting 1 masih dibuka --}}
     {{else}}
-    <!-- Card Progress untuk Voting Terbuka -->
+    <!-- Card Progress untuk Voting sudah tutup -->
     <div class="bg-white border border-black rounded-xl shadow-sm p-4 md:p-5 mb-6">
         <div class="flex justify-between items-center mb-6">
             <h2 class="text-2xl font-bold text-gray-800">Progress Voting Tahap 1</h2>
@@ -155,7 +156,7 @@
                             <tbody class="divide-y divide-gray-200">
                                 {{#each anggota}}
                                 <tr class="h-10">
-                                    <td class="px-4 py-2 whitespace-nowrap text-xs font-medium text-gray-800">{{@index}}</td>
+                                    <td class="px-4 py-2 whitespace-nowrap text-xs font-medium text-gray-800">{{inc @index}}</td>
                                     <td class="px-4 py-2 whitespace-nowrap text-xs text-gray-800">{{nama}}</td>
                                     <td class="px-4 py-2 whitespace-nowrap text-xs">
                                         {{#if sudahVote}}
@@ -197,7 +198,7 @@
             
         </div>
         <div class="lg:col-span-2 flex justify-end ">
-            <a href="/admin/kandidat_penilaian_kriteria" 
+            <a href="/admin/pemilihan_berlangsung/kandidat_penilaian_kriteria" 
             class="inline-flex items-center gap-x-2 py-2.5 px-4 text-sm font-semibold rounded-lg border border-transparent bg-black text-white hover:bg-gray-900 disabled:opacity-50 disabled:pointer-events-none">
                 Lihat Detail Hasil Voting Tahap 1
                 <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
@@ -206,6 +207,7 @@
             </a>
         </div>
     </div>
+    {{!-- Akhir Card Progress untuk Voting sudah tutup --}}
     {{/if}}
 </div>
 
@@ -215,9 +217,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
     if (tutupVotingBtn) {
         tutupVotingBtn.addEventListener('click', async function() {
-            if (confirm('Apakah Anda yakin ingin menutup voting?')) {
+            if (confirm('Apakah Anda yakin ingin menutup voting 1?')) {
                 try {
-                    const response = await fetch('/admin/tutup_voting1', {
+                    const response = await fetch('/admin/pemilihan_berlangsung/tutup_voting1', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json'

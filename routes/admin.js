@@ -1,81 +1,114 @@
-var express = require("express");
-var router = express.Router();
+const express = require('express');
+const router = express.Router();
 
-/* GET home page. */
-router.get("/", function (req, res, next) {
-  res.render("admin/dashboard", { title: "Express" });
+const manajerAnggotaRouter = require('./manajerAnggota');
+const manajerKriteriaRouter = require('./manajerKriteria');
+const manajerPemilihanRouter = require('./manajerPemilihan');
+const pemilihanBerlangsungRouter = require('./pemilihanBerlangsung');
+const generateRouter = require('./generate');
+
+// Route untuk dashboard admin - GET
+router.get('/', function(req, res, next) {
+  res.render('admin/dashboard', { 
+    title: 'Dashboard Admin',
+    layout: 'layouts/admin.hbs',
+   });
 });
 
-router.get("/manajemen_anggota", function (req, res, next) {
-  res.render("admin/manajemen_anggota/manajemen_anggota", { title: "Express" });
+// Route untuk manajemen anggota - USE
+router.use('/manajemen_anggota', manajerAnggotaRouter);
+
+// Route untuk manajemen kriteria - USE
+router.use('/manajemen_kriteria', manajerKriteriaRouter);
+
+// Route untuk manajemen pemilihan - USE
+router.use('/manajemen_pemilihan', manajerPemilihanRouter);
+
+// Route untuk pemilihan berlangsung - USE
+router.use('/pemilihan_berlangsung', pemilihanBerlangsungRouter);
+
+// Router untuk generate file-file - USE
+router.use('/generate', generateRouter);
+
+// Route untuk halaman riwayat pemilihan - GET
+router.get('/riwayat_pemilihan', function(req, res, next) {
+  res.render('admin/riwayat_pemilihan/riwayat_pemilihan', { 
+    title: 'Riwayat Pemilihan',
+    layout: 'layouts/admin.hbs',
+   });
 });
 
-router.get("/tambah_anggota", function (req, res, next) {
-  res.render("admin/manajemen_anggota/tambah_anggota", { title: "Express" });
+// Route untuk halaman detail riwayat pemilihan - GET
+router.get('/detail_riwayat', function(req, res, next) {
+  res.render('admin/riwayat_pemilihan/detail_riwayat', { 
+    title: 'Detail Riwayat Pemilihan',
+    layout: 'layouts/admin.hbs',
+   });
 });
 
-router.get("/detail_anggota", function (req, res, next) {
-  res.render("admin/manajemen_anggota/detail_anggota", { title: "Express" });
+// Route untuk download laporan 3 besar pemilihan - GET
+router.get('/download_hasil_pemilihan', (req, res) => {
+  // Implementasi download laporan bisa ditambahkan di sini
+  res.send('Download functionality to be implemented');
 });
 
-router.get("/edit_anggota", function (req, res, next) {
-  res.render("admin/manajemen_anggota/edit_anggota", { title: "Express" });
-});
 
-router.get("/ubahpw_anggota", function (req, res, next) {
-  res.render("admin/manajemen_anggota/ubahpw_anggota", { title: "Express" });
-});
+// Route untuk riwayat pemilihan
+// router.get('/riwayat_pemilihan', function(req, res, next) {
+//   // Data dummy untuk riwayat pemilihan
+//   const riwayatData = [
+//     {
+//         id: 1,
+//         judul: "Pemilihan Pegawai Terbaik Triwulan 1 Tahun 2024",
+//         tanggal: "15 Jan 2024",
+//         pemenang: "Frizqya Dela Pratiwi",
+//         posisi: 1,
+//     },
+//     {
+//         id: 2,
+//         judul: "Pemilihan Pegawai Terbaik Triwulan 4 Tahun 2023",
+//         tanggal: "15 Dec 2023",
+//         pemenang: "Annisa Nurul Hakim",
+//         posisi: 1,
+//     },
+//     {
+//         id: 3,
+//         judul: "Pemilihan Pegawai Terbaik Triwulan 3 Tahun 2023",
+//         tanggal: "15 Sep 2023",
+//         pemenang: "Muhammad Raihan Alghifari",
+//         posisi: 1,
+//     }
+//   ];
 
-router.get("/manajemen_pemilihan", function (req, res, next) {
-  res.render("admin/manajemen_pemilihan", { title: "Manajemen Pemilihan" });
-});
+//   res.render('admin/riwayat_pemilihan', {
+//     title: 'Riwayat Pemilihan',
+//     layout: 'layouts/admin.hbs',
+//     riwayatData: riwayatData,
+//     });
+// });
 
-router.get("/pemilihan", function (req, res, next) {
-  res.render("admin/pemilihan", { title: "Pemilihan" });
-});
+// Route untuk detail riwayat pemilihan
+// router.get('/riwayat_pemilihan/detail/:id', function(req, res, next) {
+//   // Data dummy untuk detail riwayat pemilihan
+//   const riwayatDetailData = [
+//     { id: 1, nama: "Frizqya Dela Pratiwi", nip: "192312345678900", posisi: 1, jmlPoin: 2520, rata2: 90.91, },
+//     { id: 2, nama: "Annisa Nurul Hakim", nip: "192312345678900", posisi: 2, jmlPoin: 2462, rata2: 88.82, },
+//     { id: 3, nama: "Muhammad Raihan Alghifari", nip: "192312345678900", posisi: 3, jmlPoin: 2442, rata2: 80.10, },
+//   ];
 
-router.get("/pemilihan_berlangsung", function (req, res, next) {
-  res.render("admin/pemilihan_berlangsung", { title: "Pemilihan Berlangsung" });
-});
+//   const judul = "PEMILIHAN PEGAWAI TELADAN";
+//   const periode = "Triwulan 1";
+//   const tahun = 2024;
 
-router.get("/buat", function (req, res, next) {
-  res.render("admin/buat_pemilihan", { title: "Buat Pemilihan" });
-});
+//   res.render('admin/detail_riwayat_pemilihan', {
+//     title: 'Detail Riwayat Pemilihan',
+//     layout: 'layouts/admin.hbs',
+//     judul,
+//     periode,
+//     tahun,
+//     riwayatDetailData: riwayatDetailData,
+//     });
+// });
 
-router.get("/input_penilaian", function (req, res, next) {
-  res.render("admin/input_penilaian", { title: "Input Penilaian" });
-});
-
-router.get("/hasil_penilaian", function (req, res, next) {
-  res.render("admin/hasil_penilaian", { title: "Hasil Penilaian" });
-});
-
-router.get("/hasil_kandidat", function (req, res, next) {
-  res.render("admin/hasil_kandidat", { title: "Hasil Kandidat" });
-});
-
-router.get("/manajemen_kriteria", function (req, res, next) {
-  res.render("admin/manajemen_kriteria/manajemen_kriteria", { title: "Express" });
-});
-
-router.get("/tambah_kriteria", function (req, res, next) {
-  res.render("admin/manajemen_kriteria/tambah_kriteria", { title: "Express" });
-});
-
-router.get("/edit_kriteria", function (req, res, next) {
-  res.render("admin/manajemen_kriteria/edit_kriteria", { title: "Express" });
-});
-
-router.get("/riwayat_pemilihan", function (req, res, next) {
-  res.render("admin/riwayat_pemilihan/riwayat_pemilihan", { title: "Express" });
-});
-
-router.get("/detail_riwayat", function (req, res, next) {
-  res.render("admin/riwayat_pemilihan/detail_riwayat", { title: "Express" });
-});
-
-router.get("/riwayat_pemilihan", function (req, res, next) {
-  res.render("admin/riwayat_pemilihan", { title: "Express" });
-});
 
 module.exports = router;

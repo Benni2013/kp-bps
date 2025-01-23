@@ -11,7 +11,8 @@
     </div>
     <h1 class="text-center text-2xl font-bold mb-4">E-Voisy</h1>
     <p class="text-center text-gray-600 mb-6">BADAN PUSAT STATISTIK KOTA PADANG</p>
-    <form action="/login" method="POST" class="space-y-4">
+    {{!-- Form Login --}}
+    <form action="/auth/login" method="POST" class="space-y-4">
       <div>
         <label for="username" class="block text-sm font-medium text-gray-700">Username</label>
         <input
@@ -39,5 +40,6 @@
         Log In
       </button>
     </form>
+    {{!-- Akhir Form Login --}}
   </div>
 </div>
