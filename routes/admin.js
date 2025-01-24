@@ -7,8 +7,10 @@ const manajerPemilihanRouter = require('./manajerPemilihan');
 const pemilihanBerlangsungRouter = require('./pemilihanBerlangsung');
 const generateRouter = require('./generate');
 
+const { middlewareValidation } = require('../controllers/AuthController');
+
 // Route untuk dashboard admin - GET
-router.get('/', function(req, res, next) {
+router.get('/', middlewareValidation, function(req, res, next) {
   res.render('admin/dashboard', { 
     title: 'Dashboard Admin',
     layout: 'layouts/admin.hbs',

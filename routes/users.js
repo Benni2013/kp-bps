@@ -4,8 +4,10 @@ const router = express.Router();
 const pemilihanRouter = require('./pemilihan');
 const generateRouter = require('./generate');
 
+const { middlewareValidation } = require('../controllers/AuthController');
+
 // Route untuk halaman beranda - GET
-router.get('/beranda', function (req, res, next) {
+router.get('/beranda', middlewareValidation, function (req, res, next) {
   // dummy data
   let pegawaiTerbaik = true;
 
@@ -23,7 +25,7 @@ router.get('/beranda', function (req, res, next) {
 });
 
 // Route untuk halaman Dashboard (SUPERVISOR) - GET
-router.get('/dashboard', function(req, res, next) {
+router.get('/dashboard', middlewareValidation, function (req, res, next) {
 
   // buat ambil role dari cookie
   let role = req.cookies.role;

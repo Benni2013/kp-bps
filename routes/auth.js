@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
 
+const { login, middlewareValidation } = require('../controllers/AuthController');
+
 // Route untuk halaman login - GET
 router.get('/login', function(req, res, next) {
     res.render('auth/login', { 
@@ -16,23 +18,7 @@ router.get('/login', function(req, res, next) {
   // });
   
 // Route untuk proses login - POST
-router.post('/login', function (req, res, next) {
-
-  const username = req.body.username;
-  const role = username; // Ganti dengan role yang sesuai
-
-  console.log('\n\nLogin berhasil sebagai: ' + username + '\n\n');
-
-  res.cookie('role', role);
-
-  if (role == 'supervisor') {
-    res.redirect('/users/dashboard');
-  } else if (role == 'admin') {
-    res.redirect('/admin/');
-  } else {
-    res.redirect('/users/beranda');
-  }
-});
+router.post('/login', login);
   
   //router.get('/profile', function (req, res, next) {
     //res.render('user/profile', { title: 'Profil' });
