@@ -1,25 +1,47 @@
 <div class="flex flex-col lg:ml-10 lg:mt-12">
-  <h1 class="text-6xl font-bold text-center">Terima Kasih Sudah Melakukan Voting!</h1>
-  <p class="mt-6 text-lg leading-8 text-center">
-    Silahkan download bukti voting dibawah ini.
+  <h1 class="text-4xl font-bold">Terima Kasih Sudah Melakukan Voting!</h1>
+  <p class="mt-4 text-lg leading-8">
+    Silahkan download bukti voting di bawah ini.
   </p>
 
-<div class="mt-10 bg-white rounded-xl border border-gray-300 shadow-lg p-8 w-full">
-  <!-- Iframe untuk menampilkan PDF -->
-  <iframe 
-    src="/files/bukti-voting.pdf"
-    class="w-full h-[700px] border-none rounded-lg"
-    style="width: 100%; min-width: 100%;"
-  >
-  </iframe>
-  
-  <!-- Tombol Download PDF -->
-  <a 
-    href="/files/bukti-voting.pdf" 
-    class="mt-6 inline-block px-6 py-3 bg-orange-500 text-white font-semibold text-lg rounded-lg shadow-md hover:bg-orange-600 focus:outline-none focus:ring-4 focus:ring-orange-500 focus:ring-offset-2"
-  >
-    Download PDF
-  </a>
-</div>
+  <div class="mt-8 bg-white rounded-xl border border-gray-300 shadow-sm p-6">
+    <!-- Tabel Informasi -->
+    <table class="table-auto w-full border-collapse border border-gray-200 text-left">
+      <thead>
+        <tr>
+          <th class="border border-gray-300 px-4 py-2 bg-gray-100 font-semibold">PERTANYAAN</th>
+          <th class="border border-gray-300 px-4 py-2 bg-gray-100 font-semibold">JAWABAN</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="border border-gray-300 px-4 py-2">NIP</td>
+          <td class="border border-gray-300 px-4 py-2">198102182006021001</td>
+        </tr>
+        <tr>
+          <td class="border border-gray-300 px-4 py-2">Nama Lengkap</td>
+          <td class="border border-gray-300 px-4 py-2">Chairil Fadli</td>
+        </tr>
+        <tr>
+          <td class="border border-gray-300 px-4 py-2">Jabatan</td>
+          <td class="border border-gray-300 px-4 py-2">Statistisi Ahli Madya</td>
+        </tr>
+        <tr>
+          <td class="border border-gray-300 px-4 py-2">Tim</td>
+          <td class="border border-gray-300 px-4 py-2">Teknis</td>
+        </tr>
+        <tr>
+          <td class="border border-gray-300 px-4 py-2">Diunduh pada</td>
+          <td class="border border-gray-300 px-4 py-2">2024-12-18 09:31:22</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 
+  <!-- Tombol Download PDF -->
+  <div class="mt-6 flex justify-end">
+    <a href="/files/bukti-voting.pdf" class="inline-block px-6 py-3 bg-orange-500 text-white font-semibold text-lg rounded-lg shadow-md hover:bg-orange-600 focus:outline-none focus:ring-4 focus:ring-orange-500 focus:ring-offset-2">
+      Download PDF
+    </a>
+  </div>
 </div>
