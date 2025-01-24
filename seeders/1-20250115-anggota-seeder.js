@@ -56,7 +56,7 @@ module.exports = {
         nip: '101010',
         nama: 'Admin',
         email: 'admin@example.com',
-        password: defaultPassword,
+        password: await bcrypt.hash('admin', 10),
         role: 'admin',
         jabatan: 'Admin WEB E-Voisy',
         status_anggota: 'aktif'
