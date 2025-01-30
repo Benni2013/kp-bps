@@ -4,7 +4,7 @@ const router = express.Router();
 const pemilihanRouter = require('./pemilihan');
 const generateRouter = require('./generate');
 
-const { middlewareValidation } = require('../controllers/AuthController');
+const { middlewareValidation, isSupervisor } = require('../controllers/AuthController');
 
 // Route untuk halaman beranda - GET
 router.get('/beranda', middlewareValidation, function (req, res, next) {
@@ -14,28 +14,30 @@ router.get('/beranda', middlewareValidation, function (req, res, next) {
   // buat ambil role dari cookie
   let role = req.cookies.role;
 
-  console.log('\nRole: ' + role + '\n');
+  const akun = req.user;
   
   res.render('user/beranda', { 
     title: 'Beranda',
     pegawaiTerbaik: pegawaiTerbaik,
     layout: 'layouts/layout',
     role,
+    akun,
    });
 });
 
 // Route untuk halaman Dashboard (SUPERVISOR) - GET
-router.get('/dashboard', middlewareValidation, function (req, res, next) {
+router.get('/dashboard', middlewareValidation, isSupervisor, function (req, res, next) {
 
   // buat ambil role dari cookie
   let role = req.cookies.role;
 
-  console.log('\nRole: ' + role + '\n');
+  const akun = req.user;
 
   res.render('supervisor/dashboard', { 
     title: 'Dashboard', 
     layout: 'layouts/layout',
     role,
+    akun,
    });
 });
 
