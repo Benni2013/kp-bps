@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
 
+const { login, middlewareValidation, logout, changePassword } = require('../controllers/AuthController');
+
 // Route untuk halaman login - GET
 router.get('/login', function(req, res, next) {
     res.render('auth/login', { 
@@ -9,64 +11,26 @@ router.get('/login', function(req, res, next) {
     });
 });
   
-  
-  
-  // router.get('/login', function (req, res, next) {
-  //   res.redirect('/');
-  // });
-  
 // Route untuk proses login - POST
-router.post('/login', function (req, res, next) {
-
-  const username = req.body.username;
-  const role = username; // Ganti dengan role yang sesuai
-
-  console.log('\n\nLogin berhasil sebagai: ' + username + '\n\n');
-
-  res.cookie('role', role);
-
-  if (role == 'supervisor') {
-    res.redirect('/users/dashboard');
-  } else if (role == 'admin') {
-    res.redirect('/admin/');
-  } else {
-    res.redirect('/users/beranda');
-  }
-});
-  
-  //router.get('/profile', function (req, res, next) {
-    //res.render('user/profile', { title: 'Profil' });
-  //}); bagian dela
+router.post('/login', login);
 
 // Route untuk halaman ganti password - GET
-router.get('/change-password', function (req, res, next) {
+router.get('/change-password', middlewareValidation, function (req, res, next) {
   let role = req.cookies.role;
-
+  const akun = req.user;
 
   res.render('user/change_password', { 
     title: 'Ubah Password',
     layout: 'layouts/profile', 
-    role
+    role,
+    akun,
   });
 });
 
 // Route untuk proses ganti password - POST
-router.post('/change-password', function (req, res, next) {
-  let role = req.cookies.role;
-
-  console.log('\nPassword berhasil diubah\n');
-
-  if (role === 'admin') {
-    res.redirect('/admin')
-  } else {
-    res.redirect('/users/beranda');
-  }
-  
-});
+router.post('/change-password', middlewareValidation, changePassword);
   
 // Route untuk proses logout - GET
-router.get('/logout', function (req, res, next) {
-  res.redirect('/auth/login') ; // Redirect ke halaman login
-});
+router.get('/logout', logout);
 
 module.exports = router;

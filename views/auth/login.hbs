@@ -11,6 +11,13 @@
     </div>
     <h1 class="text-center text-2xl font-bold mb-4">E-Voisy</h1>
     <p class="text-center text-gray-600 mb-6">BADAN PUSAT STATISTIK KOTA PADANG</p>
+
+    {{#if error}}
+      <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4" role="alert">
+        <span class="block sm:inline">{{error}}</span>
+      </div>
+    {{/if}}
+    
     {{!-- Form Login --}}
     <form action="/auth/login" method="POST" class="space-y-4">
       <div>
