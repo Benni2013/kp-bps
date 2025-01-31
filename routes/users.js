@@ -15,6 +15,7 @@ router.get('/beranda', middlewareValidation, function (req, res, next) {
   let role = req.cookies.role;
 
   const akun = req.user;
+  console.log('\nRole: ' + akun + '\n');
   
   res.render('user/beranda', { 
     title: 'Beranda',
@@ -48,16 +49,18 @@ router.use('/pemilihan', pemilihanRouter);
 router.use('/generate', generateRouter);
 
 // Route untuk halaman riwayat - GET
-router.get('/riwayat', function (req, res, next) {
+router.get('/riwayat',middlewareValidation, function (req, res, next) {
   // buat ambil role dari cookie
   let role = req.cookies.role;
 
-  console.log('\nRole: ' + role + '\n');
+  const akun = req.user;
+  console.log('\nRole: ' + akun + '\n');
 
   res.render('user/riwayat', { 
     title: 'Riwayat Pemilihan',
     layout: 'layouts/layout', 
     role,
+    akun,
   });
 });
 
