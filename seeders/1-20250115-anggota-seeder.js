@@ -9,17 +9,17 @@ module.exports = {
     const anggotaData = [
       {
         nip: '050061116',
-        nama: 'Yusuf',
-        email: 'yusuf@example.com',
-        password: defaultPassword,
+        nama: 'agif',
+        email: 'agif@example.com',
+        password: await bcrypt.hash('agif', 10), 
         role: 'biasa',
         jabatan: 'Pengolah Data',
         status_anggota: 'aktif'
       },
       {
         nip: '340013515',
-        nama: 'Ahmad Nur',
-        email: 'ahmadnur@example.com',
+        nama: 'ul Nur',
+        email: 'ulnur@example.com',
         password: defaultPassword,
         role: 'biasa',
         jabatan: 'Statistisi Ahli Muda',
@@ -27,8 +27,8 @@ module.exports = {
       },
       {
         nip: '340014375',
-        nama: 'Yatria Nova',
-        email: 'yatrianova@example.com',
+        nama: 'satria Noa',
+        email: 'satrianoa@example.com',
         password: defaultPassword,
         role: 'biasa',
         jabatan: 'Pengolah Data',
@@ -36,8 +36,8 @@ module.exports = {
       },
       {
         nip: '340015616',
-        nama: 'Edy',
-        email: 'edy@example.com',
+        nama: 'Emir',
+        email: 'Emir@example.com',
         password: defaultPassword,
         role: 'biasa',
         jabatan: 'Statistisi Ahli Muda',
@@ -45,8 +45,8 @@ module.exports = {
       },
       {
         nip: '340015808',
-        nama: 'Alfianto',
-        email: 'alfianto@example.com',
+        nama: 'Riskan',
+        email: 'Riskan@example.com',
         password: defaultPassword,
         role: 'supervisor',
         jabatan: 'Kepala BPS Kabupaten/Kota',
