@@ -42,13 +42,13 @@ router.get('/dashboard', middlewareValidation, isSupervisor, function (req, res,
 });
 
 // Router untuk pemilihan - USE
-router.use('/pemilihan', pemilihanRouter);
+router.use('/pemilihan', middlewareValidation, pemilihanRouter);
 
 // Router untuk generate - USE
-router.use('/generate', generateRouter);
+router.use('/generate', middlewareValidation, generateRouter);
 
 // Route untuk halaman riwayat - GET
-router.get('/riwayat', function (req, res, next) {
+router.get('/riwayat', middlewareValidation, function (req, res, next) {
   // buat ambil role dari cookie
   let role = req.cookies.role;
 
@@ -62,7 +62,7 @@ router.get('/riwayat', function (req, res, next) {
 });
 
 // Route untuk halaman profil - GET
-router.get('/profil', function(req, res, next) {
+router.get('/profil', middlewareValidation, function(req, res, next) {
   // buat ambil role dari cookie
   let role = req.cookies.role;
 

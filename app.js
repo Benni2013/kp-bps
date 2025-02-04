@@ -36,6 +36,17 @@ hbs.registerHelper('eq', (a, b) => a === b);
 // helper index + 1
 hbs.registerHelper('inc', (a) => a + 1);
 
+// helper untuk pagination
+hbs.registerHelper('gt', (a, b) => a > b);
+hbs.registerHelper('lt', (a, b) => a < b);
+hbs.registerHelper('add', (a, b) => a + b);
+hbs.registerHelper('subtract', (a, b) => a - b);
+
+// helper untuk mengecek apakah suatu nilai ada di dalam array
+hbs.registerHelper('includes', (array, value) => {
+  return Array.isArray(array) && array.includes(value);
+});
+
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));
@@ -49,7 +60,11 @@ app.use(function(err, req, res, next) {
 
   // render the error page
   res.status(err.status || 500);
-  res.render('error');
+  res.render('error', { 
+    layout: 'layouts/error',
+    status: err.status || 500,
+    message: err.message
+  });
 });
 
 module.exports = app;

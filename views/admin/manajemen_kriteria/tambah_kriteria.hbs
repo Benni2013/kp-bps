@@ -8,7 +8,9 @@
   <!-- Card -->
   <div class="bg-white rounded-xl shadow p-4 sm:p-7">
 
-    <form action="/admin/manajemen_kriteria/tambah_kriteria" method="POST">
+    <form action="/admin/manajemen_kriteria/tambah_kriteria" method="POST"
+      onsubmit="handleSubmit(event)"
+    >
 
       <div class="pt-6 first:pt-0 last:pb-0 border-t first:border-transparent border-gray-200">
         <label for="tambah_kriteria" class="inline-block text-sm font-medium">
@@ -17,10 +19,12 @@
 
         <div class="mt-2 space-y-3">
           <input
-            id="tambah_kriteria"
+            id="isi_kriteria"
+            name="isi_kriteria"
             type="text"
             class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none"
             placeholder="Masukkan Kriteria"
+            required
           />
         </div>
       </div>
@@ -29,11 +33,20 @@
           Kategori
         </label>
 
-        <select class="py-2 px-3 pe-9 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none">
-          <option selected>Pilih Kategori</option>
-          <option>pria</option>
-          <option>jantan</option>
-          <option>liverpool</option>
+        <select 
+          id="tipe_indikator"
+          name="tipe_indikator"
+          class="py-2 px-3 pe-9 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none"
+          required
+        >
+          <option selected disabled>Pilih Kategori</option>
+          <option value="Adaptif">Adaptif</option>
+          <option value="Akuntabel">Akuntabel</option>
+          <option value="Berorientasi Pelayanan">Berorientasi Pelayanan</option>
+          <option value="Harmonis">Harmonis</option>
+          <option value="Kolaboratif">Kolaboratif</option>
+          <option value="Kompeten">Kompeten</option>
+          <option value="Loyal">Loyal</option>
         </select>
 
       </div>
@@ -69,17 +82,23 @@
 <!-- End Card Section -->
 
 <!-- Modal -->
-<div id="hs-ai-invoice-modal" class="hs-overlay hidden size-full fixed top-0 start-0 z-[80] overflow-x-hidden overflow-y-auto pointer-events-none" role="dialog" tabindex="-1" aria-labelledby="hs-ai-invoice-modal-label">
-  <div class="hs-overlay-open:mt-7 hs-overlay-open:opacity-100 hs-overlay-open:duration-500 mt-0 opacity-0 ease-out transition-all sm:max-w-lg sm:w-full m-3 sm:mx-auto">
-    <div class="flex flex-col justify-center items-center px-20 py-12 bg-white rounded-lg max-w-[716px] max-md:px-5">
+<div id="successModal" class="hs-overlay hidden size-full fixed top-0 start-0 z-[80] overflow-x-hidden overflow-y-auto" role="dialog" tabindex="-1" aria-labelledby="hs-ai-invoice-modal-label">
+  <!-- Backdrop -->
+  <div class="bg-black bg-opacity-50 fixed inset-0"></div>
+  
+  <div class="sm:max-w-lg sm:w-full m-3 sm:mx-auto py-8">
+    <div class="flex flex-col justify-center items-center px-20 py-12 bg-white rounded-lg max-w-[716px] max-md:px-5 relative">
       <div class="flex flex-col items-center">
-        <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/eb3f24795a2bd97bfa44b656b3f8be6e2b8154e88d387fb961bd100642b02adc?apiKey=0eb9abb28bf34cd7be47a2dfb2f311cb&" alt="Success Icon" class="w-28 h-28" />
+        <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/eb3f24795a2bd97bfa44b656b3f8be6e2b8154e88d387fb961bd100642b02adc?apiKey=0eb9abb28bf34cd7be47a2dfb2f311cb&" 
+          alt="Success Icon" 
+          class="w-28 h-28" />
         <!-- Text -->
         <p class="mt-6 text-xl font-bold text-black text-center">
           Kriteria Berhasil Ditambahkan
         </p>
         <!-- Button -->
-        <button class="mt-8 px-4 py-2 bg-blue-800 text-white text-sm font-medium rounded-lg hover:bg-blue-700 focus:outline-none" onclick="closeModal()">
+        <button class="mt-8 px-4 py-2 bg-blue-800 text-white text-sm font-medium rounded-lg hover:bg-blue-700 focus:outline-none" 
+          onclick="window.location.href = '/admin/manajemen_kriteria'">
           OKE
         </button>
       </div>
@@ -87,3 +106,42 @@
   </div>
 </div>
 <!-- End Modal -->
+
+<script>
+// Update handleSubmit function
+async function handleSubmit(event) {
+  event.preventDefault();
+  const form = event.target;
+  
+  // Debug: log data yang akan dikirim
+  const formData = new FormData(form);
+
+  try {
+    const response = await fetch(form.action, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: new URLSearchParams(formData)
+    });
+
+    const result = await response.json();
+
+    if (result.success) {
+      const modal = document.getElementById('successModal');
+      modal.classList.remove('hidden');
+      modal.classList.add('block');
+      
+      // setelah 1 detik, redirect ke halaman manajemen_kriteria
+      setTimeout(() => {
+        window.location.href = '/admin/manajemen_kriteria';
+      }, 1000);
+    } else {
+      console.error('Update failed:', result.message);
+    }
+  } catch (error) {
+    console.error('Error:', error);
+  }
+}
+
+</script>
