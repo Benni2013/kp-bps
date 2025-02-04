@@ -1,10 +1,11 @@
 // UserVoting
 
 // - getKandidatVot1 (utk saat akan milih 3 besar)
-// - setVot1 (simpan pilihan)                               (done)
-// - getMyVot (lihat kandidat yg dipilih)                   (done)
-// - getKandidatKriteria (untuk saat penilaian kriteria)    (done)
-// - setPenilaianKriteria (simpan penilaian kriteria)
+// - setVot1 (simpan pilihan)                                       (done)
+// - getMyVot (lihat kandidat yg dipilih)                           (done)
+// - getKandidatKriteria (untuk saat penilaian kriteria)            (done)
+// - setPenilaianKriteria (simpan penilaian kriteria)               (done)
+// - getMyPenilaianKriteria (lihat penilaian kriteria yg dipilih)   (done)
 
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
@@ -253,7 +254,7 @@ const setPenilaianKriteria = async (req, res, next) => {
         let fieldName = `criteria-${kriteria.indikator_id}-${kandidat.detail_pemilihan_id}`;
         let nilai = parseInt(req.body[fieldName]);
 
-        if (!nilai || nilai < 1 || nilai > 4) {
+        if (nilai < 1 || nilai > 4) {
           throw new Error(`Nilai tidak valid untuk ${fieldName}`);
         }
 
@@ -276,10 +277,48 @@ const setPenilaianKriteria = async (req, res, next) => {
   }
 };
 
+const getMyPenilaianKriteria = async (req, res, next) => {
+  try {
+    let pemilihan = await Pemilihan.findOne({
+      where: {
+        status: "berjalan",
+      },
+    });
+    const akun = req.user;
+
+    let detail_pemilihan = await DetailPemilihan.findOne({
+      where: {
+        pemilihan_id: pemilihan.pemilihan_id,
+        anggota_id: akun.nip,
+      },
+    });
+
+    let waktu_voting = await Voting2.findOne({
+      where: {
+        detail_pemilihan_id: detail_pemilihan.detail_pemilihan_id,
+      },
+    });
+
+    console.log("----------------" + waktu_voting.waktu_vot2);
+    let role = req.cookies.role;
+    res.render("user/thank-you", {
+      title: "Thank You",
+      layout: "layouts/layout",
+      role,
+      akun,
+      waktu_voting
+    });
+  } catch (error) {
+    console.error("getMyVot validation error:", error);
+    res.redirect("users/beranda");
+  }
+};
+
 module.exports = {
   getKandidatVot1,
   setVot1,
   getMyVot,
   getKandidatKriteria,
   setPenilaianKriteria,
+  getMyPenilaianKriteria,
 };
