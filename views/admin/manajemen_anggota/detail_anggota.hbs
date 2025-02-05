@@ -11,36 +11,47 @@
     <!-- Foto -->
     <img
       loading="lazy"
-      src="https://cdn.builder.io/api/v1/image/assets/TEMP/d51e6353f840d11b0b9228a36ee2f6a2a8681b6398bb794bd0d91b1d1b155d92?apiKey=0eb9abb28bf34cd7be47a2dfb2f311cb&"
+      src="{{anggota.foto_profil}}"
       class="object-cover rounded-lg w-40 h-52 border border-gray-300"
-      alt="Employee Profile Picture"
+      alt="Foto Profil {{anggota.nama}}"
     />
     <!-- Detail Karyawan -->
     <dl class="flex flex-col text-sm text-black">
-      <div class="flex mb-2">
-        <dt class="w-36 font-bold">Nama Karyawan</dt>
-        <dd>: Frizqya Dela Pratiwi</dd>
-      </div>
-      <div class="flex mb-2">
-        <dt class="w-36 font-bold">NIP</dt>
-        <dd>: 192312345678900</dd>
-      </div>
-      <div class="flex mb-2">
-        <dt class="w-36 font-bold">Jabatan</dt>
-        <dd>: Analis Pengelolaan Keuangan APBN Ahli Muda</dd>
-      </div>
-      <div class="flex mb-2">
-        <dt class="w-36 font-bold">Bidang</dt>
-        <dd>: Keuangan</dd>
-      </div>
-      <div class="flex mb-2">
-        <dt class="w-36 font-bold">Email</dt>
-        <dd>: 08123456789</dd>
-      </div>
-      <div class="flex">
-        <dt class="w-36 font-bold">Jenis Kelamin</dt>
-        <dd>: Perempuan</dd>
-      </div>
+      {{#with anggota}}
+        <div class="flex mb-2">
+          <dt class="w-36 font-bold">Nama Karyawan</dt>
+          <dd>: {{nama}}</dd>
+        </div>
+        <div class="flex mb-2">
+          <dt class="w-36 font-bold">NIP</dt>
+          <dd>: {{nip}}</dd>
+        </div>
+        <div class="flex mb-2">
+          <dt class="w-36 font-bold">Jabatan</dt>
+          <dd>: {{jabatan}}</dd>
+        </div>
+        <div class="flex mb-2">
+          <dt class="w-36 font-bold">Tim</dt>
+          <dd>: {{divisi}}</dd>
+        </div>
+        <div class="flex mb-2">
+          <dt class="w-36 font-bold">Role</dt>
+          <dd>: {{role}}</dd>
+        </div>
+        <div class="flex mb-2">
+          <dt class="w-36 font-bold">Email</dt>
+          <dd>: {{email}}</dd>
+        </div>
+        <div class="flex mb-2">
+          <dt class="w-36 font-bold">Jenis Kelamin</dt>
+          <dd>: {{jenis_kelamin_display}}</dd>
+        </div>
+        <div class="flex">
+          <dt class="w-36 font-bold">Status</dt>
+          <dd>: {{#if status}}Aktif{{else}}Tidak Aktif{{/if}}</dd>
+        </div>
+      {{/with}}
+      
     </dl>
   </div>
   <hr class="mt-6 border-gray-300" />

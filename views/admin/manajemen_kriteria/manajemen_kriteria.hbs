@@ -32,7 +32,7 @@
             <img
               loading="lazy"
               src="https://cdn.builder.io/api/v1/image/assets/TEMP/c3298dfdfad3de5332e45e084e12d2172f36afb3b78a8a3653d0a71b92ee77ff?placeholderIfAbsent=true&apiKey=0eb9abb28bf34cd7be47a2dfb2f311cb"
-              alt=""
+              alt="Search Kriteria"
               class="object-contain shrink-0 self-stretch my-auto aspect-square w-[18px]"
             />
             <input 
@@ -110,12 +110,16 @@
           <!-- Table -->
           <table class="min-w-full divide-y divide-gray-200">
 
-            <!-- Table Header -->
-            <div class="px-6 py-4 grid gap-3 md:flex md:justify-between md:items-center border-t border-gray-200">
-              <div>
-                <p id="dataCount" class="text-gray-600">Total data kriteria = {{totalData}}</p>
+            {{!-- Header --}}
+              <div class="px-6 py-4 grid gap-3 md:flex md:justify-between md:items-center border-t border-gray-200">
+                <div>
+                  <p class="text-sm text-gray-600">
+                    Total Kriteria : 
+                    <span class="font-semibold text-gray-800">{{totalData}}</span>
+                  </p>
+                </div>
               </div>
-            </div>
+            {{!-- Akhir Header --}}
 
             <thead class="bg-gray-100 divide-y divide-gray-200 border">
               <tr>
@@ -300,8 +304,6 @@
 const searchInput = document.getElementById('searchKriteria');
 const searchForm = document.getElementById('searchForm');
 
-let kriteriaIdToDelete = null;
-
 // Handle search submit
 function handleSearchSubmit(event) {
   event.preventDefault();
@@ -367,6 +369,8 @@ async function updateResults() {
 
 // JavaScript function untuk meng-handle delete
 // Delete modal functions
+let kriteriaIdToDelete = null;
+
 function showDeleteModal(id, kriteria) {
   kriteriaIdToDelete = id;
   const modal = document.getElementById('hs-ai-invoice-modal');
