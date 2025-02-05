@@ -65,16 +65,15 @@ router.get('/riwayat',middlewareValidation, function (req, res, next) {
 });
 
 // Route untuk halaman profil - GET
-router.get('/profil', function(req, res, next) {
+router.get('/profil', middlewareValidation, function(req, res, next) {
   // buat ambil role dari cookie
   let role = req.cookies.role;
-
-  console.log('\nRole: ' + role + '\n');
+  const akun = req.user;
 
   res.render('supervisor/profil', { 
     title: 'Profil',
     layout: "layouts/profile", 
-    role,
+    akun,
   });
 });
 

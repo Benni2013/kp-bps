@@ -169,7 +169,20 @@ const getKandidatKriteria = async (req, res, next) => {
       },
     });
 
-    //user udah voting
+    const akun = req.user;
+    let detail_pemilihan = await DetailPemilihan.findOne({
+      where: {
+        pemilihan_id: pemilihan.pemilihan_id,
+        anggota_id: akun.nip,
+      },
+    });
+    console.log("++__++__++__ " + detail_pemilihan.detail_pemilihan_id);
+    let detail_voting2 = await Voting2.findOne({
+      where: {
+        detail_pemilihan_id: detail_pemilihan.detail_pemilihan_id,
+      },
+    });
+
     if (!pemilihan) {
       statusnya = true;
       res.render("user/penilaian_kriteria", {
@@ -178,7 +191,8 @@ const getKandidatKriteria = async (req, res, next) => {
         pemilihan,
         statusnya,
       });
-    } else if (/*cari user udah voting atau belum */ p) {
+    } else if (detail_voting2) {
+        res.redirect("/users/pemilihan/thank-you");
     } else {
       let inditakor = await Indikator.findAll({
         where: {
