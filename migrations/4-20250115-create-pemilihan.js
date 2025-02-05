@@ -32,10 +32,10 @@ module.exports = {
         type: Sequelize.DATE,
         allowNull: false
       },
-      status: {
-        type: Sequelize.ENUM('berjalan', 'selesai'),
+      tahap_pemilihan: {
+        type: Sequelize.ENUM('datanilai', 'voting1',  'voting2', 'tutup', 'selesai'),
         allowNull: false,
-        defaultValue: 'berjalan'
+        defaultValue: 'datanilai'
       }
     });
   },

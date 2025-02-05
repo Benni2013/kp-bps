@@ -48,11 +48,6 @@ module.exports = (sequelize, DataTypes) => {
     status_anggota: {
       type: DataTypes.ENUM('lolos', 'gugur')
     },
-    status_vot1: {
-      type: DataTypes.ENUM('berjalan', 'selesai'),
-      allowNull: false,
-      defaultValue: 'berjalan'
-    }
   }, {
     tableName: 'voting1',
     timestamps: false

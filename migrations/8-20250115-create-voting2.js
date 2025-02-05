@@ -45,11 +45,6 @@ module.exports = {
       waktu_vot2: {
         type: Sequelize.DATE
       },
-      status_vot2: {
-        type: Sequelize.ENUM('berjalan', 'selesai'),
-        allowNull: false,
-        defaultValue: 'berjalan'
-      }
     });
   },
 

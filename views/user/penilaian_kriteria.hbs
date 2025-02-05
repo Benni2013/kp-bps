@@ -9,70 +9,65 @@
     Penilaian ini bertujuan untuk memberikan evaluasi yang objektif dalam menentukan hasil akhir sesuai dengan kriteria yang telah ditetapkan.
   </p>
 
-  {{#if openPenilaian}}
-    <!-- Form Penilaian -->
-    <form action="/users/pemilihan/penilaian" method="POST"
-    class="mt-8 bg-white rounded-xl border border-gray-300 shadow-sm p-6 space-y-6 overflow-auto" style="max-height: 60vh;">
-      <!-- Tabel Penilaian -->
-      <table class="table-auto w-full text-left border-collapse">
-        <thead>
-          <tr>
-            <th class="px-4 py-2 border-b-2 border-gray-300">Kategori</th>
-            <th class="px-4 py-2 border-b-2 border-gray-300">Indikator</th>
-            <th class="px-4 py-2 border-b-2 border-gray-300">Frizqya Dela Pratiwi</th>
-            <th class="px-4 py-2 border-b-2 border-gray-300">Annisa Nurul Hakim</th>
-            <th class="px-4 py-2 border-b-2 border-gray-300">Muhammad Raihan Alghifari</th>
-          </tr>
-        </thead>
-        <tbody>
-          {{#each rows as |row index|}}
-          <tr>
-            <td class="px-4 py-2 border-b border-gray-200">{{row.category}}</td>
-            <td class="px-4 py-2 border-b border-gray-200">{{row.indicator}}</td>
-            <td class="px-4 py-2 border-b border-gray-200">
-              <ol class="space-y-1">
-                <li><label><input type="radio" name="criteria-{{index}}-frizqya" value="1" /> 1</label></li>
-                <li><label><input type="radio" name="criteria-{{index}}-frizqya" value="2" /> 2</label></li>
-                <li><label><input type="radio" name="criteria-{{index}}-frizqya" value="3" /> 3</label></li>
-                <li><label><input type="radio" name="criteria-{{index}}-frizqya" value="4" /> 4</label></li>
-              </ol>
-            </td>
-            <td class="px-4 py-2 border-b border-gray-200">
-              <ol class="space-y-1">
-                <li><label><input type="radio" name="criteria-{{index}}-annisa" value="1" /> 1</label></li>
-                <li><label><input type="radio" name="criteria-{{index}}-annisa" value="2" /> 2</label></li>
-                <li><label><input type="radio" name="criteria-{{index}}-annisa" value="3" /> 3</label></li>
-                <li><label><input type="radio" name="criteria-{{index}}-annisa" value="4" /> 4</label></li>
-              </ol>
-            </td>
-            <td class="px-4 py-2 border-b border-gray-200">
-              <ol class="space-y-1">
-                <li><label><input type="radio" name="criteria-{{index}}-muhammad" value="1" /> 1</label></li>
-                <li><label><input type="radio" name="criteria-{{index}}-muhammad" value="2" /> 2</label></li>
-                <li><label><input type="radio" name="criteria-{{index}}-muhammad" value="3" /> 3</label></li>
-                <li><label><input type="radio" name="criteria-{{index}}-muhammad" value="4" /> 4</label></li>
-              </ol>
-            </td>
-          </tr>
-          {{/each}}
-        </tbody>
-      </table>
-
-      <!-- Button Simpan -->
-      <button
-        type="submit"
-        {{!-- onclick="//window.location.href='/thank-you'" --}}
-        class="mt-4 px-4 py-2 bg-green-600 text-white font-semibold text-sm rounded-lg shadow-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
-      >
-        Simpan Penilaian
-      </button>
-
-    </form>
-  {{else}}
+  {{#if statusnya}}
     <!-- Notifikasi Belum Bisa Dinilai -->
     <div class="mt-8 bg-gray-200 rounded-xl border border-gray-300 shadow-sm p-6 flex justify-center items-center h-[400px]">
-      <p class="text-gray-600 text-xl font-medium">Voting 1 masih berlangsung</p>
+      <p class="text-gray-600 text-xl font-medium">Votig Tahap 2 Tidak Tersedia</p>
     </div>
+  {{else}}
+    <!-- Form Penilaian -->
+<form action="/users/pemilihan/penilaian" method="POST" class="mt-8 bg-white rounded-xl border border-gray-300 shadow-sm p-6 space-y-6 overflow-auto" style="max-height: 60vh;">
+  <!-- Tabel Penilaian -->
+  <table class="table-auto w-full text-left border-collapse">
+    <thead>
+      <tr>
+        <th class="px-4 py-2 border-b-2 border-gray-300">Kategori</th>
+        <th class="px-4 py-2 border-b-2 border-gray-300">Indikator</th>
+        {{#each kandidatKriteria}}
+          <th class="px-4 py-2 border-b-2 border-gray-300 text-center">
+            <!-- Foto Kandidat -->
+            <div class="flex flex-col items-center">
+              <img 
+                src="{{#if this.gender}}{{#if (eq this.gender 'laki-laki')}}/images/male-default.png{{else}}/images/female-default.png{{/if}}{{else}}/images/male-default.png{{/if}}" 
+                alt="Foto {{this.nama}}" 
+                class="w-10 h-10 rounded-full mb-2"
+              />
+              <!-- Nama Kandidat -->
+              <span>{{this.nama}}</span>
+            </div>
+          </th>
+        {{/each}}
+      </tr>
+    </thead>
+    <tbody>
+      {{#each inditakor}}
+        <tr>
+          <td class="px-4 py-2 border-b border-gray-200">{{this.tipe_indikator}}</td>
+          <td class="px-4 py-2 border-b border-gray-200">{{this.isi_indikator}}</td>
+          {{#each ../kandidatKriteria}}
+            <td class="px-4 py-2 border-b border-gray-200">
+              <ol class="space-y-1">
+                <li><label><input type="radio" name="criteria-{{@../index}}-{{this.detail_pemilihan_id}}" value="1" /> 1</label></li>
+                <li><label><input type="radio" name="criteria-{{@../index}}-{{this.detail_pemilihan_id}}" value="2" /> 2</label></li>
+                <li><label><input type="radio" name="criteria-{{@../index}}-{{this.detail_pemilihan_id}}" value="3" /> 3</label></li>
+                <li><label><input type="radio" name="criteria-{{@../index}}-{{this.detail_pemilihan_id}}" value="4" /> 4</label></li>
+              </ol>
+            </td>
+          {{/each}}
+        </tr>
+      {{/each}}
+    </tbody>
+  </table>
+
+  <!-- Button Simpan -->
+  <button
+    type="submit"
+    class="mt-4 px-4 py-2 bg-green-600 text-white font-semibold text-sm rounded-lg shadow-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
+  >
+    Simpan Penilaian
+  </button>
+</form>
+
   {{/if}}
-  
+
 </div>

@@ -27,11 +27,6 @@ module.exports = (sequelize, DataTypes) => {
     status_anggota: {
       type: DataTypes.ENUM('non_eligible', 'eligible')
     },
-    status_data_nilai: {
-      type: DataTypes.ENUM('berjalan', 'selesai'),
-      allowNull: false,
-      defaultValue: 'berjalan'
-    }
   }, {
     tableName: 'data_nilai',
     timestamps: false
