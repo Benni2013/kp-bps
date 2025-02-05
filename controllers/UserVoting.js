@@ -1,10 +1,11 @@
 // UserVoting
 
 // - getKandidatVot1 (utk saat akan milih 3 besar)
-// - setVot1 (simpan pilihan)                               (done)
-// - getMyVot (lihat kandidat yg dipilih)                   (done)
-// - getKandidatKriteria (untuk saat penilaian kriteria)    (done)
-// - setPenilaianKriteria (simpan penilaian kriteria)
+// - setVot1 (simpan pilihan)                                       (done)
+// - getMyVot (lihat kandidat yg dipilih)                           (done)
+// - getKandidatKriteria (untuk saat penilaian kriteria)            (done)
+// - setPenilaianKriteria (simpan penilaian kriteria)               (done)
+// - getMyPenilaianKriteria (lihat penilaian kriteria yg dipilih)   (done)
 
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
@@ -14,39 +15,59 @@ require("dotenv").config();
 // Middleware untuk validasi token
 const getKandidatVot1 = async (req, res, next) => {
   try {
-    // buat ambil role dari cookie
-    let role = req.cookies.role;
-    const data_nilai = await DataNilai.findAll({
-      where: { status_anggota: "eligible" },
+    let pemilihan = await Pemilihan.findOne({
+      where: {
+        tahap_pemilihan: "voting1",
+      },
     });
-
-    for (let j = 0; j < data_nilai.length; j++) {
-      let detail_pemilihan = await DetailPemilihan.findOne({
-        where: {
-          detail_pemilihan_id: data_nilai[j].detail_pemilihan_id,
-        },
-      });
-      data_nilai[j].data_id_anggota = detail_pemilihan.anggota_id;
-    }
-
-    for (let i = 0; i < data_nilai.length; i++) {
-      let anggota = await Anggota.findOne({
-        where: {
-          nip: data_nilai[i].data_id_anggota,
-        },
-      });
-      data_nilai[i].data_nama_anggota = anggota.nama;
-      data_nilai[i].data_nip_anggota = anggota.nip;
-    }
     const akun = req.user;
 
-    res.render("user/voting", {
-      title: "Voting",
-      layout: "layouts/layout",
-      role,
-      data_nilai,
-      akun,
-    });
+    if (!pemilihan) {
+      statusnya = false;
+      res.render("user/voting", {
+        title: "Voting",
+        layout: "layouts/layout",
+        pemilihan,
+        akun,
+        statusnya,
+      });
+      console.log("=========================");
+    } else {
+      statusnya = true;
+      // buat ambil role dari cookie
+      let role = req.cookies.role;
+      const data_nilai = await DataNilai.findAll({
+        where: { status_anggota: "eligible" },
+      });
+
+      for (let j = 0; j < data_nilai.length; j++) {
+        let detail_pemilihan = await DetailPemilihan.findOne({
+          where: {
+            detail_pemilihan_id: data_nilai[j].detail_pemilihan_id,
+          },
+        });
+        data_nilai[j].data_id_anggota = detail_pemilihan.anggota_id;
+      }
+
+      for (let i = 0; i < data_nilai.length; i++) {
+        let anggota = await Anggota.findOne({
+          where: {
+            nip: data_nilai[i].data_id_anggota,
+          },
+        });
+        data_nilai[i].data_nama_anggota = anggota.nama;
+        data_nilai[i].data_nip_anggota = anggota.nip;
+      }
+
+      res.render("user/voting", {
+        title: "Voting",
+        layout: "layouts/layout",
+        role,
+        data_nilai,
+        akun,
+        statusnya,
+      });
+    }
   } catch (error) {
     console.error("getKandidatVot1 validation error:", error);
     res.redirect("users/beranda");
@@ -59,7 +80,7 @@ const setVot1 = async (req, res, next) => {
 
     let pemilihan = await Pemilihan.findOne({
       where: {
-        status: "berjalan",
+        tahap_pemilihan: "voting1",
       },
     });
     const akun = req.user;
@@ -90,7 +111,7 @@ const getMyVot = async (req, res, next) => {
   try {
     let pemilihan = await Pemilihan.findOne({
       where: {
-        status: "berjalan",
+        tahap_pemilihan: "voting1",
       },
     });
     const akun = req.user;
@@ -126,7 +147,6 @@ const getMyVot = async (req, res, next) => {
       },
     });
 
-    console.log("----------------" + nama_pilihan.pilihan2);
     res.render("user/hasil-voting", {
       title: "Hasil Voting",
       layout: "layouts/layout",
@@ -143,53 +163,71 @@ const getMyVot = async (req, res, next) => {
 
 const getKandidatKriteria = async (req, res, next) => {
   try {
-    let inditakor = await Indikator.findAll({
+    let pemilihan = await Pemilihan.findOne({
       where: {
-        status_inditakor: "aktif",
-      },
-    });
-    // buat ambil role dari cookie
-    let role = req.cookies.role;
-    const akun = req.user;
-
-    let kandidatKriteria = await Voting1.findAll({
-      where: {
-        status_anggota: "lolos",
+        tahap_pemilihan: "voting2",
       },
     });
 
-    for (let j = 0; j < kandidatKriteria.length; j++) {
-      let detail_lulus = await DetailPemilihan.findOne({
-        where: {
-          detail_pemilihan_id: kandidatKriteria[j].detail_pemilihan_id,
-        },
-      });
-      kandidatKriteria[j].nip_lulus = detail_lulus.anggota_id;
-    }
-    for (let i = 0; i < kandidatKriteria.length; i++) {
-      let nama_lulus = await Anggota.findOne({
-        where: {
-          nip: kandidatKriteria[i].nip_lulus,
-        },
-      });
-      kandidatKriteria[i].nama = nama_lulus.nama;
-    }
-
-    const openPenilaian = true;
-    const sudahNilai = false;
-
-    if (sudahNilai) {
-      res.redirect("/users/pemilihan/thank-you");
-    } else {
+    //user udah voting
+    if (!pemilihan) {
+      statusnya = true;
       res.render("user/penilaian_kriteria", {
         title: "Penilaian Kriteria",
         layout: "layouts/layout",
-        inditakor,
-        openPenilaian,
-        role,
-        akun,
-        kandidatKriteria,
+        pemilihan,
+        statusnya,
       });
+    } else if (/*cari user udah voting atau belum */ p) {
+    } else {
+      let inditakor = await Indikator.findAll({
+        where: {
+          status_inditakor: "aktif",
+        },
+      });
+      // buat ambil role dari cookie
+      let role = req.cookies.role;
+      const akun = req.user;
+
+      let kandidatKriteria = await Voting1.findAll({
+        where: {
+          status_anggota: "lolos",
+        },
+      });
+
+      for (let j = 0; j < kandidatKriteria.length; j++) {
+        let detail_lulus = await DetailPemilihan.findOne({
+          where: {
+            detail_pemilihan_id: kandidatKriteria[j].detail_pemilihan_id,
+          },
+        });
+        kandidatKriteria[j].nip_lulus = detail_lulus.anggota_id;
+      }
+      for (let i = 0; i < kandidatKriteria.length; i++) {
+        let nama_lulus = await Anggota.findOne({
+          where: {
+            nip: kandidatKriteria[i].nip_lulus,
+          },
+        });
+        kandidatKriteria[i].nama = nama_lulus.nama;
+      }
+
+      const openPenilaian = true;
+      const sudahNilai = false;
+
+      if (sudahNilai) {
+        res.redirect("/users/pemilihan/thank-you");
+      } else {
+        res.render("user/penilaian_kriteria", {
+          title: "Penilaian Kriteria",
+          layout: "layouts/layout",
+          inditakor,
+          openPenilaian,
+          role,
+          akun,
+          kandidatKriteria,
+        });
+      }
     }
   } catch (error) {
     console.error("getKandidatKriteria validation error:", error);
@@ -199,10 +237,10 @@ const getKandidatKriteria = async (req, res, next) => {
 
 const setPenilaianKriteria = async (req, res, next) => {
   try {
-    // Ambil pemilihan yang sedang berjalan
+    // Ambil Penilaian Kriteria yang sedang berjalan
     let pemilihan = await Pemilihan.findOne({
       where: {
-        status: "berjalan",
+        tahap_pemilihan: "voting2",
       },
     });
 
@@ -253,7 +291,7 @@ const setPenilaianKriteria = async (req, res, next) => {
         let fieldName = `criteria-${kriteria.indikator_id}-${kandidat.detail_pemilihan_id}`;
         let nilai = parseInt(req.body[fieldName]);
 
-        if (!nilai || nilai < 1 || nilai > 4) {
+        if (nilai < 1 || nilai > 4) {
           throw new Error(`Nilai tidak valid untuk ${fieldName}`);
         }
 
@@ -264,7 +302,6 @@ const setPenilaianKriteria = async (req, res, next) => {
           kandidat_id: kandidat.pilihan1,
           nilai: nilai,
           waktu_vot2: new Date(),
-          status_vot2: "berjalan",
         });
       }
     }
@@ -276,10 +313,48 @@ const setPenilaianKriteria = async (req, res, next) => {
   }
 };
 
+const getMyPenilaianKriteria = async (req, res, next) => {
+  try {
+    let pemilihan = await Pemilihan.findOne({
+      where: {
+        tahap_pemilihan: "voting2",
+      },
+    });
+    const akun = req.user;
+
+    let detail_pemilihan = await DetailPemilihan.findOne({
+      where: {
+        pemilihan_id: pemilihan.pemilihan_id,
+        anggota_id: akun.nip,
+      },
+    });
+
+    let waktu_voting = await Voting2.findOne({
+      where: {
+        detail_pemilihan_id: detail_pemilihan.detail_pemilihan_id,
+      },
+    });
+
+    console.log("----------------" + waktu_voting.waktu_vot2);
+    let role = req.cookies.role;
+    res.render("user/thank-you", {
+      title: "Thank You",
+      layout: "layouts/layout",
+      role,
+      akun,
+      waktu_voting,
+    });
+  } catch (error) {
+    console.error("getMyVot validation error:", error);
+    res.redirect("users/beranda");
+  }
+};
+
 module.exports = {
   getKandidatVot1,
   setVot1,
   getMyVot,
   getKandidatKriteria,
   setPenilaianKriteria,
+  getMyPenilaianKriteria,
 };

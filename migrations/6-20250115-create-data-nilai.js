@@ -36,11 +36,6 @@ module.exports = {
       status_anggota: {
         type: Sequelize.ENUM('non_eligible', 'eligible')
       },
-      status_data_nilai: {
-        type: Sequelize.ENUM('berjalan', 'selesai'),
-        allowNull: false,
-        defaultValue: 'berjalan'
-      }
     });
   },
 

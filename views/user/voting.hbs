@@ -13,48 +13,55 @@
     Poin-poin ini akan diakumulasi untuk menentukan hasil akhir dari proses voting.
   </p>
 
-  <!-- Form Voting -->
-  <form action="/users/pemilihan/voting" method="POST" class="mt-8 p-6 bg-white rounded-xl border border-gray-300 shadow-sm space-y-6">
-    <!-- Pilihan ke-1 -->
-    <div>
-      <h2 class="text-lg font-semibold">Pilihan ke-1</h2>
-      <p class="text-sm text-gray-500">Pilihan ke-1 akan mendapatkan 3 Poin</p>
-      <select id="pilihan1" name="pilihan1" class="select-input mt-2 block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-sm">
-        {{#each data_nilai}}
-          <option value="{{this.data_nip_anggota}}">{{this.data_nama_anggota}}</option>
-        {{/each}}
-      </select>
-    </div>
+  {{#if statusnya}}
+    <!-- Form Voting -->
+    <form action="/users/pemilihan/voting" method="POST" class="mt-8 p-6 bg-white rounded-xl border border-gray-300 shadow-sm space-y-6">
+      <!-- Pilihan ke-1 -->
+      <div>
+        <h2 class="text-lg font-semibold">Pilihan ke-1</h2>
+        <p class="text-sm text-gray-500">Pilihan ke-1 akan mendapatkan 3 Poin</p>
+        <select id="pilihan1" name="pilihan1" class="select-input mt-2 block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-sm">
+          {{#each data_nilai}}
+            <option value="{{this.data_nip_anggota}}">{{this.data_nama_anggota}}</option>
+          {{/each}}
+        </select>
+      </div>
 
-    <!-- Pilihan ke-2 -->
-    <div>
-      <h2 class="text-lg font-semibold">Pilihan ke-2</h2>
-      <p class="text-sm text-gray-500">Pilihan ke-2 akan mendapatkan 2 Poin</p>
-      <select id="pilihan2" name="pilihan2" class="select-input mt-2 block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-sm">
-        {{#each data_nilai}}
-          <option value="{{this.data_nip_anggota}}">{{this.data_nama_anggota}}</option>
-        {{/each}}
-      </select>
-    </div>
+      <!-- Pilihan ke-2 -->
+      <div>
+        <h2 class="text-lg font-semibold">Pilihan ke-2</h2>
+        <p class="text-sm text-gray-500">Pilihan ke-2 akan mendapatkan 2 Poin</p>
+        <select id="pilihan2" name="pilihan2" class="select-input mt-2 block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-sm">
+          {{#each data_nilai}}
+            <option value="{{this.data_nip_anggota}}">{{this.data_nama_anggota}}</option>
+          {{/each}}
+        </select>
+      </div>
 
-    <!-- Pilihan ke-3 -->
-    <div>
-      <h2 class="text-lg font-semibold">Pilihan ke-3</h2>
-      <p class="text-sm text-gray-500">Pilihan ke-3 akan mendapatkan 1 Poin</p>
-      <select id="pilihan3" name="pilihan3" class="select-input mt-2 block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-sm">
-        {{#each data_nilai}}
-          <option value="{{this.data_nip_anggota}}">{{this.data_nama_anggota}}</option>
-        {{/each}}
-      </select>
-    </div>
+      <!-- Pilihan ke-3 -->
+      <div>
+        <h2 class="text-lg font-semibold">Pilihan ke-3</h2>
+        <p class="text-sm text-gray-500">Pilihan ke-3 akan mendapatkan 1 Poin</p>
+        <select id="pilihan3" name="pilihan3" class="select-input mt-2 block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-sm">
+          {{#each data_nilai}}
+            <option value="{{this.data_nip_anggota}}">{{this.data_nama_anggota}}</option>
+          {{/each}}
+        </select>
+      </div>
 
-    <!-- Button Simpan -->
-    <button type="submit" class="mt-4 px-4 py-2 bg-green-600 text-white font-semibold text-sm rounded-lg shadow-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2">
-      Simpan Voting
-    </button>
-  </form>
+      <!-- Button Simpan -->
+      <button type="submit" class="mt-4 px-4 py-2 bg-green-600 text-white font-semibold text-sm rounded-lg shadow-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2">
+        Simpan Voting
+      </button>
+    </form>
+  {{else}}
+    <!-- Notifikasi Belum Bisa Dinilai -->
+    <div class="mt-8 bg-gray-200 rounded-xl border border-gray-300 shadow-sm p-6 flex justify-center items-center h-[400px]">
+      <p class="text-gray-600 text-xl font-medium">Voting Tahap 1 Tidak Tersedia</p>
+    </div>
+  {{/if}}
+
 </div>
-
 
 <script>
   // Ambil semua elemen select

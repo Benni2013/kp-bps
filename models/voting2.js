@@ -26,11 +26,6 @@ module.exports = (sequelize, DataTypes) => {
     waktu_vot2: {
       type: DataTypes.DATE
     },
-    status_vot2: {
-      type: DataTypes.ENUM('berjalan', 'selesai'),
-      allowNull: false,
-      defaultValue: 'berjalan'
-    }
   }, {
     tableName: 'voting2',
     timestamps: false

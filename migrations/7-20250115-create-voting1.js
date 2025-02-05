@@ -73,11 +73,6 @@ module.exports = {
       status_anggota: {
         type: Sequelize.ENUM('lolos', 'gugur'),
       },
-      status_vot1: {
-        type: Sequelize.ENUM('berjalan', 'selesai'),
-        allowNull: false,
-        defaultValue: 'berjalan'
-      }
     });
   },
 
