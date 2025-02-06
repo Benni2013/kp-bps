@@ -10,11 +10,11 @@
             <div class="relative px-6 pb-6">
                 <div class="flex flex-col items-center" style="margin-top: -4rem;">
                     <div class="w-32 h-32 rounded-full border-4 border-white overflow-hidden bg-white shadow-lg" style="position: relative; z-index: 10;">
-                        <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/58939653abd2fe92efd56969fd694e84aff5ac98e18d03bec19e12442a40f634?apiKey=b968644d66b542249f51acc2390675a8&" alt="Profile" class="w-full h-full object-cover">
+                        <img src="/images/Foto {{akun.nama}}.png" alt="Profile" class="w-full h-full object-cover">
                     </div>
                     <div class="bg-white pt-16 px-6 text-center" style="margin-top: -4rem; width: 100%; border-radius: 1rem;">
-                        <h2 class="text-2xl font-bold">Frizqya Dela Pratiwi</h2>
-                        <p class="text-gray-500">192312345678900</p>
+                        <h2 class="text-2xl font-bold">{{akun.nama}}</h2>
+                        <p class="text-gray-500">{{akun.nip}}</p>
                     </div>
                 </div>
 
@@ -28,7 +28,7 @@
                         </div>
                         <div>
                             <p class="text-sm text-gray-500">Jabatan</p>
-                            <p class="font-medium">Analis Pengelolaan Keuangan APBN Ahli Muda</p>
+                            <p class="font-medium">{{akun.jabatan}}</p>
                         </div>
                     </div>
 
@@ -39,8 +39,8 @@
                             </svg>
                         </div>
                         <div>
-                            <p class="text-sm text-gray-500">Nomor Telepon</p>
-                            <p class="font-medium">0123456789</p>
+                            <p class="text-sm text-gray-500">Email</p>
+                            <p class="font-medium">{{akun.email}}</p>
                         </div>
                     </div>
 
@@ -51,8 +51,8 @@
                             </svg>
                         </div>
                         <div>
-                            <p class="text-sm text-gray-500">Divisi</p>
-                            <p class="font-medium">Keuangan</p>
+                            <p class="text-sm text-gray-500">Tim</p>
+                            <p class="font-medium">{{akun.divisi}}</p>
                         </div>
                     </div>
 
@@ -64,7 +64,7 @@
                         </div>
                         <div>
                             <p class="text-sm text-gray-500">Jenis Kelamin</p>
-                            <p class="font-medium">Perempuan</p>
+                            <p class="font-medium">{{akun.gender}}</p>
                         </div>
                     </div>
                 </div>
