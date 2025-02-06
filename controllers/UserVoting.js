@@ -20,6 +20,7 @@ const getKandidatVot1 = async (req, res, next) => {
         tahap_pemilihan: "voting1",
       },
     });
+    let role = req.cookies.role;
     const akun = req.user;
 
     if (!pemilihan) {
@@ -30,6 +31,7 @@ const getKandidatVot1 = async (req, res, next) => {
         pemilihan,
         akun,
         statusnya,
+        role
       });
       console.log("=========================");
     } else {
@@ -114,6 +116,7 @@ const getMyVot = async (req, res, next) => {
         tahap_pemilihan: "voting1",
       },
     });
+    let role = req.cookies.role;
     const akun = req.user;
 
     let detail_pemilihan = await DetailPemilihan.findOne({
@@ -154,6 +157,7 @@ const getMyVot = async (req, res, next) => {
       pil2,
       pil3,
       akun,
+      role,
     });
   } catch (error) {
     console.error("getMyVot validation error:", error);
@@ -168,20 +172,8 @@ const getKandidatKriteria = async (req, res, next) => {
         tahap_pemilihan: "voting2",
       },
     });
-
+    let role = req.cookies.role;
     const akun = req.user;
-    let detail_pemilihan = await DetailPemilihan.findOne({
-      where: {
-        pemilihan_id: pemilihan.pemilihan_id,
-        anggota_id: akun.nip,
-      },
-    });
-    console.log("++__++__++__ " + detail_pemilihan.detail_pemilihan_id);
-    let detail_voting2 = await Voting2.findOne({
-      where: {
-        detail_pemilihan_id: detail_pemilihan.detail_pemilihan_id,
-      },
-    });
 
     if (!pemilihan) {
       statusnya = true;
@@ -190,53 +182,58 @@ const getKandidatKriteria = async (req, res, next) => {
         layout: "layouts/layout",
         pemilihan,
         statusnya,
+        akun,
+        role,
       });
-    } else if (detail_voting2) {
-        res.redirect("/users/pemilihan/thank-you");
     } else {
-      let inditakor = await Indikator.findAll({
+      let detail_pemilihan = await DetailPemilihan.findOne({
         where: {
-          status_inditakor: "aktif",
+          pemilihan_id: pemilihan.pemilihan_id,
+          anggota_id: akun.nip,
         },
       });
-      // buat ambil role dari cookie
-      let role = req.cookies.role;
-      const akun = req.user;
-
-      let kandidatKriteria = await Voting1.findAll({
+      let detail_voting2 = await Voting2.findOne({
         where: {
-          status_anggota: "lolos",
+          detail_pemilihan_id: detail_pemilihan.detail_pemilihan_id,
         },
       });
-
-      for (let j = 0; j < kandidatKriteria.length; j++) {
-        let detail_lulus = await DetailPemilihan.findOne({
-          where: {
-            detail_pemilihan_id: kandidatKriteria[j].detail_pemilihan_id,
-          },
-        });
-        kandidatKriteria[j].nip_lulus = detail_lulus.anggota_id;
-      }
-      for (let i = 0; i < kandidatKriteria.length; i++) {
-        let nama_lulus = await Anggota.findOne({
-          where: {
-            nip: kandidatKriteria[i].nip_lulus,
-          },
-        });
-        kandidatKriteria[i].nama = nama_lulus.nama;
-      }
-
-      const openPenilaian = true;
-      const sudahNilai = false;
-
-      if (sudahNilai) {
+      if (detail_voting2) {
         res.redirect("/users/pemilihan/thank-you");
       } else {
+        let inditakor = await Indikator.findAll({
+          where: {
+            status_inditakor: "aktif",
+          },
+        });
+        // buat ambil role dari cookie
+        let role = req.cookies.role;
+
+        let kandidatKriteria = await Voting1.findAll({
+          where: {
+            status_anggota: "lolos",
+          },
+        });
+
+        for (let j = 0; j < kandidatKriteria.length; j++) {
+          let detail_lulus = await DetailPemilihan.findOne({
+            where: {
+              detail_pemilihan_id: kandidatKriteria[j].detail_pemilihan_id,
+            },
+          });
+          kandidatKriteria[j].nip_lulus = detail_lulus.anggota_id;
+        }
+        for (let i = 0; i < kandidatKriteria.length; i++) {
+          let nama_lulus = await Anggota.findOne({
+            where: {
+              nip: kandidatKriteria[i].nip_lulus,
+            },
+          });
+          kandidatKriteria[i].nama = nama_lulus.nama;
+        }
         res.render("user/penilaian_kriteria", {
           title: "Penilaian Kriteria",
           layout: "layouts/layout",
           inditakor,
-          openPenilaian,
           role,
           akun,
           kandidatKriteria,
@@ -348,8 +345,6 @@ const getMyPenilaianKriteria = async (req, res, next) => {
         detail_pemilihan_id: detail_pemilihan.detail_pemilihan_id,
       },
     });
-
-    console.log("----------------" + waktu_voting.waktu_vot2);
     let role = req.cookies.role;
     res.render("user/thank-you", {
       title: "Thank You",
