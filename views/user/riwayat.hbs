@@ -1,60 +1,63 @@
 <div class="flex flex-col lg:ml-10 lg:mt-8">
   <h1 class="text-5xl font-bold">Riwayat</h1>
 
-  <div class="mt-4 flex gap-4">
-    <!-- Dropdown Triwulan -->
-    <div class="relative">
-      <select
-        class="block w-full px-4 py-2 pe-8 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:ring-blue-500 focus:ring-opacity-50"
-        aria-label="Pilih Triwulan"
-      >
-        <option value="1">Triwulan 1</option>
-        <option value="2">Triwulan 2</option>
-        <option value="3">Triwulan 3</option>
-        <option value="4">Triwulan 4</option>
-      </select>
+  {{#if statusnya}}
+    <!-- Notifikasi Belum Ada Riwayat -->
+    <div class="mt-8 bg-gray-200 rounded-xl border border-gray-300 shadow-sm p-6 flex justify-center items-center h-[400px]">
+      <p class="text-gray-600 text-xl font-medium">Belum ada Pemilihan Selesai</p>
+    </div>
+  {{else}}
+    <div class="mt-4 flex gap-4">
+      <!-- Dropdown Triwulan -->
+      <div class="relative">
+        <select class="block w-full px-4 py-2 pe-8 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:ring-blue-500 focus:ring-opacity-50" aria-label="Pilih Triwulan">
+          {{#each periode}}
+            <option value="1">{{this.nama_periode}}</option>
+          {{/each}}
+        </select>
+      </div>
+
+      <!-- Dropdown Tahun -->
+      <div class="relative">
+        <select class="block w-full px-4 py-2 pe-8 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:ring-blue-500 focus:ring-opacity-50" aria-label="Pilih Tahun">
+          {{#each tahun}}
+            <option value="1">{{this.tahun}}</option>
+          {{/each}}
+        </select>
+      </div>
     </div>
 
-    <!-- Dropdown Tahun -->
-    <div class="relative">
-      <select
-        class="block w-full px-4 py-2 pe-8 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:ring-blue-500 focus:ring-opacity-50"
-        aria-label="Pilih Tahun"
-      >
-        <option value="2024">2024</option>
-        <option value="2023">2023</option>
-        <option value="2022">2022</option>
-        <option value="2021">2021</option>
-      </select>
-    </div>
-  </div>
+    <!-- Daftar Riwayat -->
+    {{#each pemilihan}}
+      <div class="mt-8 bg-white rounded-xl border border-gray-300 shadow-sm p-6">
+        <!-- Container untuk judul dan status -->
+        <div class="flex items-center justify-between">
+          <h2 class="text-xl font-semibold">{{this.nama_pemilihan}}</h2>
+          <span class="text-green-600 font-semibold">{{this.tahap_pemiihan}}</span>
+        </div>
 
- <!-- Daftar Riwayat -->
-<div class="mt-8 bg-white rounded-xl border border-gray-300 shadow-sm p-6">
-  <!-- Container untuk judul dan status -->
-  <div class="flex items-center justify-between">
-    <h2 class="text-xl font-semibold">Pegawai Terbaik Triwulan 1 2024</h2>
-    <span class="text-green-600 font-semibold">Selesai</span>
-  </div>
-  
-  <p class="text-gray-500 text-sm mt-1">10 Jan 2024</p>
+        <p class="text-gray-500 text-sm mt-1">{{this.tanggal_mulai}}</p>
 
-  <div class="mt-4 p-4 bg-gray-100 rounded-lg flex items-center justify-between">
-    <div class="flex items-center gap-4">
-      <div class="w-10 h-10 bg-yellow-400 rounded-full flex items-center justify-center">
-        <div class="flex overflow-hidden flex-col h-[22px] w-[22px]" role="img" aria-label="Decorative image">
-          <img 
-            src="https://cdn.builder.io/api/v1/image/assets/TEMP/3a856bdebe4dc04a9830460173bfa611fc46e3f78970ebb1a5c527d6bc753904?apiKey=2db49ce8ace14314a069c63ad69561d0&"
-            alt=""
-            class="object-contain w-full brightness-0 aspect-square brightness-[102%] contrast-[105%] hue-rotate-[359deg] invert-[71%] saturate-[100%] saturate-[1242%] sepia-[83%]"
-          />
+        <div class="mt-4 p-4 bg-gray-100 rounded-lg flex items-center justify-between">
+          <div class="flex items-center gap-4">
+            <div class="w-10 h-10 bg-yellow-400 rounded-full flex items-center justify-center">
+              <div class="flex overflow-hidden flex-col h-[22px] w-[22px]" role="img" aria-label="Decorative image">
+                <img
+                  src="https://cdn.builder.io/api/v1/image/assets/TEMP/3a856bdebe4dc04a9830460173bfa611fc46e3f78970ebb1a5c527d6bc753904?apiKey=2db49ce8ace14314a069c63ad69561d0&"
+                  alt=""
+                  class="object-contain w-full brightness-0 aspect-square brightness-[102%] contrast-[105%] hue-rotate-[359deg] invert-[71%] saturate-[100%] saturate-[1242%] sepia-[83%]"
+                />
+              </div>
+            </div>
+            <div>
+              <p class="text-lg font-semibold">PEMENANG</p>
+              <p class="text-gray-500 text-sm">Posisi 1</p>
+            </div>
+          </div>
         </div>
       </div>
-      <div>
-        <p class="text-lg font-semibold">Frizqya Dela Pratiwi</p>
-        <p class="text-gray-500 text-sm">Posisi 1</p>
-      </div>
-    </div>
-  </div>
-</div>
+    {{/each}}
+
+  {{/if}}
+
 </div>
