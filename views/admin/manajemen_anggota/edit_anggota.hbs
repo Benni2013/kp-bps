@@ -9,52 +9,88 @@
 
     </div>
 
-    <form action="/admin/manajemen_anggota/edit_anggota" method="POST">
+    <span class="text-red-500">* Wajib diisi</span>
+
+    <form action="/admin/manajemen_anggota/edit_anggota/{{anggota.nip}}" 
+      method="POST" 
+      enctype="multipart/form-data"
+      onsubmit="handleSubmit(event)"
+    >
       <!-- Section -->
       <div class="pt-6 first:pt-0 last:pb-0 border-t first:border-transparent border-gray-200">
         <label for="nama_anggota" class="inline-block text-sm font-medium">
-          Nama Anggota
+          Nama Anggota <span class="text-red-500">*</span>
         </label>
 
         <div class="mt-2 space-y-3">
           <input
-            id="nama_anggota"
+            id="nama"
+            name="nama"
             type="text"
             class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none"
-            placeholder="Nama Lengkap"
+            value="{{anggota.nama}}"
+            required
           />
         </div>
       </div>
       <div class="py-2 first:pt-0 last:pb-0">
         <label for="NIP" class="inline-block text-sm font-medium">
-          NIP
+          NIP <span class="text-red-500">*</span>
         </label>
 
         <div class="space-y-3">
-          <input id="NIP" type="text" class="px-3 pe-11 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none" placeholder="NIP" />
+          <input id="nip" 
+            name="nip"
+            type="text" 
+            class="px-3 pe-11 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none" 
+            value="{{anggota.nip}}"
+            readonly />
         </div>
       </div>
 
       <div class="py-2 first:pt-0 last:pb-0">
         <label for="Jabatan" class="inline-block text-sm font-medium">
-          Jabatan
+          Jabatan <span class="text-red-500">*</span>
         </label>
 
         <div class="space-y-3">
-          <input id="Jabatan" type="text" class="px-3 pe-11 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none" placeholder="Jabatan" />
+          <input 
+            id="jabatan"
+            name="jabatan"
+            type="text" 
+            class="px-3 pe-11 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none" 
+            value="{{anggota.jabatan}}"
+            required />
         </div>
       </div>
       <div class="py-2 first:pt-0 last:pb-0">
         <label for="Divisi" class="inline-block text-sm font-medium">
-          Divisi
+          Tim <span class="text-red-500">*</span>
         </label>
 
-        <select class="py-2 px-3 pe-9 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none">
-          <option selected>Pilih Bidang</option>
-          <option>Gold</option>
-          <option>Mid 2</option>
-          <option>Exp 3</option>
+        <select required id="divisi" name="divisi" class="py-2 px-3 pe-9 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none">
+          <option value="" disabled>-- Pilih Tim --</option>
+          {{#each divisiList}}
+            <option value="{{this.divisi}}" {{#if (eq ../anggota.divisi this.divisi)}}selected{{/if}}>
+              {{this.divisi}}
+            </option>
+          {{/each}}
         </select>
+      </div>
+      <div class="py-1 first:pt-0 last:pb-0">
+        <label for="role" class="inline-block text-sm font-medium pb-2">
+          Role <span class="text-red-500">*</span>
+        </label>
+        <div class="space-x-6">
+          <label>
+            <input required type="radio" name="role" value="biasa" {{#if (eq anggota.role "biasa")}}checked{{/if}} />
+            Biasa
+          </label>
+          <label>
+            <input required type="radio" name="role" value="supervisor" {{#if (eq anggota.role "supervisor")}}checked{{/if}} />
+            Supervisor
+          </label>
+        </div>
       </div>
       <div class="py-2 first:pt-0 last:pb-0">
         <label for="Email" class="inline-block text-sm font-medium">
@@ -62,28 +98,41 @@
         </label>
 
         <div class="space-y-3">
-          <input id="Email" type="text" class="px-3 pe-11 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none" placeholder="Email" />
+          <input id="email" 
+            name="email"
+            type="text" 
+            class="px-3 pe-11 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none" 
+            value="{{anggota.email}}" />
         </div>
       </div>
       <div class="py-1 first:pt-0 last:pb-0">
         <label for="Jenis Kelamin" class="inline-block text-sm font-medium pb-2">
-          Jenis Kelamin
+          Jenis Kelamin <span class="text-red-500">*</span>
         </label>
-        <ol class="space-y-1">
-          <li><label><input type="radio" name="jenis" value="1" /> Laki Laki</label><label><input type="radio" class="ms-20" name="jenis" value="2" /> Perempuan</label></li>
-          <li></li>
-        </ol>
-
+        <div class="space-x-6">
+          <label>
+            <input required type="radio" name="gender" value="pria" {{#if (eq anggota.jenis_kelamin_display "Laki-laki")}}checked{{/if}} />
+            Laki-laki
+          </label>
+          <label>
+            <input required type="radio" name="gender" value="wanita" {{#if (eq anggota.jenis_kelamin_display "Perempuan")}}checked{{/if}} />
+            Perempuan
+          </label>
+        </div>
       </div>
       <div class="py-2 first:pt-0 last:pb-0">
         <label for="status" class="inline-block text-sm font-medium">
           Status
         </label>
 
-        <select class="py-2 px-3 pe-9 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none">
-          <option selected>Pilih Status</option>
-          <option>aktif</option>
-          <option>nonaktif</option>
+        <select id="status_anggota" 
+          name="status_anggota" 
+          class="py-2 px-3 pe-9 block w-full border-gray-200 shadow-sm text-sm rounded-lg" 
+          required
+        >
+          <option value="" disabled>-- Pilih Status --</option>
+          <option value="aktif" {{#if anggota.status}}selected{{/if}}>Aktif</option>
+          <option value="nonaktif" {{#unless anggota.status}}selected{{/unless}}>Tidak Aktif</option>
         </select>
       </div>
       <div class="py-2 first:pt-0 last:pb-0">
@@ -94,23 +143,37 @@
         <div class="sm:col-span-9 flex flex-col items-center pb-5">
           <!-- Gambar Profil -->
           <img
+            id="preview-image"
             loading="lazy"
-            src="https://cdn.builder.io/api/v1/image/assets/TEMP/d51e6353f840d11b0b9228a36ee2f6a2a8681b6398bb794bd0d91b1d1b155d92?apiKey=0eb9abb28bf34cd7be47a2dfb2f311cb&"
+            src="{{anggota.foto_profil}}"
             class="object-cover rounded-lg w-40 h-30 border border-gray-300 mb-4"
-            alt="Employee Profile Picture"
+            alt="Foto Profil {{anggota.nama}}"
+          />
+          <p id="file-error" class="mt-1 text-sm text-red-500 hidden"></p>
+
+          <!-- Input File (Hidden) -->
+          <input 
+            type="file"
+            name="foto_profile"
+            id="foto_profile"
+            accept="image/jpeg,image/jpg,image/png"
+            onchange="previewImage(this)"
+            class="hidden" 
           />
 
           <!-- Tombol Pilih Foto -->
-          <label for="file-upload" class="px-4 py-2 bg-blue-500 text-white font-bold rounded-lg cursor-pointer hover:bg-blue-600 transition duration-200">
+          <label for="foto_profile" class="px-4 py-2 bg-blue-500 text-white font-bold rounded-lg cursor-pointer hover:bg-blue-600 transition duration-200">
             Edit Foto
           </label>
 
-          <!-- Input File (Hidden) -->
-          <input type="file" id="file-upload" class="hidden" />
         </div>
       </div>
 
       <!-- End Section -->
+
+      <div id="error-message" class="hidden bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4" role="alert">
+        <span id="error-text" class="block sm:inline"></span>
+      </div>
 
       <div class="mt-5 flex justify-end gap-x-2">
         <button
@@ -140,17 +203,23 @@
 <!-- End Card Section -->
 
 <!-- Modal -->
-<div id="hs-ai-invoice-modal" class="hs-overlay hidden size-full fixed top-0 start-0 z-[80] overflow-x-hidden overflow-y-auto pointer-events-none" role="dialog" tabindex="-1" aria-labelledby="hs-ai-invoice-modal-label">
-  <div class="hs-overlay-open:mt-7 hs-overlay-open:opacity-100 hs-overlay-open:duration-500 mt-0 opacity-0 ease-out transition-all sm:max-w-lg sm:w-full m-3 sm:mx-auto">
-    <div class="flex flex-col justify-center items-center px-20 py-12 bg-white rounded-lg max-w-[716px] max-md:px-5">
+<div id="successModal" class="hs-overlay hidden size-full fixed top-0 start-0 z-[80] overflow-x-hidden overflow-y-auto" role="dialog" tabindex="-1" aria-labelledby="hs-ai-invoice-modal-label">
+  <!-- Backdrop -->
+  <div class="bg-black bg-opacity-50 fixed inset-0"></div>
+  
+  <div class="sm:max-w-lg sm:w-full m-3 sm:mx-auto py-8">
+    <div class="flex flex-col justify-center items-center px-20 py-12 bg-white rounded-lg max-w-[716px] max-md:px-5 relative">
       <div class="flex flex-col items-center">
-        <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/eb3f24795a2bd97bfa44b656b3f8be6e2b8154e88d387fb961bd100642b02adc?apiKey=0eb9abb28bf34cd7be47a2dfb2f311cb&" alt="Success Icon" class="w-28 h-28" />
+        <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/eb3f24795a2bd97bfa44b656b3f8be6e2b8154e88d387fb961bd100642b02adc?apiKey=0eb9abb28bf34cd7be47a2dfb2f311cb&" 
+          alt="Success Icon" 
+          class="w-28 h-28" />
         <!-- Text -->
         <p class="mt-6 text-xl font-bold text-black text-center">
           Anggota Berhasil Diperbarui
         </p>
         <!-- Button -->
-        <button class="mt-8 px-4 py-2 bg-blue-800 text-white text-sm font-medium rounded-lg hover:bg-blue-700 focus:outline-none" onclick="closeModal()">
+        <button class="mt-8 px-4 py-2 bg-blue-800 text-white text-sm font-medium rounded-lg hover:bg-blue-700 focus:outline-none" 
+          onclick="window.location.href = '/admin/manajemen_anggota'">
           OKE
         </button>
       </div>
@@ -158,3 +227,79 @@
   </div>
 </div>
 <!-- End Modal -->
+
+<script>
+// Add preview function
+function previewImage(input) {
+  if (input.files && input.files[0]) {
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      document.getElementById('preview-image').src = e.target.result;
+    }
+    reader.readAsDataURL(input.files[0]);
+  }
+}
+
+// Validasi file
+function validateFile(input) {
+  const file = input.files[0];
+  const errorElement = document.getElementById('file-error');
+  
+  // Reset error
+  errorElement.classList.add('hidden');
+  
+  if (file) {
+    // Validasi tipe file
+    const validTypes = ['image/jpeg', 'image/jpg', 'image/png'];
+    if (!validTypes.includes(file.type)) {
+      errorElement.textContent = 'Hanya file gambar (JPG, JPEG, PNG) yang diperbolehkan';
+      errorElement.classList.remove('hidden');
+      input.value = '';
+      return false;
+    }
+    
+    // Validasi ukuran (max 5MB)
+    if (file.size > 5 * 1024 * 1024) {
+      errorElement.textContent = 'Ukuran file maksimal 5MB';
+      errorElement.classList.remove('hidden');
+      input.value = '';
+      return false;
+    }
+  }
+  
+  return true;
+}
+
+async function handleSubmit(event) {
+  event.preventDefault();
+  const form = event.target;
+  const formData = new FormData(form);
+
+  try {
+    const response = await fetch(form.action, {
+      method: 'POST',
+      body: formData
+    });
+
+    const result = await response.json();
+
+    if (result.success) {
+      const modal = document.getElementById('successModal');
+      modal.classList.remove('hidden');
+      modal.classList.add('block');
+      
+      setTimeout(() => {
+        window.location.href = '/admin/manajemen_anggota';
+      }, 1000);
+    } else {
+      const errorDiv = document.getElementById('error-message');
+      const errorSpan = document.getElementById('error-text');
+      errorSpan.textContent = result.message;
+      errorDiv.classList.remove('hidden');
+      console.error('Update failed:', result.message);
+    }
+  } catch (error) {
+    console.error('Error:', error);
+  }
+}
+</script>

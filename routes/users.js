@@ -14,10 +14,10 @@ router.get("/beranda", middlewareValidation, getPegawaiTerbaik, function (req, r
 router.get("/dashboard", middlewareValidation, isSupervisor, getDataPemilihan, function (req, res, next) {});
 
 // Router untuk pemilihan - USE
-router.use("/pemilihan", pemilihanRouter);
+router.use('/pemilihan', middlewareValidation, pemilihanRouter);
 
 // Router untuk generate - USE
-router.use("/generate", generateRouter);
+router.use('/generate', middlewareValidation, generateRouter);
 
 // Route untuk halaman riwayat - GET
 router.get("/riwayat", middlewareValidation, getRiwayat, async function (req, res, next) {});

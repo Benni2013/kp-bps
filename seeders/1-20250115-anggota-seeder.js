@@ -14,6 +14,7 @@ module.exports = {
         password: await bcrypt.hash('agif', 10), 
         role: 'biasa',
         jabatan: 'Pengolah Data',
+        divisi: 'Inti',
         status_anggota: 'aktif'
       },
       {
@@ -23,6 +24,7 @@ module.exports = {
         password: defaultPassword,
         role: 'biasa',
         jabatan: 'Statistisi Ahli Muda',
+        divisi: 'Inti',
         status_anggota: 'aktif'
       },
       {
@@ -32,6 +34,7 @@ module.exports = {
         password: defaultPassword,
         role: 'biasa',
         jabatan: 'Pengolah Data',
+        divisi: 'Inti',
         status_anggota: 'aktif'
       },
       {
@@ -41,6 +44,7 @@ module.exports = {
         password: defaultPassword,
         role: 'biasa',
         jabatan: 'Statistisi Ahli Muda',
+        divisi: 'Inti',
         status_anggota: 'aktif'
       },
       {
@@ -50,6 +54,7 @@ module.exports = {
         password: defaultPassword,
         role: 'supervisor',
         jabatan: 'Kepala BPS Kabupaten/Kota',
+        divisi: 'Inti',
         status_anggota: 'aktif'
       },
       {
@@ -59,6 +64,7 @@ module.exports = {
         password: await bcrypt.hash('admin', 10),
         role: 'admin',
         jabatan: 'Admin WEB E-Voisy',
+        divisi: 'Inti',
         status_anggota: 'aktif'
       }
     ];

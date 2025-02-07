@@ -3,9 +3,9 @@
   <div class="flex justify-between items-center mb-8">
     <div>
       <h1 class="text-2xl font-bold mb-2">Manajemen Pemilihan</h1>
-      <h2 class="text-lg text-gray-600 italic">
+      {{!-- <h2 class="text-lg text-gray-600 italic">
         Pemilihan Pegawai Terbaik Triwulan 1 Tahun 2024
-      </h2>
+      </h2> --}}
     </div>
     <button 
       class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg flex items-center gap-2"
@@ -28,7 +28,7 @@
         </div>
         <div>
           <p class="text-sm text-gray-600 mb-1">Pemilihan Aktif</p>
-          <p class="text-2xl font-bold">1</p>
+          <p class="text-2xl font-bold">{{activePemilihan}}</p>
         </div>
       </div>
     </div>
@@ -43,7 +43,7 @@
         </div>
         <div>
           <p class="text-sm text-gray-600 mb-1">Total Selesai</p>
-          <p class="text-2xl font-bold">0</p>
+          <p class="text-2xl font-bold">{{completedPemilihan}}</p>
         </div>
       </div>
     </div>
@@ -58,7 +58,7 @@
         </div>
         <div>
           <p class="text-sm text-gray-600 mb-1">Total Partisipan</p>
-          <p class="text-2xl font-bold">34</p>
+          <p class="text-2xl font-bold">{{activeAnggota}}</p>
         </div>
       </div>
     </div>
@@ -85,29 +85,55 @@
               </td>
               <td class="py-4 px-6">{{periode}} - {{tahun}}</td>
               <td class="py-4 px-6">
-                {{#if status}}
-                  <span class="inline-flex items-center gap-1.5 py-1 px-3 rounded-full text-sm bg-yellow-100 text-yellow-800">
-                    <span class="w-1.5 h-1.5 inline-block rounded-full bg-yellow-500"></span>
-                    Berjalan
-                  </span>
-                {{else}}
+                {{#if (eq status 'selesai')}}
                   <span class="inline-flex items-center gap-1.5 py-1 px-3 rounded-full text-sm bg-green-100 text-green-800">
                     <span class="w-1.5 h-1.5 inline-block rounded-full bg-green-500"></span>
                     Selesai
                   </span>
+                {{else if (eq status 'tutup')}}
+                  <span class="inline-flex items-center gap-1.5 py-1 px-3 rounded-full text-sm bg-gray-100 text-gray-800">
+                    <span class="w-1.5 h-1.5 inline-block rounded-full bg-gray-500"></span>
+                    Ditutup
+                  </span>
+                {{else}}
+                  <span class="inline-flex items-center gap-1.5 py-1 px-3 rounded-full text-sm bg-yellow-100 text-yellow-800">
+                    <span class="w-1.5 h-1.5 inline-block rounded-full bg-yellow-500"></span>
+                    Berjalan
+                  </span>
                 {{/if}}
-                
               </td>
               <td class="py-4 px-6">
                   <div class="flex justify-end gap-2">
-                      <button class="p-2 bg-black rounded-lg hover:bg-gray-800" title="Kunci" 
-                      onclick="window.location.href='/admin/manajemen_pemilihan/tutup'">
+                      <button 
+                        {{#if (eq status 'tutup')}}
+                          disabled
+                        {{/if}}
+                        {{#if (eq status 'selesai')}}
+                          
+                        {{/if}}
+                        class="p-2 bg-black rounded-lg hover:bg-gray-800" 
+                        title="Tutup" 
+                        data-hs-overlay="#tutup_pemilihan"
+                        aria-haspopup="dialog" 
+                        aria-expanded="false" 
+                        aria-controls="hs-ai-invoice-modal" 
+                        data-hs-overlay="#hs-ai-invoice-modal"
+                        onclick="showCloseModal('{{this.pemilihan_id}}', '{{this.nama_pemilihan}} - {{this.periode}} {{this.tahun}}')"
+                      >
                           <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
                           </svg>
                       </button>
-                      <button class="p-2 bg-red-500 rounded-lg hover:bg-red-600" title="Hapus"
-                      onclick="window.location.href='/admin/manajemen_pemilihan/hapus'">
+                      <button 
+                        class="p-2 bg-red-500 rounded-lg hover:bg-red-600" 
+                        title="Hapus"
+                        data-hs-overlay="#hapus_pemilihan"
+                        aria-haspopup="dialog" 
+                        aria-expanded="false" 
+                        aria-controls="hs-ai-invoice-modal" 
+                        data-hs-overlay="#hs-ai-invoice-modal"
+                        onclick="showDeleteModal('{{this.pemilihan_id}}', '{{this.nama_pemilihan}}')"
+                      >
                           <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                           </svg>
@@ -122,3 +148,139 @@
     </div>
   </div>
 </div>
+
+<!-- Modal Hapus Pemilihan -->
+<div id="hapus_pemilihan" class="hs-overlay hidden size-full fixed inset-0 z-[80] overflow-x-hidden overflow-y-auto pointer-events-auto" role="dialog" tabindex="-1" aria-labelledby="delete-member-title">
+  <div class="hs-overlay-open:mt-7 hs-overlay-open:opacity-100 hs-overlay-open:duration-500 mt-0 opacity-0 ease-out transition-all sm:max-w-xl sm:w-full m-3 sm:mx-auto">
+    <div class="flex flex-col px-10 p-8 bg-white rounded-xl shadow-lg max-w-2xl mx-auto">
+      <!-- Header -->
+      <div class="flex items-center gap-6">
+        <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/c5f1394b0798b1548cd832008e9a74fe0d7e3eb3f4bea406d715b2e5c3842fe5?placeholderIfAbsent=true&apiKey=0eb9abb28bf34cd7be47a2dfb2f311cb" alt="Warning Icon" class="w-16 h-16" />
+        <div>
+          <h2 id="delete-pemilihan-title" class="text-2xl text-black">
+            Hapus
+            <b id="pemilihanToDelete">PEMILIHAN</b>?
+          </h2>
+          <p class="mt-2 text-sm text-gray-600">Pemilihan akan terhapus secara permanen</p>
+        </div>
+      </div>
+
+      <!-- Footer Buttons -->
+      <div class="flex justify-end gap-4 mt-8">
+        <a href="" class="px-6 mb-4 flex items-center justify-center text-black border border-black rounded-lg hover:bg-gray-100 focus:outline-none">
+          Batal
+        </a>
+        <button type="button"
+           onclick="handleDelete()" 
+          class="px-6 py-2 mb-4 text-white bg-black rounded-lg hover:bg-gray-800 focus:outline-none">
+          Hapus
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- End Modal Hapus Pemilihan -->
+
+<!-- Modal Tutup Pemilihan -->
+<div id="tutup_pemilihan" class="hs-overlay hidden size-full fixed inset-0 z-[80] overflow-x-hidden overflow-y-auto pointer-events-auto" role="dialog" tabindex="-1" aria-labelledby="delete-member-title">
+  <div class="hs-overlay-open:mt-7 hs-overlay-open:opacity-100 hs-overlay-open:duration-500 mt-0 opacity-0 ease-out transition-all sm:max-w-xl sm:w-full m-3 sm:mx-auto">
+    <div class="flex flex-col px-10 p-8 bg-white rounded-xl shadow-lg max-w-2xl mx-auto">
+      <!-- Header -->
+      <div class="flex items-center gap-6">
+        <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/c5f1394b0798b1548cd832008e9a74fe0d7e3eb3f4bea406d715b2e5c3842fe5?placeholderIfAbsent=true&apiKey=0eb9abb28bf34cd7be47a2dfb2f311cb" alt="Warning Icon" class="w-16 h-16" />
+        <div>
+          <h2 id="close-pemilihan-title" class="text-2xl text-black">
+            <b>Konfirmasi Penutupan Pemilihan</b><br>
+            <span id="pemilihanToClose" >NAMA PEMILIHAN - PERIODE TAHUN</span>
+          </h2>
+          <div class="mt-4 text-sm text-gray-800">
+            <p class="font-semibold">Perhatian:</p>
+            <ul class="list-disc ml-5 space-y-1">
+              <li class="ml-5">Semua proses voting akan dihentikan</li>
+              <li class="ml-5">Hasil pemilihan akan difinalisasi</li>
+              <li class="ml-5">Tindakan ini tidak dapat dibatalkan</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Footer Buttons -->
+      <div class="flex justify-end gap-4 mt-8">
+        <a href="" 
+          data-hs-overlay="#tutup_pemilihan"
+          class="px-6 mb-4 flex items-center justify-center text-black border border-black rounded-lg hover:bg-gray-100 focus:outline-none"
+        >
+          Batal
+        </a>
+        <button 
+          type="button"
+          onclick="handleClose()" 
+          class="px-6 py-2 mb-4 bg-red-600 text-white rounded-lg hover:bg-red-700 focus:outline-none">
+          Tutup Pemilihan
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- End Modal Tutup Pemilihan -->
+
+<script>
+function showDeleteModal(id, nama) {
+  const modal = document.getElementById('hapus_pemilihan');
+  const pemilihanName = document.getElementById('pemilihanToDelete');
+  
+  pemilihanName.textContent = nama;
+  HSOverlay.open(modal);
+  
+  // Store ID for delete operation
+  window.pemilihanIdToDelete = id;
+}
+
+// Update showCloseModal function
+function showCloseModal(id, nama) {
+  const modal = document.getElementById('tutup_pemilihan');
+  const pemilihanInfo = document.getElementById('pemilihanToClose');
+  
+  pemilihanInfo.textContent = nama;
+  HSOverlay.open(modal); // Gunakan HSOverlay untuk buka modal
+  
+  window.pemilihanIdToClose = id;
+}
+
+function closeModal(modalId) {
+  const modal = document.getElementById(modalId);
+  modal.classList.add('hidden');
+}
+
+async function handleDelete() {
+  try {
+    const response = await fetch(`/admin/manajemen_pemilihan/hapus/${window.pemilihanIdToDelete}`, {
+      method: 'POST'
+    });
+    
+    if (response.ok) {
+      window.location.reload();
+    }
+  } catch (error) {
+    console.error('Error:', error);
+  }
+}
+
+async function handleClose() {
+  try {
+    const response = await fetch(`/admin/manajemen_pemilihan/tutup/${window.pemilihanIdToClose}`, {
+      method: 'POST'
+    });
+    
+    const result = await response.json();
+    
+    if (result.success) {
+      window.location.reload();
+    } else {
+      console.error('Failed to close pemilihan:', result.message);
+    }
+  } catch (error) {
+    console.error('Error:', error);
+  }
+}
+</script>

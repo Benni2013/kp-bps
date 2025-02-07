@@ -1,4 +1,4 @@
-<div class="flex flex-col rounded-none max-w-[965px]" role="region" aria-label="Member Management Section">
+<div class="flex flex-col rounded-none max-w-[965px]" role="region" aria-label="Kriteria Management Section">
   <div class="flex flex-wrap gap-5 justify-between w-full max-md:max-w-full">
     <h1 class="text-4xl font-extrabold leading-none text-black">
       Manajemen Kriteria
@@ -17,40 +17,90 @@
     </a>
   </div>
 
+  {{!-- Search & Filter Section --}}
   <div class="flex flex-wrap gap-5 justify-between mt-2 w-full whitespace-nowrap max-md:max-w-full">
-    <form class="flex flex-col text-base leading-normal text-gray-500" role="search">
+    <form 
+      class="flex flex-col text-base leading-normal text-gray-500" 
+      role="search"
+      id="searchForm" 
+      onsubmit="handleSearchSubmit(event)"
+       >
       <div class="flex flex-col w-full">
-        <label for="searchMembers" class="sr-only">Search Members</label>
+        <label for="searchKriteria" class="sr-only">Search Kriteria</label>
         <div class="flex gap-2 items-center px-3.5 py-2.5 w-full bg-white rounded-lg border-gray-300 border-solid">
           <div class="flex flex-1 shrink gap-2 items-center self-stretch my-auto w-full basis-0 min-w-[240px]">
             <img
               loading="lazy"
               src="https://cdn.builder.io/api/v1/image/assets/TEMP/c3298dfdfad3de5332e45e084e12d2172f36afb3b78a8a3653d0a71b92ee77ff?placeholderIfAbsent=true&apiKey=0eb9abb28bf34cd7be47a2dfb2f311cb"
-              alt=""
+              alt="Search Kriteria"
               class="object-contain shrink-0 self-stretch my-auto aspect-square w-[18px]"
             />
-            <input type="search" id="searchMembers" placeholder="Search" class="w-full bg-transparent border-none rounded-lg focus:outline-none" />
+            <input 
+            type="search" 
+            id="searchKriteria" 
+            name="search"
+            value="{{search}}"
+            placeholder="Cari kriteria..." 
+            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" />
           </div>
         </div>
       </div>
     </form>
 
-    <button class="flex items-start text-sm mt-6 font-medium leading-none rounded-lg min-h-[40px] text-slate-700" aria-label="Filter Members">
-      <div class="flex overflow-hidden gap-2 justify-center items-center px-4 py-2.5 bg-white rounded-lg border border-gray-300 border-solid shadow-sm">
-        <img
-          loading="lazy"
-          src="https://cdn.builder.io/api/v1/image/assets/TEMP/565ef0f7d60ee4cafb3e62c36e3f2b725be54df8b71e3b1813ba0884d857d57b?placeholderIfAbsent=true&apiKey=0eb9abb28bf34cd7be47a2dfb2f311cb"
-          alt=""
-          class="object-contain shrink-0 self-stretch my-auto w-5 aspect-square"
-        />
-        <span>Filters</span>
+    <!-- Filter Section -->
+    <div class="relative inline-block">
+      <button id="filterBtn" class="flex items-start text-sm mt-6 font-medium leading-none rounded-lg min-h-[40px] text-slate-700">
+        <div class="flex overflow-hidden gap-2 justify-center items-center px-4 py-2.5 bg-white rounded-lg border border-gray-300 border-solid shadow-sm">
+          <img 
+            loading="lazy" 
+            src="https://cdn.builder.io/api/v1/image/assets/TEMP/565ef0f7d60ee4cafb3e62c36e3f2b725be54df8b71e3b1813ba0884d857d57b?placeholderIfAbsent=true&apiKey=0eb9abb28bf34cd7be47a2dfb2f311cb" 
+            alt="filter" 
+            class="w-5 h-5"/>
+          <span>Filters</span>
+        </div>
+      </button>
+
+      <div id="filterDropdown" class="hidden absolute right-0 mt-2 w-72 bg-white rounded-lg shadow-xl border border-gray-200 z-50">
+        <div class="p-4">
+          <h3 class="font-semibold mb-4">Filter Kategori</h3>
+          
+          <label class="flex items-center gap-2 mb-4 pb-2 border-b">
+            <input type="checkbox" id="selectAll" class="h-4 w-4">
+            <span class="font-medium">Pilih Semua</span>
+          </label>
+
+          <div class="max-h-60 overflow-y-auto mb-4 space-y-2">
+            {{#each categories}}
+            <label class="flex items-center gap-2 py-1 px-2 hover:bg-gray-50 rounded">
+              <input type="checkbox" 
+                     name="category"
+                     value="{{this.tipe_indikator}}"
+                     class="category-filter h-4 w-4"
+                     {{#if (includes ../selectedCategories this.tipe_indikator)}}
+                      checked
+                     {{/if}} />
+              <span class="flex-1">{{this.tipe_indikator}}</span>
+              <span class="text-gray-500 text-sm">({{this.count}})</span>
+            </label>
+            {{/each}}
+          </div>
+
+          <button type="button"
+                  id="applyFilter"
+                  class="w-full py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                  >
+            Terapkan Filter
+          </button>
+        </div>
       </div>
-    </button>
+    </div>
+    <!-- End Filter Section -->
+
   </div>
 
 </div>
 <!-- Table Section -->
-<div class="max-w-4xl px-4 py-10 sm:px-6 lg:px-8 lg:py-14 mx-auto">
+<div class="max-w-5xl px-2 py-2 sm:px-2 lg:px-2 lg:py-2 mx-auto">
   <!-- Card -->
   <div class="flex flex-col">
     <div class="-m-1.5 overflow-x-auto">
@@ -59,9 +109,21 @@
 
           <!-- Table -->
           <table class="min-w-full divide-y divide-gray-200">
-            <thead class="bg-gray-100">
+
+            {{!-- Header --}}
+              <div class="px-6 py-4 grid gap-3 md:flex md:justify-between md:items-center border-t border-gray-200">
+                <div>
+                  <p class="text-sm text-gray-600">
+                    Total Kriteria : 
+                    <span class="font-semibold text-gray-800">{{totalData}}</span>
+                  </p>
+                </div>
+              </div>
+            {{!-- Akhir Header --}}
+
+            <thead class="bg-gray-100 divide-y divide-gray-200 border">
               <tr>
-                <th scope="col" class="px-8 py-4 text-start">
+                <th scope="col" class="px-5 py-4 text-start">
                   <div class="flex items-center">
                     <span class="text-xs font-semibold uppercase tracking-wide text-gray-800">
                       NO
@@ -89,6 +151,14 @@
                 <th scope="col" class="px-8 py-3 text-start">
                   <div class="flex items-center gap-x-2">
                     <span class="text-xs font-semibold uppercase tracking-wide text-gray-800">
+                      Status
+                    </span>
+                  </div>
+                </th>
+
+                <th scope="col" class="px-8 py-3 text-start">
+                  <div class="flex items-center gap-x-2">
+                    <span class="text-xs font-semibold uppercase tracking-wide text-gray-800">
                       Opsi
                     </span>
                   </div>
@@ -101,31 +171,53 @@
               {{#each dataKriteria }}
                 <tr class="bg-white hover:bg-gray-50">
                   <td class="size-px whitespace-nowrap">
-                    <button type="button" class="block" aria-haspopup="dialog" aria-expanded="false" aria-controls="hs-ai-invoice-modal" data-hs-overlay="#hs-ai-invoice-modal">
+                    <span class="block">
                       <span class="block px-6 py-2">
                         <span class="font-mono text-sm text-blue-600">{{inc @index}}</span>
                       </span>
-                    </button>
+                    </span>
+                  </td>
+
+                  <td class="whitespace-normal px-6 py-2">
+                    <span class="block text-start w-full" title="{{isi_kriteria}}">
+                      <span class="text-sm font-bold text-gray-600 line-clamp-2">{{isi_kriteria}}</span>
+                    </span>
                   </td>
 
                   <td class="size-px whitespace-nowrap">
-                    <button type="button" class="block text-start" aria-haspopup="dialog" aria-expanded="false" aria-controls="hs-ai-invoice-modal" data-hs-overlay="#hs-ai-invoice-modal">
-                      <span class="block px-6 py-2">
-                        <span class="text-sm font-bold text-gray-600">{{isi_kriteria}}</span>
-                      </span>
-                    </button>
-                  </td>
-
-                  <td class="size-px whitespace-nowrap">
-                    <button type="button" class="block text-start" aria-haspopup="dialog" aria-expanded="false" aria-controls="hs-ai-invoice-modal" data-hs-overlay="#hs-ai-invoice-modal">
+                    <span class="block text-start">
                       <span class="block px-6 py-2">
                         <span class="text-sm font-bold text-gray-600">{{kategori}}</span>
                       </span>
-                    </button>
+                    </span>
+                  </td>
+
+                  <td class="size-px whitespace-nowrap">
+                    <span class="block text-start">
+                      <span class="block px-6 py-2">
+                        {{#if status}}
+                          <span class="py-1 px-1.5 inline-flex items-center gap-x-1 text-xs font-medium bg-teal-100 text-teal-800 rounded-full">
+                            <svg class="size-2.5" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                              <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" />
+                            </svg>
+                            Aktif
+                          </span>
+                        {{else}}
+                          <span class="inline-flex items-center gap-1.5 py-0.5 px-2 rounded-full text-xs font-medium bg-red-100 text-red-800">
+                            <svg class="size-2.5" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                              <path
+                                d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293 5.354 4.646z" />
+                            </svg>
+                            Tidak Aktif
+                          </span>
+                        {{/if}}
+                        
+                      </span>
+                    </span>
                   </td>
 
                   <td class="flex space-x-2 pt-2 ps-5">
-                    <a href="/admin/manajemen_kriteria/edit_kriteria" class="block">
+                    <a href="/admin/manajemen_kriteria/edit_kriteria/{{this.id}}" class="block">
                       <img
                         loading="lazy"
                         src="https://cdn.builder.io/api/v1/image/assets/TEMP/0fe336745368fc2896cc5f48a0a41e930b8a14cd2f6ec3a94d596ab121911229?apiKey=0eb9abb28bf34cd7be47a2dfb2f311cb&"
@@ -134,7 +226,14 @@
                       />
                     </a>
 
-                    <button type="button" class="block text-start" aria-haspopup="dialog" aria-expanded="false" aria-controls="hs-ai-invoice-modal" data-hs-overlay="#hs-ai-invoice-modal">
+                    <button 
+                      type="button" 
+                      class="block text-start" 
+                      aria-haspopup="dialog" 
+                      onclick="showDeleteModal('{{this.id}}', '{{this.isi_kriteria}}')"
+                      aria-expanded="false" 
+                      aria-controls="hs-ai-invoice-modal" 
+                      data-hs-overlay="#hs-ai-invoice-modal">
                       <img
                         loading="lazy"
                         src="https://cdn.builder.io/api/v1/image/assets/TEMP/4b2b586f44984b67bb7814a0bec30a83ec480b698578cd88e4f7cff46da40007?apiKey=0eb9abb28bf34cd7be47a2dfb2f311cb&"
@@ -152,40 +251,6 @@
           </table>
           <!-- End Table -->
 
-          <!-- Footer -->
-          <div class="px-6 py-4 grid gap-3 md:flex md:justify-between md:items-center border-t border-gray-200">
-            <div>
-              <p class="text-sm text-gray-600">
-                <span class="font-semibold text-gray-800">9</span>
-                results
-              </p>
-            </div>
-
-            <div>
-              <div class="inline-flex gap-x-2">
-                <button
-                  type="button"
-                  class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 focus:outline-none focus:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none"
-                >
-                  <svg class="size-3" width="16" height="16" viewBox="0 0 16 15" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M10.506 1.64001L4.85953 7.28646C4.66427 7.48172 4.66427 7.79831 4.85953 7.99357L10.506 13.64" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
-                  </svg>
-                  Prev
-                </button>
-
-                <button
-                  type="button"
-                  class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 focus:outline-none focus:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none"
-                >
-                  Next
-                  <svg class="size-3" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M4.50598 2L10.1524 7.64645C10.3477 7.84171 10.3477 8.15829 10.1524 8.35355L4.50598 14" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
-                  </svg>
-                </button>
-              </div>
-            </div>
-          </div>
-          <!-- End Footer -->
         </div>
       </div>
     </div>
@@ -204,7 +269,7 @@
         <div>
           <h2 id="delete-member-title" class="text-xl text-black">
             Hapus Kriteria
-            <b>Memahami dan memenuhi kebutuhan masyarakat</b>?
+            <b>KRITERIA</b>?
           </h2>
           <p class="mt-2 text-sm text-gray-600">Kriteria akan terhapus secara permanen</p>
         </div>
@@ -215,13 +280,127 @@
         <a href="" class="px-6 mb-4 flex items-center justify-center text-black border border-black rounded-lg hover:bg-gray-100 focus:outline-none">
           Batal
         </a>
-        <form method="POST" action="/admin/manajemen_kriteria/hapus_kriteria">
-          <button type="submit" class="px-6 py-2 text-white bg-black rounded-lg hover:bg-gray-800 focus:outline-none">
-            Hapus
-          </button>
-        </form>
+        <button type="button"
+           onclick="handleDelete()" 
+          class="px-6 py-2 mb-4 text-white bg-black rounded-lg hover:bg-gray-800 focus:outline-none">
+          Hapus
+        </button>
       </div>
     </div>
   </div>
 </div>
-<!-- End Modal -->
+
+<style>
+.line-clamp-2 {
+  /* display: -webkit-box; */
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+</style>
+
+<script>
+// Search handling
+const searchInput = document.getElementById('searchKriteria');
+const searchForm = document.getElementById('searchForm');
+
+// Handle search submit
+function handleSearchSubmit(event) {
+  event.preventDefault();
+  updateResults();
+}
+
+// Filter handling
+const filterBtn = document.getElementById('filterBtn');
+const filterDropdown = document.getElementById('filterDropdown');
+const selectAll = document.getElementById('selectAll');
+const categoryFilters = document.querySelectorAll('.category-filter');
+const applyFilterBtn = document.getElementById('applyFilter');
+
+// Toggle dropdown
+filterBtn.addEventListener('click', () => {
+  filterDropdown.classList.toggle('hidden');
+});
+
+// Close dropdown when clicking outside
+document.addEventListener('click', (e) => {
+  if (!filterBtn.contains(e.target) && !filterDropdown.contains(e.target)) {
+    filterDropdown.classList.add('hidden');
+  }
+});
+
+// Select All functionality
+selectAll.addEventListener('change', (e) => {
+  const isChecked = e.target.checked;
+  categoryFilters.forEach(checkbox => {
+    checkbox.checked = isChecked;
+  });
+});
+
+// Update select all when individual checkboxes change
+categoryFilters.forEach(checkbox => {
+  checkbox.addEventListener('change', () => {
+    const allChecked = [...categoryFilters].every(cb => cb.checked);
+    selectAll.checked = allChecked;
+  });
+});
+
+// Apply filter
+applyFilterBtn.addEventListener('click', () => {
+  updateResults();
+  filterDropdown.classList.add('hidden');
+});
+
+// Update results function
+async function updateResults() {
+  const searchValue = searchInput.value;
+  const selectedCategories = [...document.querySelectorAll('.category-filter:checked')]
+    .map(cb => cb.value);
+  
+  // Buat URL dengan parameter
+  const params = new URLSearchParams();
+  if (searchValue) params.set('search', searchValue);
+  if (selectedCategories.length) params.set('categories', selectedCategories.join(','));
+  
+  // Reload halaman dengan parameter baru
+  window.location.href = `${window.location.pathname}?${params}`;
+  
+}
+
+// JavaScript function untuk meng-handle delete
+// Delete modal functions
+let kriteriaIdToDelete = null;
+
+function showDeleteModal(id, kriteria) {
+  kriteriaIdToDelete = id;
+  const modal = document.getElementById('hs-ai-invoice-modal');
+  const titleElement = modal.querySelector('h2');
+
+  titleElement.innerHTML = `Hapus Kriteria <b>${kriteria}</b>?`;
+
+  modal.classList.remove('hidden');
+}
+
+// Delete handling
+async function handleDelete() {
+  try {
+    const response = await fetch('/admin/manajemen_kriteria/hapus_kriteria', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ id: kriteriaIdToDelete })
+    });
+
+    const result = await response.json();
+    
+    if (result.success) {
+      window.location.reload();
+    } else {
+      console.error('Delete failed:', result.message);
+    }
+  } catch (error) {
+    console.error('Error:', error);
+  }
+}
+</script>

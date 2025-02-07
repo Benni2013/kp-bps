@@ -1,0 +1,12 @@
+<div class="min-h-screen flex items-center justify-center bg-gray-100">
+  <div class="bg-white p-8 rounded-lg shadow-md w-3/4">
+    <h1 class="text-3xl font-bold text-red-600 mb-4">Error {{status}}</h1>
+    <p class="text-gray-600 mb-4">{{message}}</p>
+    {{#if error.stack}}
+      <pre class="bg-gray-100 p-4 rounded text-sm overflow-auto">{{error.stack}}</pre>
+    {{/if}}
+    <div class="mt-6">
+      <a href="/" class="text-blue-600 hover:underline">Kembali ke Beranda</a>
+    </div>
+  </div>
+</div>

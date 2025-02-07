@@ -1,77 +1,93 @@
 const express = require('express');
 const router = express.Router();
 
-// Router untuk halaman manajemen anggota - GET
-router.get('/', function(req, res, next) {
-  // data anggota dummy yg berisi nama, nip, jabatan, tim, dan status
-  const dataAnggota = [
-    { nama: 'Anggota 1', nip: '123456', jabatan: 'Asisten Statistisi Terampil', tim: 'Tim A', status: true },
-    { nama: 'Anggota 2', nip: '234567', jabatan: 'Pranata Keuangan APBN  Terampil', tim: 'Tim B', status: false },
-  ];
-  
-  res.render('admin/manajemen_anggota/manajemen_anggota', { 
-    title: 'Manajemen Anggota',
-    layout: 'layouts/admin.hbs',
-    dataAnggota: dataAnggota,
-   });
+const multer = require('multer');
+const path = require('path');
+const fs = require('fs');
+
+const { getAllAnggota, getOneAnggota, getAnggotaToChangePassword, createAnggota, deleteAnggota, editAnggota } = require('../controllers/ManajerAnggota');
+
+// Buat fungsi untuk cek dan buat direktori
+const createUploadDir = () => {
+  const uploadDir = './public/uploads/foto_profile';
+  if (!fs.existsSync(uploadDir)) {
+    fs.mkdirSync(uploadDir, { recursive: true });
+  }
+};
+
+// Konfigurasi multer untuk upload foto
+const storage = multer.diskStorage({
+  destination: function(req, file, cb) {
+    // Pastikan direktori ada sebelum upload
+    createUploadDir();
+    cb(null, './public/uploads/foto_profile');
+  },
+  filename: function(req, file, cb) {
+    // Format tanggal: YYYYMMDD_HHmm
+    const today = new Date();
+    const date = today.getFullYear().toString() +
+                (today.getMonth() + 1).toString().padStart(2, '0') +
+                today.getDate().toString().padStart(2, '0') + '_' + 
+                today.getHours().toString().padStart(2, '0') + 
+                today.getMinutes().toString().padStart(2, '0');
+    
+    // Format nama file: nip_YYYYMMDD.extension
+    const filename = `${req.body.nip}_${date}${path.extname(file.originalname)}`;
+    cb(null, filename);
+  }
 });
+
+// Filter file yang diupload
+const upload = multer({ 
+  storage: storage,
+  fileFilter: function(req, file, cb) {
+    const filetypes = /jpeg|jpg|png/;
+    const mimetype = filetypes.test(file.mimetype);
+    const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
+
+    if (mimetype && extname) {
+      return cb(null, true);
+    }
+    cb(new Error('Hanya file gambar (JPG, JPEG, PNG) yang diperbolehkan'));
+  },
+  limits: {
+    fileSize: 5 * 1024 * 1024 // 5MB limit
+  },
+});
+
+// Router untuk halaman manajemen anggota - GET
+router.get('/', getAllAnggota);
 
 // Router untuk halaman tambah anggota - GET
 router.get('/tambah_anggota', function(req, res, next) {
   res.render('admin/manajemen_anggota/tambah_anggota', { 
     title: 'Tambah Anggota',
     layout: 'layouts/admin.hbs', 
+    akun: req.user,
   });
 });
 
 // Router untuk proses tambah anggota - POST
-router.post('/tambah_anggota', function(req, res, next) {
-  console.log('\nAnggota Baru berhasil ditambahkan \n');
-  res.redirect('/admin/manajemen_anggota');
-});
+router.post('/tambah_anggota', upload.single('foto_profile'), createAnggota);
 
 // Router untuk halaman detail anggota - GET
-router.get('/detail_anggota', function(req, res, next) {
-  res.render('admin/manajemen_anggota/detail_anggota', { 
-    title: 'Detail Anggota',
-    layout: 'layouts/admin.hbs', 
-  });
-});
+router.get('/detail_anggota/:id', getOneAnggota);
 
 // Router untuk halaman edit anggota - GET
-router.get('/edit_anggota', function(req, res, next) {
-  res.render('admin/manajemen_anggota/edit_anggota', { 
-    title: 'Edit Anggota',
-    layout: 'layouts/admin.hbs', 
-  });
-});
+router.get('/edit_anggota/:id', getOneAnggota);
 
 // Router untuk proses edit anggota - POST
-router.post('/edit_anggota', function(req, res, next) {
-  console.log('\nAnggota berhasil diedit \n');
-  res.redirect('/admin/manajemen_anggota');
-});
+router.post('/edit_anggota/:id', upload.single('foto_profile'), editAnggota);
 
 
 // Router untuk halaman ubah password anggota - GET
-router.get('/ubahpw_anggota', function(req, res, next) {
-  res.render('admin/manajemen_anggota/ubahpw_anggota', { 
-    title: 'Ubah Password Anggota',
-    layout: 'layouts/admin.hbs',
-   });
-});
+router.get('/ubahpw_anggota/:id', getAnggotaToChangePassword);
 
 // Router untuk proses ubah password anggota - POST
-router.post('/ubahpw_anggota', function(req, res, next) {
-  console.log('\nPassword anggota berhasil diubah \n');
-  res.redirect('/admin/manajemen_anggota');
-});
+router.post('/ubahpw_anggota/:id', editAnggota);
 
 // Router untuk proses hapus anggota - POST
-router.post('/hapus_anggota', function(req, res, next) {
-  console.log('\nAnggota berhasil dihapus \n');
-  res.redirect('/admin/manajemen_anggota');
-});
+router.post('/hapus_anggota', deleteAnggota);
 
 
 module.exports = router;

@@ -11,29 +11,32 @@ const { middlewareValidation, isAdmin } = require('../controllers/AuthController
 
 // Route untuk dashboard admin - GET
 router.get('/', middlewareValidation, isAdmin, function(req, res, next) {
+  const akun = req.user;
+
   res.render('admin/dashboard', { 
     title: 'Dashboard Admin',
     layout: 'layouts/admin.hbs',
+    akun,
    });
 });
 
 // Route untuk manajemen anggota - USE
-router.use('/manajemen_anggota', manajerAnggotaRouter);
+router.use('/manajemen_anggota', middlewareValidation, isAdmin, manajerAnggotaRouter);
 
 // Route untuk manajemen kriteria - USE
-router.use('/manajemen_kriteria', manajerKriteriaRouter);
+router.use('/manajemen_kriteria', middlewareValidation, isAdmin, manajerKriteriaRouter);
 
 // Route untuk manajemen pemilihan - USE
-router.use('/manajemen_pemilihan', manajerPemilihanRouter);
+router.use('/manajemen_pemilihan', middlewareValidation, isAdmin, manajerPemilihanRouter);
 
 // Route untuk pemilihan berlangsung - USE
-router.use('/pemilihan_berlangsung', pemilihanBerlangsungRouter);
+router.use('/pemilihan_berlangsung', middlewareValidation, isAdmin, pemilihanBerlangsungRouter);
 
 // Router untuk generate file-file - USE
-router.use('/generate', generateRouter);
+router.use('/generate', middlewareValidation, generateRouter);
 
 // Route untuk halaman riwayat pemilihan - GET
-router.get('/riwayat_pemilihan', function(req, res, next) {
+router.get('/riwayat_pemilihan', middlewareValidation, isAdmin, function(req, res, next) {
   res.render('admin/riwayat_pemilihan/riwayat_pemilihan', { 
     title: 'Riwayat Pemilihan',
     layout: 'layouts/admin.hbs',
@@ -41,7 +44,7 @@ router.get('/riwayat_pemilihan', function(req, res, next) {
 });
 
 // Route untuk halaman detail riwayat pemilihan - GET
-router.get('/detail_riwayat', function(req, res, next) {
+router.get('/detail_riwayat', middlewareValidation, isAdmin, function(req, res, next) {
   res.render('admin/riwayat_pemilihan/detail_riwayat', { 
     title: 'Detail Riwayat Pemilihan',
     layout: 'layouts/admin.hbs',
