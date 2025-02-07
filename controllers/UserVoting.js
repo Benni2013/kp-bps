@@ -72,7 +72,7 @@ const getKandidatVot1 = async (req, res, next) => {
     }
   } catch (error) {
     console.error("getKandidatVot1 validation error:", error);
-    res.redirect("users/beranda");
+    res.redirect("beranda");
   }
 };
 
@@ -105,7 +105,7 @@ const setVot1 = async (req, res, next) => {
     res.redirect("/users/pemilihan/hasil-voting");
   } catch (error) {
     console.error("setVot1 validation error:", error);
-    res.redirect("users/beranda");
+    res.redirect("beranda");
   }
 };
 
@@ -161,7 +161,7 @@ const getMyVot = async (req, res, next) => {
     });
   } catch (error) {
     console.error("getMyVot validation error:", error);
-    res.redirect("users/beranda");
+    res.redirect("beranda");
   }
 };
 
@@ -242,7 +242,7 @@ const getKandidatKriteria = async (req, res, next) => {
     }
   } catch (error) {
     console.error("getKandidatKriteria validation error:", error);
-    res.redirect("users/beranda");
+    res.redirect("beranda");
   }
 };
 
@@ -320,7 +320,7 @@ const setPenilaianKriteria = async (req, res, next) => {
     res.redirect("/users/pemilihan/thank-you");
   } catch (error) {
     console.error("setPenilaianKriteria validation error:", error);
-    res.redirect("/users/beranda");
+    res.redirect("/beranda");
   }
 };
 
@@ -355,7 +355,7 @@ const getMyPenilaianKriteria = async (req, res, next) => {
     });
   } catch (error) {
     console.error("getMyVot validation error:", error);
-    res.redirect("users/beranda");
+    res.redirect("beranda");
   }
 };
 
