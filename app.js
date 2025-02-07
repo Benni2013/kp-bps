@@ -30,7 +30,7 @@ app.use('/', indexRouter);
 // app.use('/supervisor', supervisorsRouter);
 
 // Daftarkan helper
-// helper cek role
+// helper cek sama atau tidak
 hbs.registerHelper('eq', (a, b) => a === b);
 
 // helper index + 1
@@ -46,6 +46,9 @@ hbs.registerHelper('subtract', (a, b) => a - b);
 hbs.registerHelper('includes', (array, value) => {
   return Array.isArray(array) && array.includes(value);
 });
+
+// helper untuk logika or
+hbs.registerHelper('or', (a, b) => a || b);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

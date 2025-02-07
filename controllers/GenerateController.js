@@ -1,14 +1,22 @@
 // GenerateController
 
 // - ucapan terimakasih
-// - template penilaian
+// - template penilaian  (done)
 // - laporan kandidate eligible
 // - laporan voting 1
 // - laporan voting 2 (hasil akhir pemilihan)
 
 const jwt = require("jsonwebtoken");
-const { Anggota, Pemilihan, DetailPemilihan, DataNilai, Voting1, Voting2, Indikator } = require("../models");
+const { Anggota, 
+        Pemilihan, 
+        Periode,
+        DetailPemilihan, 
+        DataNilai, 
+        Voting1, 
+        Voting2, 
+        Indikator } = require("../models");
 const PDFDocument = require("pdfkit");
+const XLSX = require('xlsx');
 const path = require("path");
 const fs = require("fs");
 
@@ -118,7 +126,125 @@ function getBulanPeriode(namaPeriode) {
   }
 }
 
+// fungsi untuk generate template excel
+function templateExcel(pemilihan) {
+  const workbook = XLSX.utils.book_new();
+  
+  // Tentukan bulan berdasarkan periode
+  const bulan = getBulanPeriode(pemilihan.Periode.nama_periode);
+  
+  // Buat header tabel dinamis berdasarkan jumlah bulan
+  const mainHeaders = ['No.', 'NIP', 'Nama', 'Jabatan'];
+  const subHeaders = ['', '', '', ''];
+  const columnCount = mainHeaders.length;
+  
+  // Buat header bulan dan sub-header untuk tiap bulan
+  bulan.forEach(b => {
+    // Tambah sub-header untuk tiap bulan
+    const subHeadersForMonth = [
+      'CKP', 'S', 'I', 'TK', 'CB', 'CM', 'CP', 'CT',
+      'TL1', 'TL2', 'TL3', 'TL4', 'PSW1', 'PSW2', 'PSW3', 'PSW4'
+    ];
+    
+    // Tambah header bulan (merged cells)
+    for(let i = 0; i < 16; i++) {
+      mainHeaders.push(b);
+    }
+    
+    // Tambah sub-headers
+    subHeaders.push(...subHeadersForMonth);
+  });
+
+  // Gabung data anggota
+  const rows = [];
+  rows.push(mainHeaders);
+  rows.push(subHeaders);
+
+  // Isi data anggota
+  if (pemilihan.DetailPemilihans && pemilihan.DetailPemilihans.length > 0) {
+    pemilihan.DetailPemilihans.forEach((detail, index) => {
+      if (detail.Anggotum) {
+        const row = [
+          index + 1,
+          detail.Anggotum.nip,
+          detail.Anggotum.nama,
+          detail.Anggotum.jabatan || ''
+        ];
+
+        // Tambah cell kosong untuk setiap kolom nilai
+        const totalColumns = bulan.length * 16;
+        for(let i = 0; i < totalColumns; i++) {
+          row.push('');
+        }
+
+        rows.push(row);
+      }
+    });
+  }
+
+  // Buat worksheet
+  const ws = XLSX.utils.aoa_to_sheet(rows);
+
+  // Styling untuk merged cells header bulan
+  const merge = [];
+  let colIndex = columnCount;
+  bulan.forEach(() => {
+    merge.push({
+      s: {r: 0, c: colIndex},
+      e: {r: 0, c: colIndex + 15}
+    });
+    colIndex += 16;
+  });
+
+  if(!ws['!merges']) ws['!merges'] = [];
+  ws['!merges'] = merge;
+
+  // Tambah worksheet ke workbook
+  XLSX.utils.book_append_sheet(workbook, ws, 'Template');
+
+  return XLSX.write(workbook, { type: 'buffer', bookType: 'xlsx' });
+}
+
+// Controller untuk download template penilaian
+const downloadTemplatePenilaian = async (req, res, next) => {
+  try {
+    const id = req.params.id;
+    const pemilihan = await Pemilihan.findOne({
+      where: { pemilihan_id: id },
+      include: [
+        { 
+          model: DetailPemilihan,
+          include: [{ 
+            model: Anggota,
+            attributes: ['nip', 'nama', 'jabatan']
+          }]
+        },
+        { model: Periode }
+      ]
+    });
+
+    if (!pemilihan) {
+      return res.status(404).send('Pemilihan tidak ditemukan');
+    }
+
+    // Debug log
+    console.log('\n Detail Pemilihan:', JSON.stringify(pemilihan.DetailPemilihans, null, 2));
+
+    // Generate workbook
+    const workbook = templateExcel(pemilihan);
+    
+    // Set response headers
+    res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+    res.setHeader('Content-Disposition', `attachment; filename=penilaian_${pemilihan.nama_pemilihan}_${pemilihan.Periode.nama_periode}_${pemilihan.tahun}.xlsx`);
+    
+    res.send(workbook);
+  } catch (error) {
+    console.error('Error generating template: ', error);
+    next(error);
+  }
+};
+
 module.exports = {
   terimakasih,
-  getBulanPeriode,
+  downloadTemplatePenilaian,
 };

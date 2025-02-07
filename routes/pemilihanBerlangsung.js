@@ -1,32 +1,27 @@
 const express = require('express');
 const router = express.Router();
 
+const { getActivePemilihan,
+        getInputPenilaian,
+      } = require('../controllers/HandlePemilihan');
+
 // Route untuk halaman pemilihan berlangsung - GET
-router.get('/', function(req, res, next) {
-  res.render('admin/pemilihan_berlangsung/pemilihan_berlangsung', { 
-    title: 'Pemilihan Berlangsung',
-    layout: 'layouts/admin.hbs',
-   });
-});
+router.get('/', getActivePemilihan);
 
 // Router untuk halaman input penilaian - GET
-router.get('/input_penilaian', function(req, res, next) {
-  res.render('admin/pemilihan_berlangsung/input_penilaian', { 
-    title: 'Input Penilaian',
-    layout: 'layouts/admin.hbs',
-   });
-});
+router.get('/:id/input_penilaian', getInputPenilaian);
 
 // Router untuk upload excel penilaian - POST
-router.post('/hasil_penilaian', function (req, res, next) {
+router.post('/:id/hasil_penilaian', function (req, res, next) {
   console.log('\nFile Excel Penilaian Terunggah\n')
+  const id = req.params.id;
 
-  res.redirect('/admin/pemilihan_berlangsung//hasil_penilaian')
+  res.redirect(`/admin/pemilihan_berlangsung/${id}/hasil_penilaian`)
   
 });
 
 // Router untuk halaman hasil penilaian - GET
-router.get('/hasil_penilaian', function(req, res, next) {
+router.get('/:id/hasil_penilaian', function(req, res, next) {
   res.render('admin/pemilihan_berlangsung/hasil_penilaian', { 
    title: 'Hasil Penilaian',
    layout: 'layouts/admin.hbs',
@@ -34,7 +29,7 @@ router.get('/hasil_penilaian', function(req, res, next) {
 });
 
 // Router untuk halaman hasil kandidat eligible - GET
-router.get('/hasil_kandidat', function (req, res, next) {
+router.get('/:id/hasil_kandidat', function (req, res, next) {
   res.render('admin/pemilihan_berlangsung/hasil_kandidat', { 
     title: 'Hasil Kandidat', 
     layout: 'layouts/admin.hbs',
@@ -51,7 +46,7 @@ const voting1Status = {
 };
   
 // Route untuk halaan monitor voting 1 - GET
-router.get('/monitor_voting1', function(req, res, next) {
+router.get('/:id/monitor_voting1', function(req, res, next) {
   // votingStatus.isVotingOpen = true;
 
   const anggota = [
@@ -81,7 +76,7 @@ router.get('/monitor_voting1', function(req, res, next) {
 });
 
 // Route untuk menghandle tutup voting 1 - POST
-router.post('/tutup_voting1', (req, res) => {
+router.post('/:id/tutup_voting1', (req, res) => {
   voting1Status.isVotingOpen = false;
 
   console.log('\nVoting 1 berhasil ditutup\n');
@@ -90,7 +85,7 @@ router.post('/tutup_voting1', (req, res) => {
 });
 
 // Route untuk halaman kandidat penilaian keriteria - GET
-router.get('/kandidat_penilaian_kriteria', function(req, res, next) {
+router.get('/:id/kandidat_penilaian_kriteria', function(req, res, next) {
   // Data dummy untuk kandidat
   const kandidatData = [
     { no: 1, nama: "Frizqya Dela Pratiwi", skor1: 45, skor2: 45, skor3: 45, total: 100, },
@@ -108,7 +103,7 @@ router.get('/kandidat_penilaian_kriteria', function(req, res, next) {
 });
 
 // Route untuk simpan kandidat penilaian kriteria - POST
-router.post('/simpan_kandidat_penilaian_kriteria', (req, res) => {
+router.post('/:id/simpan_kandidat_penilaian_kriteria', (req, res) => {
 
   console.log('\nData kandidat penilaian kriteria berhasil disimpan\n');
 
@@ -125,7 +120,7 @@ const voting2Status = {
 };
 
 // Route untuk monitor voting 2
-router.get('/monitor_voting2', function(req, res, next) {
+router.get('/:id/monitor_voting2', function(req, res, next) {
   // voting2Status.isVotingOpen = true;
 
   // Data dummy untuk anggota
@@ -144,7 +139,7 @@ router.get('/monitor_voting2', function(req, res, next) {
 });
 
 // Route untuk menghandle tutup voting 2 - POST
-router.post('/tutup_voting2', (req, res) => {
+router.post('/:id/tutup_voting2', (req, res) => {
   voting2Status.isVotingOpen = false;
 
   console.log('\nPenilaian Kriteria berhasil ditutup\n');
@@ -153,14 +148,14 @@ router.post('/tutup_voting2', (req, res) => {
 });
 
 // Router untuk halaman hasil voting 2
-router.get("/hasil_kriteria", function (req, res, next) {
+router.get("/:id/hasil_kriteria", function (req, res, next) {
   res.render("admin/pemilihan_berlangsung/hasil_kriteria", { 
     title: "Hasil Kriteria", 
     layout: 'layouts/admin.hbs',
   });
 });
 
-router.get("/kandidat_terpilih", function (req, res, next) {
+router.get("/:id/kandidat_terpilih", function (req, res, next) {
   res.render("admin/pemilihan_berlangsung/kandidat_terpilih", { 
     title: "Kandidat Terpilih",
     layout: 'layouts/admin.hbs',
