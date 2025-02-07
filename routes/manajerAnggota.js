@@ -63,6 +63,7 @@ router.get('/tambah_anggota', function(req, res, next) {
   res.render('admin/manajemen_anggota/tambah_anggota', { 
     title: 'Tambah Anggota',
     layout: 'layouts/admin.hbs', 
+    akun: req.user,
   });
 });
 
