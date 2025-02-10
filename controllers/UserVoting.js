@@ -299,7 +299,7 @@ const setPenilaianKriteria = async (req, res, next) => {
     for (let kriteria of kriteriaAktif) {
       for (let kandidat of kandidatKriteria) {
         // Ambil nilai dari req.body berdasarkan nama field yang dinamis
-        let fieldName = `criteria-${kriteria.indikator_id}-${kandidat.detail_pemilihan_id}`;
+        let fieldName = `criteria-${kriteria.indikator_id-1}-${kandidat.detail_pemilihan_id}`;
         let nilai = parseInt(req.body[fieldName]);
 
         if (nilai < 1 || nilai > 4) {
