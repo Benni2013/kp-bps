@@ -9,7 +9,7 @@
 
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const { Anggota, Pemilihan, DetailPemilihan, DataNilai, Voting1, Voting2, Indikator } = require("../models");
+const { Anggota, Pemilihan, DetailPemilihan, DataNilai, Voting1, Voting2, Indikator, sequelize } = require("../models");
 require("dotenv").config();
 const { Op } = require("sequelize");
 
@@ -268,12 +268,14 @@ const getKandidatKriteria = async (req, res, next) => {
 };
 
 const setPenilaianKriteria = async (req, res, next) => {
+  const transaction = await sequelize.transaction();
+  
   try {
-    // Ambil Penilaian Kriteria yang sedang berjalan
+    // Get pemilihan aktif
     let pemilihan = await Pemilihan.findOne({
       where: {
         tahap_pemilihan: "voting2",
-      },
+      }
     });
 
     if (!pemilihan) {
@@ -282,66 +284,86 @@ const setPenilaianKriteria = async (req, res, next) => {
 
     const akun = req.user;
 
-    // Ambil detail pemilihan untuk akun saat ini
+    // Get detail pemilihan penilai
     let detail_pemilihan = await DetailPemilihan.findOne({
       where: {
         pemilihan_id: pemilihan.pemilihan_id,
         anggota_id: akun.nip,
-      },
+      }
     });
 
     if (!detail_pemilihan) {
-      throw new Error("Detail pemilihan tidak ditemukan untuk akun ini.");
+      throw new Error("Detail pemilihan tidak ditemukan.");
     }
 
-    // Ambil kandidat yang lolos pada tahap 1
+    // Get semua kandidat yang lolos
     let kandidatKriteria = await Voting1.findAll({
-      where: {
+      where: { 
         status_anggota: "lolos",
+        '$DetailPemilihan.pemilihan_id$': pemilihan.pemilihan_id
       },
+      include: [{
+        model: DetailPemilihan,
+        required: true,
+        include: [{
+          model: Anggota,
+          attributes: ['nip', 'nama']
+        }]
+      }]
     });
 
-    if (!kandidatKriteria || kandidatKriteria.length === 0) {
-      throw new Error("Tidak ada kandidat yang lolos pada tahap 1.");
-    }
-
-    // Ambil semua kriteria aktif
-    let kriteriaAktif = await Indikator.findAll({
+    // Get semua indikator aktif
+    let indikatorList = await Indikator.findAll({
       where: {
         status_inditakor: "aktif",
       },
+      order: [['indikator_id', 'ASC']]
     });
 
-    if (!kriteriaAktif || kriteriaAktif.length === 0) {
-      throw new Error("Tidak ada kriteria aktif.");
-    }
+    console.log('\nData yang akan diproses:');
+    console.log('Jumlah kandidat:', kandidatKriteria.length);
+    console.log('Jumlah indikator:', indikatorList.length);
 
-    // Proses penilaian berdasarkan input form
-    for (let kriteria of kriteriaAktif) {
-      for (let kandidat of kandidatKriteria) {
-        // Ambil nilai dari req.body berdasarkan nama field yang dinamis
-        let fieldName = `criteria-${kriteria.indikator_id-1}-${kandidat.detail_pemilihan_id}`;
-        let nilai = parseInt(req.body[fieldName]);
+    // Proses setiap kombinasi kandidat dan indikator
+    const penilaianPromises = [];
 
-        if (nilai < 1 || nilai > 4) {
+    for (const kandidat of kandidatKriteria) {
+      for (let i = 0; i < indikatorList.length; i++) {
+        const fieldName = `criteria-${i}-${kandidat.detail_pemilihan_id}`;
+        const nilai = parseInt(req.body[fieldName]);
+
+        if (isNaN(nilai) || nilai < 1 || nilai > 4) {
           throw new Error(`Nilai tidak valid untuk ${fieldName}`);
         }
 
-        // Simpan penilaian ke database
-        await Voting2.create({
-          detail_pemilihan_id: detail_pemilihan.detail_pemilihan_id,
-          indikator_id: kriteria.indikator_id,
-          kandidat_id: kandidat.pilihan1,
-          nilai: nilai,
-          waktu_vot2: new Date(),
-        });
+        console.log(`\nMenyimpan nilai untuk:`);
+        console.log(`Kandidat: ${kandidat.DetailPemilihan.Anggotum.nama}`);
+        console.log(`Indikator: ${indikatorList[i].isi_indikator}`);
+        console.log(`Nilai: ${nilai}`);
+
+        penilaianPromises.push(
+          Voting2.create({
+            detail_pemilihan_id: detail_pemilihan.detail_pemilihan_id,
+            indikator_id: indikatorList[i].indikator_id,
+            kandidat_id: kandidat.DetailPemilihan.anggota_id,
+            nilai: nilai,
+            waktu_vot2: new Date()
+          }, { transaction })
+        );
       }
     }
 
+    // Simpan semua penilaian
+    await Promise.all(penilaianPromises);
+    await transaction.commit();
+
+    console.log('\nSemua penilaian berhasil disimpan');
     res.redirect("/users/pemilihan/thank-you");
+
   } catch (error) {
-    console.error("setPenilaianKriteria validation error:", error);
-    res.redirect("/beranda");
+    await transaction.rollback();
+    console.error("setPenilaianKriteria error:", error);
+    res.redirect("/users/beranda");
   }
 };
 

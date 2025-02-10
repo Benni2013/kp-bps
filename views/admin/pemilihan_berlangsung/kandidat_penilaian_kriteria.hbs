@@ -48,7 +48,9 @@
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 text-center">{{total}}</td>
                         <td class="px-6 py-4 whitespace-nowrap text-center">
                             <input 
-                                {{#if status}}readonly {{#if (eq status 'lolos')}}checked{{/if}}{{/if}}
+                                {{#if status}}
+                                    disabled 
+                                {{#if (eq status 'lolos')}}checked{{/if}}{{/if}}
                                 type="checkbox" 
                                 name="kandidat_{{id}}"
                                 class="shrink-0 border-gray-700 rounded text-blue-600 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none">

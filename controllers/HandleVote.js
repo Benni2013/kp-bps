@@ -4,9 +4,9 @@
 // - getMonitorVot1     (done)
 // - closeVot1          (done)
 // - getKandidatPenilaianKeriteria (data hasil voting 1)         (done)
-// - setKandidatPenilaianKeriteria (menentukan kandidat vote 2)
-// - getMonitorVot2
-// - closeVot2
+// - setKandidatPenilaianKeriteria (menentukan kandidat vote 2)  (done)
+// - getMonitorVot2     (done)
+// - closeVot2          (done)
 
 const { 
   Pemilihan, 
@@ -439,6 +439,24 @@ const setKandidatPenilaianKriteria = async (req, res, next) => {
     const { id } = req.params;
     const formData = req.body;
 
+    // Check apakah sudah ada yang memiliki status_anggota
+    const hasStatusAnggota = await Voting1.findOne({
+      where: {
+        '$DetailPemilihan.pemilihan_id$': id,
+        status_anggota: { [Op.ne]: null }
+      },
+      include: [{
+        model: DetailPemilihan,
+        required: true
+      }]
+    });
+
+    // Jika sudah ada status, redirect ke monitor voting 2
+    if (hasStatusAnggota) {
+      console.log('\nStatus anggota sudah ada, redirect ke monitor voting 2');
+      return res.redirect(`/admin/pemilihan_berlangsung/${id}/monitor_voting2`);
+    }
+
     // Get semua voting1 untuk pemilihan ini
     const voting1Data = await Voting1.findAll({
       where: {
@@ -522,18 +540,29 @@ const getMonitorVot2 = async (req, res, next) => {
     const belumIsi = totalPengisi - sudahIsi;
     const progressPercentage = Math.round((sudahIsi / totalPengisi) * 100);
 
+
     // Get data anggota dengan status pengisian
     let whereClause = { pemilihan_id: id };
     let includeVoting = {
       model: Voting2,
       required: false,
-      attributes: ['waktu_vot2']
+      separate: true, // Gunakan separate: true untuk menghindari limit dari GROUP BY
+      order: [['waktu_vot2', 'DESC']]
     };
 
+    // Get unique detail_pemilihan_ids yang sudah mengisi
+    const filledDetailPemilihanIds = await Voting2.findAll({
+      attributes: ['detail_pemilihan_id'],
+      group: ['detail_pemilihan_id']
+    });
+
+    const filledIds = filledDetailPemilihanIds.map(v => v.detail_pemilihan_id);
+
+    // Terapkan filter
     if (filter === 'sudah') {
-      includeVoting.required = true;
+      whereClause.detail_pemilihan_id = { [Op.in]: filledIds };
     } else if (filter === 'belum') {
-      whereClause['$Voting2.voting2_id$'] = null;
+      whereClause.detail_pemilihan_id = { [Op.notIn]: filledIds };
     }
 
     const detailPemilihan = await DetailPemilihan.findAll({
@@ -553,15 +582,20 @@ const getMonitorVot2 = async (req, res, next) => {
     });
 
     // Format data untuk view
-    const anggotaList = detailPemilihan.map((detail, index) => ({
-      no: index + 1,
-      nama: detail.Anggotum.nama,
-      nip: detail.Anggotum.nip,
-      sudahMengisi: !!detail.Voting2,
-      waktu: detail.Voting2 ? 
-        new Date(detail.Voting2.waktu_vot2).toLocaleString('id-ID') : 
-        '-'
-    }));
+    const anggotaList = detailPemilihan.map((detail, index) => {
+      const hasVoted = detail.Voting2s && detail.Voting2s.length > 0;
+      const latestVoting = hasVoted ? detail.Voting2s[0] : null;
+
+      return {
+        no: index + 1,
+        nama: detail.Anggotum.nama,
+        nip: detail.Anggotum.nip,
+        sudahMengisi: hasVoted,
+        waktu: hasVoted ? 
+          new Date(latestVoting.waktu_vot2) : 
+          '-'
+      };
+    });
 
     console.log('\nData Monitor Voting 2:');
     console.log(JSON.stringify({
