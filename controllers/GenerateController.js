@@ -228,7 +228,7 @@ const downloadTemplatePenilaian = async (req, res, next) => {
     }
 
     // Debug log
-    console.log('\n Detail Pemilihan:', JSON.stringify(pemilihan.DetailPemilihans, null, 2));
+    console.log('\n Detail Pemilihan:', JSON.stringify(pemilihan, null, 2));
 
     // Generate workbook
     const workbook = templateExcel(pemilihan);

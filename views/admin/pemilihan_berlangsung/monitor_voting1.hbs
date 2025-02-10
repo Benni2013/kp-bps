@@ -4,7 +4,11 @@
     <!-- Card Progress untuk Voting 1 masih dibuka -->
     <div class="bg-white border border-black rounded-xl shadow-sm p-4 md:p-5 mb-6">
         <div class="flex justify-between items-center mb-6">
-            <h2 class="text-2xl font-bold text-gray-800">Progress Voting Tahap 1</h2>
+            <div class="flex flex-col mb-4">
+                <h2 class="text-2xl font-bold text-gray-800">Progress Voting Tahap 1</h2>
+                <p class="text-gray-500 italic mt-1">{{pemilihanTitle}}</p>
+            </div>
+            
             <button type="button" id="tutupVotingBtn" class="py-2 px-4 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-red-600 text-white hover:bg-red-700 disabled:opacity-50 disabled:pointer-events-none">
                 <svg class="flex-shrink-0 w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z"/>
@@ -44,20 +48,53 @@
     </div>
 
     <!-- Table Section -->
-    <div class="bg-white border border-black rounded-xl shadow-sm">
+    <div class="bg-white border border-black rounded-xl shadow-sm overflow-hidden ">
         <div class="flex justify-between items-center py-3 px-4 border-b">
             <h2 class="text-2xl font-semibold text-gray-800">Status Voting Anggota</h2>
-            <button class="flex items-start text-sm font-medium leading-none rounded-lg min-h-[40px] text-slate-700" aria-label="Filter Voting 1">
-              <div class="flex overflow-hidden gap-2 justify-center items-center px-4 py-2.5 bg-white rounded-lg border border-gray-300 border-solid shadow-sm">
-                <img loading="lazy" src="https://cdn.builder.io/api/v1/image/assets/TEMP/565ef0f7d60ee4cafb3e62c36e3f2b725be54df8b71e3b1813ba0884d857d57b" alt="" class="object-contain shrink-0 self-stretch my-auto w-5 aspect-square"/>
-                <span>Filters</span>
-              </div>
-            </button>
+            {{!-- Filter --}}
+            <div class="relative">
+                <button 
+                    id="filterBtn"
+                    class="flex items-start text-sm font-medium leading-none rounded-lg min-h-[40px] text-slate-700" 
+                    aria-label="Filter Voting 1">
+                <div class="flex overflow-hidden gap-2 justify-center items-center px-4 py-2.5 bg-white rounded-lg border border-gray-300 border-solid shadow-sm">
+                    <img 
+                        loading="lazy" 
+                        src="https://cdn.builder.io/api/v1/image/assets/TEMP/565ef0f7d60ee4cafb3e62c36e3f2b725be54df8b71e3b1813ba0884d857d57b" 
+                        alt="Filter Status" 
+                        class="object-contain shrink-0 self-stretch my-auto w-5 aspect-square"
+                    />
+                    <span>Filters</span>
+                </div>
+                </button>
+
+                {{!-- Filter dropdown --}}
+                <div id="filterDropdown" class="hidden absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-xl border border-gray-200 z-50">
+                    <div class="p-4">
+                    <div class="space-y-3">
+                        <label class="flex items-center gap-2">
+                        <input type="radio" name="filterStatus" value="all" {{#unless selectedFilter}}checked{{/unless}} class="text-blue-600">
+                        <span>Semua</span>
+                        </label>
+                        <label class="flex items-center gap-2">
+                        <input type="radio" name="filterStatus" value="sudah" {{#if (eq selectedFilter 'sudah')}}checked{{/if}} class="text-blue-600">
+                        <span>Sudah Vote</span>
+                        </label>
+                        <label class="flex items-center gap-2">
+                        <input type="radio" name="filterStatus" value="belum" {{#if (eq selectedFilter 'belum')}}checked{{/if}} class="text-blue-600">
+                        <span>Belum Vote</span>
+                        </label>
+                    </div>
+                    </div>
+                </div>
+            </div>
+            
         </div>
 
-        <div class="overflow-x-auto">
+        {{!-- Tabel --}}
+        <div class="overflow-x-auto" style="height: 358px;">
             <table class="min-w-full divide-y divide-gray-200">
-                <thead class="bg-gray-50">
+                <thead class="bg-gray-100 sticky top-0 z-10">
                     <tr>
                         <th scope="col" class="px-6 py-3 text-start text-sm font-semibold text-gray-500">NO</th>
                         <th scope="col" class="px-6 py-3 text-start text-sm font-semibold text-gray-500">NAMA</th>
@@ -77,7 +114,7 @@
                             <span class="inline-flex items-center gap-x-1.5 py-1.5 px-3 rounded-full text-xs font-medium bg-red-100 text-red-800">Belum Vote</span>
                             {{/if}}
                         </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800">{{waktu}}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 break-words">{{waktu}}</td>
                     </tr>
                     {{/each}}
                 </tbody>
@@ -89,7 +126,11 @@
     <!-- Card Progress untuk Voting sudah tutup -->
     <div class="bg-white border border-black rounded-xl shadow-sm p-4 md:p-5 mb-6">
         <div class="flex justify-between items-center mb-6">
-            <h2 class="text-2xl font-bold text-gray-800">Progress Voting Tahap 1</h2>
+            <div class="flex flex-col mb-4">
+                <h2 class="text-2xl font-bold text-gray-800">Progress Voting Tahap 1</h2>
+                <p class="text-gray-500 italic mt-1">{{pemilihanTitle}}</p>
+            </div>
+
             <button disabled type="button" id="tutupVotingBtn" class="py-2 px-4 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-red-600 text-white hover:bg-red-700 disabled:opacity-50 disabled:pointer-events-none">
                 <svg class="flex-shrink-0 w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z"/>
@@ -131,20 +172,53 @@
     <!-- Tampilan setelah voting ditutup -->
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <!-- Card Status -->
-        <div class="bg-white border border-black rounded-xl shadow-sm ">
+        <div class="bg-white border border-black rounded-xl shadow-sm overflow-hidden ">
             <div class="flex justify-between items-center mb-6 px-2">
                 <h2 class="text-2xl font-bold text-gray-800">Status Voting Anggota</h2>
-                <button class="mt-2 flex items-start text-sm font-medium leading-none rounded-lg min-h-[40px] text-slate-700" aria-label="Filter Voting 1">
-                <div class="flex overflow-hidden gap-2 justify-center items-center px-4 py-2.5 bg-white rounded-lg border border-gray-300 border-solid shadow-sm">
-                    <img loading="lazy" src="https://cdn.builder.io/api/v1/image/assets/TEMP/565ef0f7d60ee4cafb3e62c36e3f2b725be54df8b71e3b1813ba0884d857d57b" alt="" class="object-contain shrink-0 self-stretch my-auto w-5 aspect-square"/>
-                    <span>Filters</span>
+                {{!-- Filter --}}
+                <div class="relative p-2">
+                    <button 
+                        id="filterBtn"
+                        class="flex items-start text-sm font-medium leading-none rounded-lg min-h-[40px] text-slate-700" 
+                        aria-label="Filter Voting 1">
+                    <div class="flex overflow-hidden gap-2 justify-center items-center px-4 py-2.5 bg-white rounded-lg border border-gray-300 border-solid shadow-sm">
+                        <img 
+                            loading="lazy" 
+                            src="https://cdn.builder.io/api/v1/image/assets/TEMP/565ef0f7d60ee4cafb3e62c36e3f2b725be54df8b71e3b1813ba0884d857d57b" 
+                            alt="Filter Status" 
+                            class="object-contain shrink-0 self-stretch my-auto w-5 aspect-square"
+                        />
+                        <span>Filters</span>
+                    </div>
+                    </button>
+
+                    {{!-- Filter dropdown --}}
+                    <div id="filterDropdown" class="hidden absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-xl border border-gray-200 z-50">
+                        <div class="p-4">
+                        <div class="space-y-3">
+                            <label class="flex items-center gap-2">
+                            <input type="radio" name="filterStatus" value="all" {{#unless selectedFilter}}checked{{/unless}} class="text-blue-600">
+                            <span>Semua</span>
+                            </label>
+                            <label class="flex items-center gap-2">
+                            <input type="radio" name="filterStatus" value="sudah" {{#if (eq selectedFilter 'sudah')}}checked{{/if}} class="text-blue-600">
+                            <span>Sudah Vote</span>
+                            </label>
+                            <label class="flex items-center gap-2">
+                            <input type="radio" name="filterStatus" value="belum" {{#if (eq selectedFilter 'belum')}}checked{{/if}} class="text-blue-600">
+                            <span>Belum Vote</span>
+                            </label>
+                        </div>
+                        </div>
+                    </div>
                 </div>
-                </button>
             </div>
+
+            {{!-- Tabel --}}
             <div class="relative">
-                <div class="overflow-x-auto">
+                <div class="overflow-x-auto" style="height: 250px;">
                     <table class="min-w-full divide-y divide-gray-200">
-                        <thead class="bg-gray-50 sticky top-0 z-10">
+                        <thead class="bg-gray-100 sticky top-0 z-10">
                             <tr>
                                 <th scope="col" class="px-4 py-2 text-start text-sm font-semibold text-gray-500">NO</th>
                                 <th scope="col" class="px-4 py-2 text-start text-sm font-semibold text-gray-500">NAMA</th>
@@ -152,7 +226,7 @@
                                 <th scope="col" class="px-4 py-2 text-start text-sm font-semibold text-gray-500">WAKTU</th>
                             </tr>
                         </thead>
-                        <div class="overflow-y-auto" style="max-height: calc(5 * 2.5rem);">
+                        <div class="overflow-y-auto" style="max-height: 200px;">
                             <tbody class="divide-y divide-gray-200">
                                 {{#each anggota}}
                                 <tr class="h-10">
@@ -165,7 +239,7 @@
                                         <span class="inline-flex items-center gap-x-1.5 py-1 px-2 rounded-full text-xs font-medium bg-red-100 text-red-800">Belum Vote</span>
                                         {{/if}}
                                     </td>
-                                    <td class="px-4 py-2 whitespace-nowrap text-xs text-gray-800">{{waktu}}</td>
+                                    <td class="px-4 py-2 whitespace-nowrap text-xs text-gray-800 break-words">{{waktu}}</td>
                                 </tr>
                                 {{/each}}
                             </tbody>
@@ -178,27 +252,117 @@
         </div>
 
         <!-- Card Hasil Voting -->
-        <div class="bg-white border border-black rounded-xl shadow-sm p-4 md:p-5">
-            <div class="flex justify-between items-center mb-6">
+        {{#unless votingStatus.isVotingOpen}}
+        <div class="bg-white border border-black rounded-xl shadow-sm p-4 md:p-5 overflow-hidden">
+            <div class="flex justify-between items-center">
                 <h2 class="text-2xl font-bold text-gray-800">Hasil Voting Tahap 1</h2>
             </div>
-            <div class="space-y-4">
-                {{#each hasilVoting}}
-                <div class="flex items-center gap-4">
-                    <div class="flex-1">
-                        <div class="text-sm font-medium text-gray-800">{{nama}}</div>
-                        <div class="w-full h-2 bg-gray-200 rounded-full mt-2">
-                            <div class="h-2 bg-blue-600 rounded-full" style="width: {{percentage}}%"></div>
-                        </div>
+
+            <!-- Tab Navigation -->
+            <div class="border-b border-gray-200 mb-4">
+                <nav class="-mb-px flex space-x-8" aria-label="Tabs">
+                <button 
+                    onclick="showTab('pilihan1')"
+                    class="tab-button whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm border-blue-500 text-blue-600">
+                    Pilihan 1
+                </button>
+                <button 
+                    onclick="showTab('pilihan2')"
+                    class="tab-button whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm text-gray-500 border-transparent">
+                    Pilihan 2
+                </button>
+                <button 
+                    onclick="showTab('pilihan3')"
+                    class="tab-button whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm text-gray-500 border-transparent">
+                    Pilihan 3
+                </button>
+                </nav>
+            </div>
+
+            <!-- Tab Content -->
+            <div id="pilihan1" class="tab-content overflow-y-auto" style="height: 200px;">
+                {{#each hasilVoting.pilihan1}}
+                <div class="flex items-center gap-4 mb-4">
+                <div class="flex-1">
+                    <div class="flex justify-between mb-1">
+                    <span class="text-sm font-medium text-gray-800">{{nama}}</span>
+                    <span class="text-sm font-medium text-gray-600">{{votes}} votes</span>
                     </div>
-                    <div class="text-sm font-medium text-gray-600">{{votes}} votes</div>
+                    <div class="w-full h-2 bg-gray-200 rounded-full">
+                    <div class="h-2 bg-blue-600 rounded-full" style="width: {{percentage}}% ; max-width: 100%"></div>
+                    </div>
+                </div>
                 </div>
                 {{/each}}
             </div>
-            
+
+            <!-- Tab Content -->
+            <div id="pilihan2" class="tab-content overflow-y-auto" style="height: 200px;">
+                {{#each hasilVoting.pilihan2}}
+                <div class="flex items-center gap-4 mb-4">
+                <div class="flex-1">
+                    <div class="flex justify-between mb-1">
+                    <span class="text-sm font-medium text-gray-800">{{nama}}</span>
+                    <span class="text-sm font-medium text-gray-600">{{votes}} votes</span>
+                    </div>
+                    <div class="w-full h-2 bg-gray-200 rounded-full">
+                    <div class="h-2 bg-blue-600 rounded-full" style="width: {{percentage}}% ; max-width: 100%"></div>
+                    </div>
+                </div>
+                </div>
+                {{/each}}
+            </div>
+
+            <!-- Tab Content -->
+            <div id="pilihan3" class="tab-content overflow-y-auto" style="height: 200px;">
+                {{#each hasilVoting.pilihan3}}
+                <div class="flex items-center gap-4 mb-4">
+                <div class="flex-1">
+                    <div class="flex justify-between mb-1">
+                    <span class="text-sm font-medium text-gray-800">{{nama}}</span>
+                    <span class="text-sm font-medium text-gray-600">{{votes}} votes</span>
+                    </div>
+                    <div class="w-full h-2 bg-gray-200 rounded-full">
+                    <div class="h-2 bg-blue-600 rounded-full" style="width: {{percentage}}%; max-width: 100%"></div>
+                    </div>
+                </div>
+                </div>
+                {{/each}}
+            </div>
+
         </div>
+
+        <script>
+        function showTab(tabId) {
+            // Hide all content
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.style.display = 'none';
+            });
+            
+            // Remove active class from all buttons
+            document.querySelectorAll('.tab-button').forEach(button => {
+                button.classList.remove('border-blue-500', 'text-blue-600');
+                button.classList.add('border-transparent', 'text-gray-500');
+            });
+            
+            // Show selected content
+            document.getElementById(tabId).style.display = 'block';
+            
+            // Add active class to clicked button
+            const activeButton = document.querySelector(`[onclick="showTab('${tabId}')"]`);
+            activeButton.classList.remove('border-transparent', 'text-gray-500');
+            activeButton.classList.add('border-blue-500', 'text-blue-600');
+        }
+
+        // Initialize first tab as active
+        document.addEventListener('DOMContentLoaded', () => {
+            showTab('pilihan1');
+        });
+        </script>
+        {{/unless}}
+
         <div class="lg:col-span-2 flex justify-end ">
-            <a href="/admin/pemilihan_berlangsung/kandidat_penilaian_kriteria" 
+            <a href="/admin/pemilihan_berlangsung/{{idPemilihan}}/kandidat_penilaian_kriteria" 
             class="inline-flex items-center gap-x-2 py-2.5 px-4 text-sm font-semibold rounded-lg border border-transparent bg-black text-white hover:bg-gray-900 disabled:opacity-50 disabled:pointer-events-none">
                 Lihat Detail Hasil Voting Tahap 1
                 <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
@@ -211,7 +375,34 @@
     {{/if}}
 </div>
 
+<style>
+.break-words {
+  word-wrap: break-word;
+  white-space: normal;
+}
+</style>
+
 <script>
+// Auto reload setiap 1 menit
+function setupAutoReload() {
+  const RELOAD_INTERVAL = 30000; // 30 detik dalam miliseconds
+  
+  // Simpan filter yang aktif
+  const currentFilter = new URL(window.location.href).searchParams.get('filter');
+  
+  setInterval(() => {
+    const url = new URL(window.location.href);
+    
+    // Pertahankan filter saat reload
+    if (currentFilter) {
+      url.searchParams.set('filter', currentFilter);
+    }
+    
+    window.location.href = url.toString();
+  }, RELOAD_INTERVAL);
+}
+
+// Tutup Voting
 document.addEventListener('DOMContentLoaded', function() {
     const tutupVotingBtn = document.getElementById('tutupVotingBtn');
 
@@ -219,7 +410,7 @@ document.addEventListener('DOMContentLoaded', function() {
         tutupVotingBtn.addEventListener('click', async function() {
             if (confirm('Apakah Anda yakin ingin menutup voting 1?')) {
                 try {
-                    const response = await fetch('/admin/pemilihan_berlangsung/tutup_voting1', {
+                    const response = await fetch('/admin/pemilihan_berlangsung/{{idPemilihan}}/tutup_voting1', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json'
@@ -240,5 +431,41 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     }
+
+    const filterBtn = document.getElementById('filterBtn');
+    const filterDropdown = document.getElementById('filterDropdown');
+    const filterInputs = document.querySelectorAll('input[name="filterStatus"]');
+
+    // Toggle dropdown
+    filterBtn.addEventListener('click', () => {
+        filterDropdown.classList.toggle('hidden');
+    });
+
+    // Close dropdown when clicking outside
+    document.addEventListener('click', (e) => {
+        if (!filterBtn.contains(e.target) && !filterDropdown.contains(e.target)) {
+        filterDropdown.classList.add('hidden');
+        }
+    });
+
+    // Handle filter change
+    filterInputs.forEach(input => {
+        input.addEventListener('change', () => {
+        const value = input.value;
+        const url = new URL(window.location.href);
+        
+        if (value === 'all') {
+            url.searchParams.delete('filter');
+        } else {
+            url.searchParams.set('filter', value);
+        }
+
+        window.location.href = url.toString();
+        });
+    });
+
+    // Auto reload setiap 1 menit
+    setupAutoReload();
 });
+
 </script>

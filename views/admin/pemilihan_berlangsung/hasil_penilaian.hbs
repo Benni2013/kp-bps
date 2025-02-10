@@ -1,29 +1,98 @@
 <!-- Content -->
-<main class="p-8">
-    <div class="mb-8">
-        <h2 class="text-2xl font-bold mb-4">Hasil Penilaian Pegawai</h2>
+<main class="px-8 pt-4 border rounded-lg shadow-sm bg-white">
+    <div class="mb-6">
+        <!-- Header Section -->
+        <div class="flex flex-col">
+            <h2 class="text-2xl font-bold">Hasil Penilaian Pegawai</h2>
+            <p class="text-gray-500 italic mt-1">{{pemilihanTitle}}</p>
+        </div>
         
         <div class="bg-white rounded-lg shadow-sm p-6">
-            <!-- Search and Filter -->
-            <div class="flex justify-between mb-6">
-                <div class="relative">
-                    <input type="text" class="pl-10 pr-4 py-2 border rounded-lg w-64" placeholder="Search">
-                    <svg class="w-5 h-5 text-gray-400 absolute left-3 top-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-                    </svg>
+            {{!-- Search & Filter Section --}}
+            <div class="flex flex-wrap gap-5 justify-between mt-2 w-full whitespace-nowrap max-md:max-w-full">
+                <form 
+                class="flex flex-col text-base leading-normal text-gray-500" 
+                role="search"
+                id="searchForm" 
+                onsubmit="handleSearchSubmit(event)"
+                >
+                <div class="flex flex-col w-full">
+                    <label for="searchKandidat" class="sr-only">Search Kriteria</label>
+                    <div class="flex gap-2 items-center px-3.5 py-2.5 w-full bg-white rounded-lg border-gray-300 border-solid">
+                    <div class="flex flex-1 shrink gap-2 items-center self-stretch my-auto w-full basis-0 min-w-[240px]">
+                        <img
+                        loading="lazy"
+                        src="https://cdn.builder.io/api/v1/image/assets/TEMP/c3298dfdfad3de5332e45e084e12d2172f36afb3b78a8a3653d0a71b92ee77ff?placeholderIfAbsent=true&apiKey=0eb9abb28bf34cd7be47a2dfb2f311cb"
+                        alt="Search Kriteria"
+                        class="object-contain shrink-0 self-stretch my-auto aspect-square w-[18px]"
+                        />
+                        <input 
+                        type="search" 
+                        id="searchKandidat" 
+                        name="search"
+                        value="{{search}}"
+                        placeholder="Cari kriteria..." 
+                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" />
+                    </div>
+                    </div>
                 </div>
-                <button class="px-4 py-2 bg-white border rounded-lg hover:bg-gray-50 flex items-center">
-                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"></path>
-                    </svg>
-                    Filters
+                </form>
+
+                <!-- Filter Section -->
+                <div class="relative inline-block">
+                <button id="filterBtn" class="flex items-start text-sm mt-6 font-medium leading-none rounded-lg min-h-[40px] text-slate-700">
+                    <div class="flex overflow-hidden gap-2 justify-center items-center px-4 py-2.5 bg-white rounded-lg border border-gray-300 border-solid shadow-sm">
+                    <img 
+                        loading="lazy" 
+                        src="https://cdn.builder.io/api/v1/image/assets/TEMP/565ef0f7d60ee4cafb3e62c36e3f2b725be54df8b71e3b1813ba0884d857d57b?placeholderIfAbsent=true&apiKey=0eb9abb28bf34cd7be47a2dfb2f311cb" 
+                        alt="filter" 
+                        class="w-5 h-5"/>
+                    <span>Filters</span>
+                    </div>
                 </button>
+
+                <div id="filterDropdown" class="hidden absolute right-0 mt-2 w-72 bg-white rounded-lg shadow-xl border border-gray-200 z-50">
+                    <div class="p-4">
+                    <h3 class="font-semibold mb-4">Filter Kategori</h3>
+                    
+                    <label class="flex items-center gap-2 mb-4 pb-2 border-b">
+                        <input type="checkbox" id="selectAll" class="h-4 w-4">
+                        <span class="font-medium">Pilih Semua</span>
+                    </label>
+
+                    <div class="max-h-60 overflow-y-auto mb-4 space-y-2">
+                    {{#each filterStatus}}
+                        <label class="flex items-center gap-2 py-1 px-2 hover:bg-gray-50 rounded cursor-pointer">
+                        <input 
+                            type="checkbox" 
+                            name="status"
+                            value="{{this.id}}"
+                            class="status-filter h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                            {{#if (includes ../selectedStatus this.id)}}checked{{/if}}
+                        />
+                        <span class="flex-1">{{this.label}}</span>
+                        <span class="text-gray-500 text-sm">({{this.count}})</span>
+                        </label>
+                    {{/each}}
+                    </div>
+
+                    <button type="button"
+                            id="applyFilter"
+                            class="w-full py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                            >
+                        Terapkan Filter
+                    </button>
+                    </div>
+                </div>
+                </div>
+                <!-- End Filter Section -->
+
             </div>
 
             <!-- Table -->
-            <div class="overflow-x-auto">
+            <div class="overflow-x-auto border border-gray-500 rounded-xl">
                 <table class="w-full">
-                    <thead class="bg-gray-50">
+                    <thead class="bg-gray-100 border-b border-gray-500 divide">
                         <tr>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">NO</th>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">NAMA/NIP</th>
@@ -35,69 +104,44 @@
                         </tr>
                     </thead>
                     <tbody class="bg-white divide-y divide-gray-200">
-                        <tr>
-                            <td class="px-6 py-4 whitespace-nowrap">1</td>
-                            <td class="px-6 py-4">
-                                <div>Frizqya Dela Pratiwi</div>
-                                <div class="text-sm text-gray-500">192312345678900</div>
-                            </td>
-                            <td class="px-6 py-4">Analis Pengelolaan Keuangan APBN Ahli Muda</td>
-                            <td class="px-6 py-4">100</td>
-                            <td class="px-6 py-4">100</td>
-                            <td class="px-6 py-4">100</td>
-                            <td class="px-6 py-4">
-                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">Memenuhi</span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="px-6 py-4 whitespace-nowrap">2</td>
-                            <td class="px-6 py-4">
-                                <div>John Doe</div>
-                                <div class="text-sm text-gray-500">192312345678900</div>
-                            </td>
-                            <td class="px-6 py-4">Asisten Statistisi Terampil</td>
-                            <td class="px-6 py-4">98</td>
-                            <td class="px-6 py-4">98</td>
-                            <td class="px-6 py-4">98</td>
-                            <td class="px-6 py-4">
-                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">Memenuhi</span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="px-6 py-4 whitespace-nowrap">3</td>
-                            <td class="px-6 py-4">
-                                <div>Albert Einstein</div>
-                                <div class="text-sm text-gray-500">192312345678900</div>
-                            </td>
-                            <td class="px-6 py-4">Pustakawan Terampil</td>
-                            <td class="px-6 py-4">95</td>
-                            <td class="px-6 py-4">95</td>
-                            <td class="px-6 py-4">95</td>
-                            <td class="px-6 py-4">
-                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">Tidak Memenuhi</span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="px-6 py-4 whitespace-nowrap">4</td>
-                            <td class="px-6 py-4">
-                                <div>Jasmine</div>
-                                <div class="text-sm text-gray-500">192312345678900</div>
-                            </td>
-                            <td class="px-6 py-4">Pranata Keuangan APBN Terampil</td>
-                            <td class="px-6 py-4">90</td>
-                            <td class="px-6 py-4">90</td>
-                            <td class="px-6 py-4">90</td>
-                            <td class="px-6 py-4">
-                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">Tidak Memenuhi</span>
-                            </td>
-                        </tr>
+                        {{#each dataPenilaian }}
+                            <tr>
+                                <td class="px-6 py-4 whitespace-nowrap">{{inc @index}}</td>
+                                <td class="px-6 py-4 w-56">
+                                    <div>{{this.Anggotum.nama}}</div>
+                                    <div class="text-sm text-gray-500">{{this.Anggotum.nip}}</div>
+                                </td>
+                                <td class="px-6 py-4 w-64">{{this.Anggotum.jabatan}}</td>
+                                <td class="px-6 py-4">{{this.DataNilai.score_ckp}}</td>
+                                <td class="px-6 py-4">{{this.DataNilai.score_absen}}</td>
+                                <td class="px-6 py-4">{{this.DataNilai.score_akhir}}</td>
+                                <td class="px-6 py-4">
+                                    <span 
+                                        class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
+                                            {{#if (eq this.DataNilai.status_anggota 'eligible')}} 
+                                                bg-green-100 text-green-800 
+                                            {{else}}
+                                                bg-red-100 text-red-800
+                                            {{/if}}"
+                                    >
+                                        {{#if (eq this.DataNilai.status_anggota 'eligible')}}
+                                            Memenuhi
+                                        {{else}}
+                                            Tidak Memenuhi
+                                        {{/if}}
+                                    </span>
+                                </td>
+                            </tr>
+                        {{/each}}
+                        
                     </tbody>
                 </table>
             </div>
+            <!-- End Table -->
 
             <!-- Action Button -->
             <div class="flex justify-end mt-6">
-                <a href="/admin/pemilihan_berlangsung/hasil_kandidat" class="inline-flex items-center px-4 py-2 bg-black text-white rounded-lg hover:bg-gray-800">
+                <a href="/admin/pemilihan_berlangsung/{{idPemilihan}}/hasil_kandidat" class="inline-flex items-center px-4 py-2 bg-black text-white rounded-lg hover:bg-gray-800">
                     Simpan Kandidat Eligible
                     <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path d="M9 5l7 7-7 7"></path>
@@ -107,3 +151,82 @@
         </div>
     </div>
 </main>
+
+<script>
+// Search handling
+const searchInput = document.getElementById('searchKandidat');
+const searchForm = document.getElementById('searchForm');
+
+// Handle search submit
+function handleSearchSubmit(event) {
+  event.preventDefault();
+  updateResults();
+}
+
+// Filter handling
+const filterBtn = document.getElementById('filterBtn');
+const filterDropdown = document.getElementById('filterDropdown');
+const selectAll = document.getElementById('selectAll');
+const statusFilters = document.querySelectorAll('.status-filter');
+const applyFilterBtn = document.getElementById('applyFilter');
+
+// Toggle dropdown
+filterBtn.addEventListener('click', () => {
+  filterDropdown.classList.toggle('hidden');
+});
+
+// Close dropdown when clicking outside
+document.addEventListener('click', (e) => {
+  if (!filterBtn.contains(e.target) && !filterDropdown.contains(e.target)) {
+    filterDropdown.classList.add('hidden');
+  }
+});
+
+// Select All functionality
+selectAll.addEventListener('change', (e) => {
+  const isChecked = e.target.checked;
+  statusFilters.forEach(checkbox => {
+    checkbox.checked = isChecked;
+  });
+});
+
+// Update select all when individual checkboxes change
+statusFilters.forEach(checkbox => {
+  checkbox.addEventListener('change', () => {
+    const allChecked = [...statusFilters].every(cb => cb.checked);
+    selectAll.checked = allChecked;
+  });
+});
+
+// Apply filter
+applyFilterBtn.addEventListener('click', () => {
+  updateResults();
+  filterDropdown.classList.add('hidden');
+});
+
+// Update results function
+async function updateResults() {
+  const searchValue = searchInput.value;
+  const selectedStatus = [...document.querySelectorAll('.status-filter:checked')]
+    .map(cb => cb.value);
+  
+  // Buat URL dengan parameter
+  const params = new URLSearchParams();
+  if (searchValue) params.set('search', searchValue);
+  if (selectedStatus.length) params.set('status', selectedStatus.join(','));
+  
+  // Reload halaman dengan parameter baru
+  window.location.href = `${window.location.pathname}?${params}`;
+  
+}
+
+// Initialize select all state
+function updateSelectAllState() {
+  const statusFilters = document.querySelectorAll('.status-filter');
+  const selectAll = document.getElementById('selectAll');
+  selectAll.checked = [...statusFilters].every(cb => cb.checked);
+}
+
+// Run on page load
+updateSelectAllState();
+</script>

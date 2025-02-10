@@ -47,10 +47,10 @@
         {{#each ../kandidatKriteria}}
           <td class="px-4 py-2 border-b border-gray-200">
             <ol class="space-y-1">
-              <li><label><input type="radio" name="criteria-{{@../index}}-{{this.detail_pemilihan_id}}" value="1" /> 1</label></li>
-              <li><label><input type="radio" name="criteria-{{@../index}}-{{this.detail_pemilihan_id}}" value="2" /> 2</label></li>
-              <li><label><input type="radio" name="criteria-{{@../index}}-{{this.detail_pemilihan_id}}" value="3" /> 3</label></li>
-              <li><label><input type="radio" name="criteria-{{@../index}}-{{this.detail_pemilihan_id}}" value="4" /> 4</label></li>
+              <li><label><input type="radio" name="criteria-{{@../index}}-{{this.detail_pemilihan_id}}" value="1" required /> 1</label></li>
+              <li><label><input type="radio" name="criteria-{{@../index}}-{{this.detail_pemilihan_id}}" value="2" required /> 2</label></li>
+              <li><label><input type="radio" name="criteria-{{@../index}}-{{this.detail_pemilihan_id}}" value="3" required /> 3</label></li>
+              <li><label><input type="radio" name="criteria-{{@../index}}-{{this.detail_pemilihan_id}}" value="4" required /> 4</label></li>
             </ol>
           </td>
         {{/each}}

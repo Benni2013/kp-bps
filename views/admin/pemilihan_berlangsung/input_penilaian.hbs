@@ -7,7 +7,12 @@
 
   <!-- Input Penilaian Section -->
   <div class="bg-white shadow-sm rounded-xl p-6 border">
-    <form action="/admin/pemilihan_berlangsung/{{pemilihan_id}}/hasil_penilaian" method="post">
+    <form
+      id="penilaianForm" 
+      action="/admin/pemilihan_berlangsung/{{pemilihan_id}}/hasil_penilaian" 
+      method="post"
+    >
+
       <h2 class="text-lg font-bold mb-4">Input Penilaian Pegawai</h2>
 
       <div class="space-y-6">
@@ -65,7 +70,9 @@
               accept=".xls,.xlsx,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
               onchange="updateFileName(this)"
             >
+            <input type="hidden" name="rekapData" id="rekapDataInput">
             <button type="button" 
+              id="uploadButton"
               class="bg-black hover:bg-gray-800 text-white px-6 py-2 rounded-lg">
               Upload
             </button>
@@ -75,8 +82,12 @@
 
       <!-- Lihat Hasil -->
       <div class="flex justify-end mt-6">
-          <button type="submit" class="bg-black hover:bg-gray-800 text-white px-6 py-3 rounded-lg">
-            Lihat Hasil
+          <button 
+            type="submit" 
+            id="submitButton"
+            disabled
+            class="bg-black hover:bg-gray-800 text-white px-6 py-3 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed">
+            Lihat Hasil ->
           </button>
       </div>
     </form>
@@ -84,9 +95,59 @@
   </div>
 </div>
 
+{{!-- Rekap Nilai Anggota --}}
+<div id="rekapNilai" class="w-full max-w-[1200px] mx-auto px-4 hidden">
+  <div class="flex flex-col mb-8">
+    <h1 class="text-2xl font-bold">Rekap Nilai</h1>
+  </div>
 
+  <!-- Tabel Rekap Nilai -->
+  <div class="overflow-x-auto border border-gray-500 rounded-xl">
+    <table class="w-full">
+      <thead class="bg-gray-100 border-b border-gray-500 divide">
+        <tr>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">NO</th>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">NAMA/NIP</th>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">TL1</th>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">TL2</th>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">TL3</th>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">TL4</th>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">PSW1</th>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">PSW2</th>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">PSW3</th>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">PSW4</th>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">AVG CKP</th>
+        </tr>
+      </thead>
+      <tbody class="bg-white divide-y divide-gray-200">
+        <tr>
+          <td class="px-6 py-4 whitespace-nowrap">1</td>
+          <td class="px-6 py-4">
+            <div>NAMA</div>
+            <div class="text-sm text-gray-500">NIP</div>
+          </td>
+          <td class="px-6 py-4">0</td>
+          <td class="px-6 py-4">0</td>
+          <td class="px-6 py-4">0</td>
+          <td class="px-6 py-4">0</td>
+          <td class="px-6 py-4">0</td>
+          <td class="px-6 py-4">0</td>
+          <td class="px-6 py-4">0</td>
+          <td class="px-6 py-4">0</td>
+          <td class="px-6 py-4">0</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <!-- Akhir Tabel Rekap Nilai -->
+</div>
+{{!-- Akhir rekap Nilai Anggota --}}
+
+{{!-- Import SheetJS di head HTML --}}
+<script src="https://unpkg.com/xlsx/dist/xlsx.full.min.js"></script>
 
 <script>
+// Update file name display
 function updateFileName(input) {
   const fileName = input.files[0]?.name;
   const fileNameDisplay = document.getElementById('selectedFileName');
@@ -100,4 +161,165 @@ function updateFileName(input) {
     uploadButtonText.textContent = 'Pilih File Excel';
   }
 }
+
+// Enable submit button when data is loaded
+function enableSubmitButton(data) {
+  const submitButton = document.getElementById('submitButton');
+  const rekapDataInput = document.getElementById('rekapDataInput');
+  
+  submitButton.disabled = false;
+  rekapDataInput.value = JSON.stringify(data);
+}
+
+// Calculate averages from Excel data
+function calculateAverages(worksheet) {
+  const results = [];
+  const range = XLSX.utils.decode_range(worksheet['!ref']);
+  
+  // Start dari row 3 (skip header)
+  for(let row = 2; row <= range.e.r; row++) {
+    const person = {
+      no: row - 1,
+      nip: worksheet[XLSX.utils.encode_cell({r: row, c: 1})]?.v,
+      nama: worksheet[XLSX.utils.encode_cell({r: row, c: 2})]?.v,
+      tl1: 0, tl2: 0, tl3: 0, tl4: 0,
+      psw1: 0, psw2: 0, psw3: 0, psw4: 0,
+      ckpTotal: 0,
+      monthCount: 0
+    };
+
+    // Mulai dari kolom setelah data pribadi
+    let col = 4;
+    while(col <= range.e.c) {
+      // CKP ada di setiap 16 kolom pertama dari setiap bulan
+      if((col - 4) % 16 === 0) {
+        const ckpValue = worksheet[XLSX.utils.encode_cell({r: row, c: col})]?.v || 0;
+        if(ckpValue > 0) {
+          person.ckpTotal += parseFloat(ckpValue);
+          person.monthCount++;
+        }
+      }
+      // TL1-4 dan PSW1-4 ada di kolom 8-15 dari setiap set 16 kolom
+      else if((col - 4) % 16 >= 8 && (col - 4) % 16 <= 15) {
+        const value = worksheet[XLSX.utils.encode_cell({r: row, c: col})]?.v || 0;
+        const index = (col - 4) % 16 - 8;
+        if(index < 4) {
+          person[`tl${index + 1}`] += parseInt(value);
+        } else {
+          person[`psw${index - 3}`] += parseInt(value);
+        }
+      }
+      col++;
+    }
+
+    // Calculate CKP average
+    person.avgCkp = person.monthCount > 0 ? 
+      (person.ckpTotal / person.monthCount).toFixed(2) : 0;
+
+    results.push(person);
+  }
+
+  return results;
+}
+
+// Update table with data
+function updateTable(data) {
+  const tbody = document.querySelector('table tbody');
+  tbody.innerHTML = '';
+
+  data.forEach(person => {
+    const row = document.createElement('tr');
+    row.innerHTML = `
+      <td class="px-6 py-4 whitespace-nowrap">${person.no}</td>
+      <td class="px-6 py-4">
+        <div>${person.nama}</div>
+        <div class="text-sm text-gray-500">${person.nip}</div>
+      </td>
+      <td class="px-6 py-4">${person.tl1}</td>
+      <td class="px-6 py-4">${person.tl2}</td>
+      <td class="px-6 py-4">${person.tl3}</td>
+      <td class="px-6 py-4">${person.tl4}</td>
+      <td class="px-6 py-4">${person.psw1}</td>
+      <td class="px-6 py-4">${person.psw2}</td>
+      <td class="px-6 py-4">${person.psw3}</td>
+      <td class="px-6 py-4">${person.psw4}</td>
+      <td class="px-6 py-4">${person.avgCkp}</td>
+    `;
+    tbody.appendChild(row);
+  });
+
+  // Enable submit after table update
+  enableSubmitButton(data);
+}
+
+// Handler untuk tombol Upload
+document.getElementById('uploadButton').addEventListener('click', function() {
+  const fileInput = document.getElementById('excel_penilaian');
+  const file = fileInput.files[0];
+  
+  if (!file) {
+    alert('Pilih file Excel terlebih dahulu');
+    return;
+  }
+
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    try {
+      const data = new Uint8Array(e.target.result);
+      const workbook = XLSX.read(data, {type: 'array'});
+      const worksheet = workbook.Sheets[workbook.SheetNames[0]];
+      
+      const results = calculateAverages(worksheet);
+
+      // Tampilkan rekap nilai setelah data diproses
+      document.getElementById('rekapNilai').classList.remove('hidden');
+
+      // Update tabel dengan hasil perhitungan
+      updateTable(results);
+
+      // Scroll ke rekap nilai
+      document.getElementById('rekapNilai').scrollIntoView({ behavior: 'smooth' });
+      
+    } catch (error) {
+      console.error('Error processing Excel file:', error);
+      alert('Error memproses file Excel');
+    }
+  };
+
+  reader.readAsArrayBuffer(file);
+});
+
+// Handler untuk submit form
+document.getElementById('penilaianForm').addEventListener('submit', async function(e) {
+  e.preventDefault();
+  
+  const rekapDataInput = document.getElementById('rekapDataInput');
+  if (!rekapDataInput.value) {
+    alert('Harap upload dan proses file Excel terlebih dahulu');
+    return;
+  }
+
+  try {
+    const formData = new FormData(this);
+    const response = await fetch(this.action, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: new URLSearchParams(formData)
+    });
+
+    if (response.redirected) {
+      window.location.href = response.url;
+    } else {
+      const result = await response.json();
+      if (!result.success) {
+        alert(result.message);
+      }
+    }
+  } catch (error) {
+    console.error('Error submitting form:', error);
+    alert('Terjadi kesalahan saat memproses data');
+  }
+});
 </script>

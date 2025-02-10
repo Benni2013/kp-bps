@@ -92,7 +92,7 @@ const getDataPemilihan = async (req, res, next) => {
     }
   } catch (error) {
     console.error("getDataPemilihan error:", error);
-    res.redirect("users/beranda");
+    res.redirect("/users/beranda");
   }
 };
 
@@ -124,7 +124,7 @@ const getPegawaiTerbaik = async (req, res, next) => {
     }
   } catch (error) {
     console.error("getPegawaiTerbaik error:", error);
-    res.redirect("users/beranda");
+    res.redirect("/users/beranda");
   }
 };
 
@@ -248,7 +248,7 @@ const getRiwayat = async (req, res, next) => {
     }
   } catch (error) {
     console.error("getRiwayat error:", error);
-    res.redirect("users/beranda");
+    res.redirect("/users/beranda");
   }
 };
 
@@ -265,7 +265,7 @@ const getProfile = async (req, res, next) => {
     });
   } catch (error) {
     console.error("getProfile error:", error);
-    res.redirect("users/beranda");
+    res.redirect("/users/beranda");
   }
 };
 
