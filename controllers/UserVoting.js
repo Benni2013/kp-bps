@@ -341,7 +341,7 @@ const setPenilaianKriteria = async (req, res, next) => {
     res.redirect("/users/pemilihan/thank-you");
   } catch (error) {
     console.error("setPenilaianKriteria validation error:", error);
-    res.redirect("/users/beranda");
+    res.redirect("/beranda");
   }
 };
 
