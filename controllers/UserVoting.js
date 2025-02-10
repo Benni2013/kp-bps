@@ -11,6 +11,7 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const { Anggota, Pemilihan, DetailPemilihan, DataNilai, Voting1, Voting2, Indikator } = require("../models");
 require("dotenv").config();
+const { Op } = require("sequelize");
 
 // Middleware untuk validasi token
 const getKandidatVot1 = async (req, res, next) => {
@@ -72,7 +73,7 @@ const getKandidatVot1 = async (req, res, next) => {
     }
   } catch (error) {
     console.error("getKandidatVot1 validation error:", error);
-    res.redirect("users/beranda");
+    res.redirect("/users/beranda");
   }
 };
 
@@ -105,7 +106,7 @@ const setVot1 = async (req, res, next) => {
     res.redirect("/users/pemilihan/hasil-voting");
   } catch (error) {
     console.error("setVot1 validation error:", error);
-    res.redirect("users/beranda");
+    res.redirect("/users/beranda");
   }
 };
 
@@ -161,7 +162,7 @@ const getMyVot = async (req, res, next) => {
     });
   } catch (error) {
     console.error("getMyVot validation error:", error);
-    res.redirect("users/beranda");
+    res.redirect("/users/beranda");
   }
 };
 
@@ -172,10 +173,30 @@ const getKandidatKriteria = async (req, res, next) => {
         tahap_pemilihan: "voting2",
       },
     });
+
+    // Get kandidat yang lolos (status_anggota tidak null)
+    let kandidatKriteria = await Voting1.findAll({
+      where: {
+        status_anggota: {
+          [Op.not]: null
+        }
+      },
+      include: [{
+        model: DetailPemilihan,
+        where: { pemilihan_id: pemilihan.pemilihan_id },
+        include: [{
+          model: Anggota,
+          attributes: ['nip', 'nama']
+        }]
+      }]
+    });
+
+    console.log(kandidatKriteria);
+    
     let role = req.cookies.role;
     const akun = req.user;
 
-    if (!pemilihan) {
+    if (!pemilihan || kandidatKriteria.length === 0) {
       statusnya = true;
       res.render("user/penilaian_kriteria", {
         title: "Penilaian Kriteria",
@@ -242,7 +263,7 @@ const getKandidatKriteria = async (req, res, next) => {
     }
   } catch (error) {
     console.error("getKandidatKriteria validation error:", error);
-    res.redirect("users/beranda");
+    res.redirect("/users/beranda");
   }
 };
 
@@ -355,7 +376,7 @@ const getMyPenilaianKriteria = async (req, res, next) => {
     });
   } catch (error) {
     console.error("getMyVot validation error:", error);
-    res.redirect("users/beranda");
+    res.redirect("/users/beranda");
   }
 };
 
