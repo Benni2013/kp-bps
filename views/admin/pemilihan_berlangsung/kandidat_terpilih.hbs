@@ -5,36 +5,40 @@
         <div class="bg-green-400 p-6 rounded-lg mb-8 flex justify-between items-center">
             <div class="text-white">
                 <h2 class="text-3xl font-bold mb-2">Pegawai Terbaik</h2>
-                <p class="text-xl">Pemilihan Pegawai Terbaik Triwulan 1 Tahun 2024</p>
+                <p class="text-xl">{{pemilihanTitle}}</p>
             </div>
             <div class="text-white">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="w-12 h-12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6" />
-                    <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18" />
-                    <path d="M4 22h16" />
-                    <path d="M10 5V2h4v3" />
-                    <path d="M12 12a5 5 0 0 0 5-5V4H7v3a5 5 0 0 0 5 5Z" />
-                    <path d="M12 12v10" />
+                <svg 
+                    width="65" 
+                    height="65" 
+                    viewBox="0 0 65 65" 
+                    fill="none" 
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path 
+                        d="M58.3791 14.5852H52.4072V10.6039C52.4072 9.50447 51.516 8.61323 50.4166 8.61328H14.5854C13.4859 8.61323 12.5947 9.50447 12.5947 10.6039V14.5852H6.62284C4.42407 14.5852 2.6416 16.3676 2.6416 18.5664V22.5477C2.6416 28.0448 7.09758 32.501 12.5947 32.5008H13.5029C15.8996 40.096 22.5864 45.5364 30.5103 46.3381V52.407H24.5385C23.0061 52.4087 22.0502 54.0686 22.8178 55.3949C23.1733 56.009 23.8289 56.3875 24.5385 56.3883H40.4635C41.9958 56.3866 42.9518 54.7267 42.1841 53.4005C41.8287 52.7863 41.1731 52.4078 40.4635 52.407H34.4916V46.3306C42.4392 45.5269 49.0331 39.9507 51.4318 32.5008H52.4072C57.904 32.5005 62.3604 28.0444 62.3604 22.5477V18.5664C62.3604 16.3677 60.5778 14.5853 58.3791 14.5852ZM12.5947 28.5195C9.29667 28.5194 6.62284 25.8457 6.62284 22.5477V18.5664H12.5947V26.5289C12.5947 27.1924 12.6271 27.856 12.6918 28.5195H12.5947ZM48.426 26.305C48.426 35.1433 41.21 42.3892 32.501 42.4539C23.7058 42.4539 16.576 35.324 16.576 26.5289V12.5945H48.426V26.305ZM58.3791 22.5477C58.3791 25.8457 55.7053 28.5194 52.4072 28.5195H52.2828C52.3645 27.7841 52.406 27.0449 52.4072 26.305V18.5664H58.3791V22.5477Z" 
+                        fill="white"
+                    />
                 </svg>
+
             </div>
         </div>
 
         <!-- Winner Card -->
-        <div class="bg-white rounded-lg shadow-sm p-8">
+        <div class="bg-white rounded-lg shadow-md p-8">
             <div class="max-w-2xl mx-auto text-center">
                 <!-- Photo Frame -->
                 <div class="w-64 h-64 mx-auto mb-6 rounded-lg border-4 border-gray-100 overflow-hidden">
                     <img 
-                        src="https://cdn.builder.io/api/v1/image/assets/TEMP/d51e6353f840d11b0b9228a36ee2f6a2a8681b6398bb794bd0d91b1d1b155d92?apiKey=0eb9abb28bf34cd7be47a2dfb2f311cb&" 
-                        alt="Frizqya Dela Pratiwi" 
+                        src="{{pemenang.foto}}" 
+                        alt="Foto {{pemenang.nama}}" 
                         class="w-full h-full object-cover"
                     >
                 </div>
 
                 <!-- Winner Details -->
-                <h3 class="text-3xl font-bold mb-2">Frizqya Dela Pratiwi</h3>
-                <p class="text-gray-600 text-lg mb-8">Statistisi Ahli Muda</p>
-
+                <h3 class="text-3xl font-bold mb-2">{{pemenang.nama}}</h3>
+                <p class="text-gray-600 text-lg mb-2">{{pemenang.jabatan}}</p>
+                {{!-- <p class="text-gray-500 text-sm mb-8">Nilai Akhir: {{pemenang.rataRata}}%</p> --}}
 
                 <!-- Back Button -->
                 <div class="flex justify-end">

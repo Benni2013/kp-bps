@@ -22,10 +22,16 @@ const getKandidatVot1 = async (req, res, next) => {
       },
     });
 
+    console.log("Pemilihan: ", JSON.stringify(pemilihan, null, 2));
+
     let role = req.cookies.role;
     const akun = req.user;
+
+    console.log("Akun: ", JSON.stringify(akun, null, 2));
+
     if (!pemilihan) {
       statusnya = false;
+      console.log("Tidak ada pemilihan yang sedang berjalan.");
       return res.render("user/voting", {
         title: "Voting",
         layout: "layouts/layout",
@@ -37,13 +43,17 @@ const getKandidatVot1 = async (req, res, next) => {
     }
     let detail_pemilihan = await DetailPemilihan.findOne({
       where: {
-        detail_pemilihan_id: pemilihan.pemilihan_id,
+        pemilihan_id: pemilihan.pemilihan_id,
         anggota_id: akun.nip,
       },
     });
+
+    console.log("Detail Pemilihan: ", JSON.stringify(detail_pemilihan, null, 2));
+
     if (!detail_pemilihan) {
       statusnya = false;
-      res.render("user/voting", {
+      console.log("Anda tidak terdaftar dalam pemilihan ini.");
+      return res.render("user/voting", {
         title: "Voting",
         layout: "layouts/layout",
         pemilihan,
@@ -58,13 +68,25 @@ const getKandidatVot1 = async (req, res, next) => {
         },
       });
       if (detail_voting1) {
-        res.redirect("/users/pemilihan/hasil-voting");
+        return res.redirect("/users/pemilihan/hasil-voting");
       }
       statusnya = true;
       // buat ambil role dari cookie
       let role = req.cookies.role;
       const data_nilai = await DataNilai.findAll({
-        where: { status_anggota: "eligible" },
+        where: { 
+          status_anggota: "eligible",
+          "$DetailPemilihan.pemilihan_id$": pemilihan.pemilihan_id,
+         },
+         include: [
+          {
+            model: DetailPemilihan,
+            required: true,
+            where: {
+              pemilihan_id: pemilihan.pemilihan_id,
+            },
+          },
+        ],
       });
 
       for (let j = 0; j < data_nilai.length; j++) {
@@ -86,7 +108,7 @@ const getKandidatVot1 = async (req, res, next) => {
         data_nilai[i].data_nip_anggota = anggota.nip;
       }
 
-      res.render("user/voting", {
+      return res.render("user/voting", {
         title: "Voting",
         layout: "layouts/layout",
         role,
@@ -238,7 +260,7 @@ const getKandidatKriteria = async (req, res, next) => {
         },
       });
       if (detail_voting2) {
-        res.redirect("/users/pemilihan/thank-you");
+        return res.redirect("/users/pemilihan/thank-you");
       } else {
         let inditakor = await Indikator.findAll({
           where: {
@@ -302,6 +324,7 @@ const getKandidatKriteria = async (req, res, next) => {
             },
           });
           kandidatKriteria[i].nama = nama_lulus.nama;
+          kandidatKriteria[i].foto = nama_lulus.foto;
         }
         res.render("user/penilaian_kriteria", {
           title: "Penilaian Kriteria",

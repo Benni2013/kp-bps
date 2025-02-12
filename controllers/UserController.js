@@ -28,7 +28,7 @@ const getDataPemilihan = async (req, res, next) => {
     });
     if (!pemilihan) {
       ada = true;
-      res.render("supervisor/dashboard", {
+      return res.render("supervisor/dashboard", {
         title: "Dashboard",
         layout: "layouts/layout",
         role,
@@ -39,8 +39,14 @@ const getDataPemilihan = async (req, res, next) => {
       let anggota = await Anggota.findAll({
         where: {
           status_anggota: "aktif",
+          divisi: akun.divisi,
+          role: {
+            [Op.ne]: "admin",
+          },
         },
       });
+
+      console.log("Anggota Saya : ", JSON.stringify(anggota, null, 2));
 
       for (let i = 0; i < anggota.length; i++) {
         let detail_pemilihan = await DetailPemilihan.findOne({
@@ -92,7 +98,8 @@ const getDataPemilihan = async (req, res, next) => {
     }
   } catch (error) {
     console.error("getDataPemilihan error:", error);
-    res.redirect("/users/beranda");
+    // res.redirect("/users/beranda");
+    next(error);
   }
 };
 
@@ -147,90 +154,109 @@ const getPegawaiTerbaik = async (req, res, next) => {
 
     // Get pemilihan data dengan periode
 
+    let pemenang = null;
+    let pemilihanTitle = null;
+
     if (!activePemilihan) {
       return next(eror);
     }
+    if (activePemilihan.tahap_pemilihan === "selesai") {
+      pemilihanTitle = `${activePemilihan.nama_pemilihan} ${activePemilihan.Periode.nama_periode} Tahun ${activePemilihan.tahun}`;
 
-    const pemilihanTitle = `${activePemilihan.nama_pemilihan} ${activePemilihan.Periode.nama_periode} Tahun ${activePemilihan.tahun}`;
-
-    // Get jumlah indikator aktif
-    const jumlahIndikator = await Indikator.count({
-      where: { status_inditakor: "aktif" },
-    });
-
-    // Get jumlah pengisi penilaian
-    const jumlahPengisi = await DetailPemilihan.count({
-      where: { pemilihan_id: activePemilihan.pemilihan_id },
-      include: [
-        {
-          model: Voting2,
+      // Get jumlah indikator aktif
+      const jumlahIndikator = await Voting2.count({
+        where: { 
+          '$DetailPemilihan.pemilihan_id$': activePemilihan.pemilihan_id 
+        },
+        include: [{
+          model: DetailPemilihan,
           required: true,
-          attributes: [],
+          attributes: []
+        }],
+        distinct: true,
+        col: 'indikator_id'
+      });
+
+      // Get jumlah pengisi penilaian
+      const jumlahPengisi = await DetailPemilihan.count({
+        where: { pemilihan_id: activePemilihan.pemilihan_id },
+        include: [
+          {
+            model: Voting2,
+            required: true,
+            attributes: [],
+          },
+        ],
+        distinct: true,
+      });
+
+      // Get semua kandidat yang lolos
+      const kandidat = await DetailPemilihan.findAll({
+        where: {
+          pemilihan_id: activePemilihan.pemilihan_id,
+          "$Voting1.status_anggota$": "lolos",
         },
-      ],
-      distinct: true,
-    });
+        include: [
+          {
+            model: Anggota,
+            attributes: ["nip", "nama", "jabatan", "gender", "foto"],
+          },
+          {
+            model: Voting1,
+            required: true,
+            attributes: ["status_anggota"],
+          },
+        ],
+        group: ["DetailPemilihan.detail_pemilihan_id", "Anggotum.nip", "Anggotum.nama", "Anggotum.jabatan", "Anggotum.gender", "Anggotum.foto", "Voting1.status_anggota"],
+      });
 
-    // Get semua kandidat yang lolos
-    const kandidat = await DetailPemilihan.findAll({
-      where: {
-        pemilihan_id: activePemilihan.pemilihan_id,
-        "$Voting1.status_anggota$": "lolos",
-      },
-      include: [
-        {
-          model: Anggota,
-          attributes: ["nip", "nama", "jabatan", "gender", "foto"],
-        },
-        {
-          model: Voting1,
-          required: true,
-          attributes: ["status_anggota"],
-        },
-      ],
-      group: ["DetailPemilihan.detail_pemilihan_id", "Anggotum.nip", "Anggotum.nama", "Anggotum.jabatan", "Anggotum.gender", "Anggotum.foto", "Voting1.status_anggota"],
-    });
+      console.log(JSON.stringify(kandidat,null,2))
 
-    console.log(JSON.stringify(kandidat,null,2))
+      // Get nilai semua kandidat
+      const hasilKriteria = await Promise.all(
+        kandidat.map(async (k) => {
+          const totalPoin = await Voting2.sum("nilai", {
+            where: { 
+              kandidat_id: k.anggota_id,
+              '$DetailPemilihan.pemilihan_id$': activePemilihan.pemilihan_id,
+            },
+            include: [{
+              model: DetailPemilihan,
+              required: true,
+              attributes: []
+            }]
+          });
 
-    // Get nilai semua kandidat
-    const hasilKriteria = await Promise.all(
-      kandidat.map(async (k) => {
-        const totalPoin = await Voting2.sum("nilai", {
-          where: { kandidat_id: k.anggota_id },
-        });
+          // Hitung rata-rata
+          const rataRata = (totalPoin / jumlahPengisi / (jumlahIndikator * 4)) * 100;
 
-        // Hitung rata-rata
-        const rataRata = (totalPoin / jumlahPengisi / (jumlahIndikator * 4)) * 100;
+          let foto_default = k.Anggotum.gender === "pria" ? "/default_pp/lk.png" : "/default_pp/pr.png";
 
-        let foto_default = k.Anggotum.gender === "pria" ? "/default_pp/lk.png" : "/default_pp/pr.png";
+          return {
+            nama: k.Anggotum.nama,
+            nip: k.Anggotum.nip,
+            jabatan: k.Anggotum.jabatan,
+            foto: k.Anggotum.foto || foto_default,
+            totalPoin,
+            rataRata: parseFloat(rataRata.toFixed(2)),
+          };
+        })
+      );
 
-        return {
-          nama: k.Anggotum.nama,
-          nip: k.Anggotum.nip,
-          jabatan: k.Anggotum.jabatan,
-          foto: k.Anggotum.foto || foto_default,
-          totalPoin,
-          rataRata: parseFloat(rataRata.toFixed(2)),
-        };
-      })
-    );
+      // Sort berdasarkan rata-rata tertinggi
+      hasilKriteria.sort((a, b) => b.rataRata - a.rataRata);
 
-    // Sort berdasarkan rata-rata tertinggi
-    hasilKriteria.sort((a, b) => b.rataRata - a.rataRata);
+      // Ambil kandidat dengan nilai tertinggi
+      pemenang = hasilKriteria[0];
 
-    // Ambil kandidat dengan nilai tertinggi
-    const pemenang = hasilKriteria[0];
-
-    if (!pemenang) {
-      return res.status(404).send("Pemenang tidak ditemukan");
+      if (!pemenang) {
+        return res.status(404).send("Pemenang tidak ditemukan");
+      }
     }
+    
 
     // console.log('\nData Pemenang:');
     // console.log(JSON.stringify(pemenang, null, 2));
-
-    // Update status pemilihan menjadi selesai
-    await Pemilihan.update({ tahap_pemilihan: "selesai" }, { where: { pemilihan_id: activePemilihan.pemilihan_id } });
 
     res.render("user/beranda", {
       title: "Beranda",
@@ -259,6 +285,7 @@ const getRiwayat = async (req, res, next) => {
     // Ambil data pemilihan yang telah selesai
     const pemilihan = await Pemilihan.findAll({
       where: { tahap_pemilihan: "selesai" },
+      order: [['tanggal_mulai', 'DESC']]
     });
     const kandidatKriteria = await Voting1.findAll({
       where: {

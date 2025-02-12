@@ -6,6 +6,8 @@ const { getActivePemilihan,
         createDataPenilaian,
         getAllDataPenilaian,
         getAllKandidatEligible,
+        getHasilKriteria,
+        getPegawaiTerbaik,
       } = require('../controllers/HandlePemilihan');
 const { startVot1,
         getMonitorVot1, 
@@ -46,25 +48,16 @@ router.get('/:id/kandidat_penilaian_kriteria', getKandidatPenilaianKriteria);
 // Route untuk simpan kandidat penilaian kriteria - POST
 router.post('/:id/simpan_kandidat_penilaian_kriteria', setKandidatPenilaianKriteria);
 
-// Route untuk monitor voting 2
+// Route untuk monitor voting 2 - GET
 router.get('/:id/monitor_voting2', getMonitorVot2);
 
 // Route untuk menghandle tutup voting 2 - POST
 router.post('/:id/tutup_voting2', closeVot2);
 
-// Router untuk halaman hasil voting 2
-router.get("/:id/hasil_kriteria", function (req, res, next) {
-  res.render("admin/pemilihan_berlangsung/hasil_kriteria", { 
-    title: "Hasil Kriteria", 
-    layout: 'layouts/admin.hbs',
-  });
-});
+// Router untuk halaman hasil voting 2 - GET
+router.get("/:id/hasil_kriteria", getHasilKriteria);
 
-router.get("/:id/kandidat_terpilih", function (req, res, next) {
-  res.render("admin/pemilihan_berlangsung/kandidat_terpilih", { 
-    title: "Kandidat Terpilih",
-    layout: 'layouts/admin.hbs',
-  });
-});
+// Router untuk halaman pegawai terbaik - GET
+router.get("/:id/kandidat_terpilih", getPegawaiTerbaik);
 
 module.exports = router;

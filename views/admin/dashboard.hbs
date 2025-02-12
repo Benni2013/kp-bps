@@ -1,6 +1,6 @@
 <h1 class="text-3xl font-bold">{{ title }}</h1>
 
-<p class="italic" style="margin-top: 1rem;">Pemilihan Pegawai Terbaik Triwulan 1 Tahun 2024</p>
+<p class="italic" style="margin-top: 1rem;">{{pemilihanTitle}}</p>
 
 {{!-- Card Dashboard Admin --}}
 <!-- Card Section -->
@@ -18,13 +18,13 @@
         <div class="grow">
           <div class="flex items-center gap-x-2">
             <p class="text-xs uppercase tracking-wide text-gray-500 dark:text-neutral-500">
-              Total Anggota
+              Total Partisipan
             </p>
             
           </div>
           <div class="mt-1 flex items-center gap-x-2">
             <h3 class="text-xl sm:text-2xl font-medium text-gray-800 dark:text-neutral-200">
-              72,540
+              {{totalAnggota}}
             </h3>
             
           </div>
@@ -49,7 +49,7 @@
           </div>
           <div class="mt-1 flex items-center gap-x-2">
             <h3 class="text-xl sm:text-2xl font-medium text-gray-800 dark:text-neutral-200">
-              72,540
+              {{kandidatEligible}}
             </h3>
             
           </div>
@@ -74,7 +74,7 @@
           </div>
           <div class="mt-1 flex items-center gap-x-2">
             <h3 class="text-xl sm:text-2xl font-medium text-gray-800 dark:text-neutral-200">
-              72,540
+              {{kandidatTahap1}}
             </h3>
             
           </div>
@@ -94,13 +94,13 @@
         <div class="grow">
           <div class="flex items-center gap-x-2">
             <p class="text-xs uppercase tracking-wide text-gray-500 dark:text-neutral-500">
-              Total Kriteria
+              Total Kriteria Aktif
             </p>
             
           </div>
           <div class="mt-1 flex items-center gap-x-2">
             <h3 class="text-xl sm:text-2xl font-medium text-gray-800 dark:text-neutral-200">
-              72,540
+              {{totalKriteria}}
             </h3>
             
           </div>
@@ -128,6 +128,25 @@
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
+// Auto reload setiap 30 detik
+function setupAutoReload() {
+  const RELOAD_INTERVAL = 30000; // 30 detik dalam miliseconds
+  
+  // Simpan filter yang aktif
+  const currentFilter = new URL(window.location.href).searchParams.get('filter');
+  
+  setInterval(() => {
+    const url = new URL(window.location.href);
+    
+    // Pertahankan filter saat reload
+    if (currentFilter) {
+      url.searchParams.set('filter', currentFilter);
+    }
+    
+    window.location.href = url.toString();
+  }, RELOAD_INTERVAL);
+}
+
 document.addEventListener('DOMContentLoaded', function() {
     const ctx = document.getElementById('progressChart').getContext('2d');
     
@@ -136,7 +155,11 @@ document.addEventListener('DOMContentLoaded', function() {
         data: {
             labels: ['Input Nilai', 'Voting Tahap 1', 'Penilaian Kriteria'],
             datasets: [{
-                data: [100, 75, 10],
+                data: [
+                  {{progressData.progressInputNilai}}, 
+                  {{progressData.progressVoting1}}, 
+                  {{progressData.progressVoting2}},
+                ],
                 backgroundColor: [
                     '#82C15A',  // Hijau
                     '#2E74B5',  // Biru
@@ -205,6 +228,9 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }]
     });
+
+    // Auto reload setiap 30 detik
+    setupAutoReload();
 });
 </script>
 

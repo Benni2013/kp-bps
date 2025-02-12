@@ -1,67 +1,196 @@
 <div class="flex flex-col lg:ml-10 lg:mt-8">
   <div class="flex flex-wrap gap-5 justify-between w-full max-md:max-w-full">
     <h1 class="text-4xl font-extrabold leading-none text-black">
-      Manajemen Anggota
+      Riwayat Pemilihan
     </h1>
-    <div class="mt-4 flex gap-4">
-      <!-- Dropdown Triwulan -->
-      <div class="relative">
-        <select class="block w-full px-4 py-2 pe-8 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:ring-blue-500 focus:ring-opacity-50" aria-label="Pilih Triwulan">
-          <option value="1">Triwulan 1</option>
-          <option value="2">Triwulan 2</option>
-          <option value="3">Triwulan 3</option>
-          <option value="4">Triwulan 4</option>
-          <option value="5">Semester 1</option>
-          <option value="6">Semester 2</option>
-          <option value="7">Tahunan</option>
-        </select>
-      </div>
+    <!-- Filter Section -->
+    <div class="relative inline-block">
+      <button id="filterBtn" class="flex items-start text-sm mt-6 font-medium leading-none rounded-lg min-h-[40px] text-slate-700">
+        <div class="flex overflow-hidden gap-2 justify-center items-center px-4 py-2.5 bg-white rounded-lg border border-gray-300 border-solid shadow-sm">
+          <img 
+            loading="lazy" 
+            src="https://cdn.builder.io/api/v1/image/assets/TEMP/565ef0f7d60ee4cafb3e62c36e3f2b725be54df8b71e3b1813ba0884d857d57b?placeholderIfAbsent=true&apiKey=0eb9abb28bf34cd7be47a2dfb2f311cb" 
+            alt="filter" 
+            class="w-5 h-5"/>
+          <span>Filters</span>
+        </div>
+      </button>
 
-      <!-- Dropdown Tahun -->
-      <div class="relative">
-        <select class="block w-full px-4 py-2 pe-8 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:ring-blue-500 focus:ring-opacity-50" aria-label="Pilih Tahun">
-          <option value="2025">2025</option>
-          <option value="2024">2024</option>
-          <option value="2023">2023</option>
-          <option value="2022">2022</option>
-          <option value="2021">2021</option>
-        </select>
-      </div>
-    </div>
-  </div>
+      <div id="filterDropdown" class="hidden absolute right-0 mt-2 w-72 bg-white rounded-lg shadow-xl border border-gray-200 z-50">
+        <div class="p-4">
+          <h3 class="font-semibold mb-4">Filter Periode</h3>
+          
+          <label class="flex items-center gap-2 mb-4 pb-2 border-b">
+            <input type="checkbox" id="selectAll" class="h-4 w-4">
+            <span class="font-medium">Pilih Semua</span>
+          </label>
 
-  <!-- Daftar Riwayat -->
-  <div class="mt-8 bg-white rounded-xl border border-gray-300 shadow-sm p-6">
-    <!-- Container untuk judul dan status -->
-    <div class="flex items-center justify-between">
-      <h2 class="text-xl font-semibold">Pegawai Terbaik Triwulan 1 2024</h2>
-      <span class="text-green-600 bg-green-100 p-1.5 rounded-3xl font-semibold">Selesai</span>
+          <div class="max-h-60 overflow-y-auto mb-4 space-y-2">
+            <div class="border-b pb-2 mb-2">
+              <h4 class="font-medium mb-2">Periode</h4>
+              {{#each periodeList}}
+                <label class="flex items-center gap-2 py-1 px-2 hover:bg-gray-50 rounded cursor-pointer">
+                  <input 
+                    type="checkbox" 
+                    name="periode"
+                    value="{{periode_id}}"
+                    class="periode-filter h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                    {{#if (includes ../selectedPeriode periode_id)}}checked{{/if}}
+                  />
+                  <span class="flex-1">{{nama_periode}}</span>
+                </label>
+              {{/each}}
+            </div>
 
-    </div>
-
-    <p class="text-gray-500 text-sm mt-1">10 Jan 2024</p>
-
-    <div class="mt-4 p-4 bg-gray-100 rounded-lg flex items-center justify-between">
-      <div class="flex items-center gap-4">
-        <div class="w-10 h-10 bg-yellow-400 rounded-full flex items-center justify-center">
-          <div class="flex overflow-hidden flex-col h-[22px] w-[22px]" role="img" aria-label="Decorative image">
-            <img
-              src="https://cdn.builder.io/api/v1/image/assets/TEMP/3a856bdebe4dc04a9830460173bfa611fc46e3f78970ebb1a5c527d6bc753904?apiKey=2db49ce8ace14314a069c63ad69561d0&"
-              alt=""
-              class="object-contain w-full brightness-0 aspect-square brightness-[102%] contrast-[105%] hue-rotate-[359deg] invert-[71%] saturate-[100%] saturate-[1242%] sepia-[83%]"
-            />
+            <div>
+              <h4 class="font-medium mb-2">Tahun</h4>
+              {{#each tahunList}}
+                <label class="flex items-center gap-2 py-1 px-2 hover:bg-gray-50 rounded cursor-pointer">
+                  <input 
+                    type="checkbox" 
+                    name="tahun"
+                    value="{{this}}"
+                    class="tahun-filter h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                    {{#if (includes ../selectedTahun this)}}checked{{/if}}
+                  />
+                  <span class="flex-1">{{this}}</span>
+                </label>
+              {{/each}}
+            </div>
           </div>
-        </div>
-        <div>
-          <p class="text-lg font-semibold">Frizqya Dela Pratiwi</p>
-          <p class="text-gray-500 text-sm">Posisi 1</p>
+
+          <button type="button"
+            id="applyFilter"
+            class="w-full py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+          >
+            Terapkan Filter
+          </button>
         </div>
       </div>
-      <a class="flex items-start self-start mt-2 text-sm font-medium leading-none text-white rounded-lg" aria-label="Add Member" href="/admin/detail_riwayat">
-        <div class="flex overflow-hidden gap-2 justify-center items-center px-5 py-3 bg-gray-800 rounded-lg border border-gray-300 border-solid shadow-sm">
-          <span>Lihat Detail</span>
-        </div>
-      </a>
     </div>
+    <!-- End Filter Section -->
   </div>
+
+  <!-- Card Daftar Riwayat -->
+  {{#each riwayatPemilihan }}
+    <div class="mt-8 bg-white rounded-xl border border-gray-300 shadow-sm p-6">
+      <!-- Container untuk judul dan status -->
+      <div class="flex items-center justify-between">
+        <h2 class="text-xl font-semibold">{{title}}</h2>
+        <span class="{{#if (eq status 'selesai')}}text-green-600 bg-green-100{{else}}text-gray-600 bg-gray-100{{/if}} p-1.5 rounded-3xl font-semibold">
+          {{#if (eq status 'selesai')}}Selesai{{else}}Ditutup{{/if}}
+        </span>
+
+      </div>
+
+      <p class="text-gray-500 text-sm mt-1">{{tanggal}}</p>
+
+      <div class="mt-4 p-4 bg-gray-100 rounded-lg flex items-center justify-between">
+        <div class="flex items-center gap-4">
+          {{#if (eq status 'selesai')}}
+            <div class="w-10 h-10 bg-yellow-400 rounded-full flex items-center justify-center">
+              <div class="flex overflow-hidden flex-col h-[22px] w-[22px]" role="img" aria-label="Decorative image">
+                <img
+                  src="https://cdn.builder.io/api/v1/image/assets/TEMP/3a856bdebe4dc04a9830460173bfa611fc46e3f78970ebb1a5c527d6bc753904?apiKey=2db49ce8ace14314a069c63ad69561d0&"
+                  alt=""
+                  class="object-contain w-full brightness-0 aspect-square brightness-[102%] contrast-[105%] hue-rotate-[359deg] invert-[71%] saturate-[100%] saturate-[1242%] sepia-[83%]"
+                />
+              </div>
+            </div>
+            <div>
+              <p class="text-lg font-semibold">{{pemenang.nama}}</p>
+              <p class="text-gray-500 text-sm">Nilai Rata-rata: {{pemenang.rataRata}}%</p>
+            </div>
+          {{else}}
+            <div class="w-10 h-10 bg-gray-300 rounded-full flex items-center justify-center">
+              <i class="fas fa-user-slash text-gray-500"></i>
+            </div>
+            <div>
+              <p class="text-lg font-semibold">Tidak Ada Pegawai Terbaik</p>
+              <p class="text-gray-500 text-sm">Pemilihan ini Ditutup</p>
+            </div>
+          {{/if}}
+          
+        </div>
+        <a 
+          class="flex items-start self-start mt-2 text-sm font-medium leading-none text-white rounded-lg" 
+          aria-label="{{#if (eq status 'selesai')}}Lihat Detail{{else}}Download Rekap{{/if}}" 
+          href="{{#if (eq status 'selesai')}}/admin/detail_riwayat/{{id}}{{else}}/admin/generate/{{id}}/rekap_laporan{{/if}}"
+        >
+          <div class="flex overflow-hidden gap-2 justify-center items-center px-5 py-3 {{#if (eq status 'selesai')}}bg-gray-800{{else}}bg-orange-500 hover:bg-orange-600{{/if}} rounded-lg border border-gray-300 border-solid shadow-sm">
+            <span>{{#if (eq status 'selesai')}}Lihat Detail{{else}} <p class="text-center">Rekap Laporan <br> Pemilihan</p> {{/if}}</span>
+          </div>
+        </a>
+      </div>
+    </div>
+  {{/each}}
+
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const filterBtn = document.getElementById('filterBtn');
+  const filterDropdown = document.getElementById('filterDropdown');
+  const selectAll = document.getElementById('selectAll');
+  const periodeFilters = document.querySelectorAll('.periode-filter');
+  const tahunFilters = document.querySelectorAll('.tahun-filter');
+  const applyFilterBtn = document.getElementById('applyFilter');
+
+  // Toggle dropdown
+  filterBtn.addEventListener('click', () => {
+    filterDropdown.classList.toggle('hidden');
+  });
+
+  // Close dropdown when clicking outside
+  document.addEventListener('click', (e) => {
+    if (!filterBtn.contains(e.target) && !filterDropdown.contains(e.target)) {
+      filterDropdown.classList.add('hidden');
+    }
+  });
+
+  // Select All functionality
+  selectAll.addEventListener('change', (e) => {
+    const isChecked = e.target.checked;
+    periodeFilters.forEach(checkbox => {
+      checkbox.checked = isChecked;
+    });
+    tahunFilters.forEach(checkbox => {
+      checkbox.checked = isChecked;
+    });
+  });
+
+  // Update select all when individual checkboxes change
+  function updateSelectAll() {
+    const allFilters = [...periodeFilters, ...tahunFilters];
+    const allChecked = allFilters.every(cb => cb.checked);
+    selectAll.checked = allChecked;
+  }
+
+  periodeFilters.forEach(checkbox => {
+    checkbox.addEventListener('change', updateSelectAll);
+  });
+
+  tahunFilters.forEach(checkbox => {
+    checkbox.addEventListener('change', updateSelectAll);
+  });
+
+  // Apply filter
+  applyFilterBtn.addEventListener('click', () => {
+    const selectedPeriodes = [...document.querySelectorAll('.periode-filter:checked')]
+      .map(cb => cb.value);
+    const selectedTahun = [...document.querySelectorAll('.tahun-filter:checked')]
+      .map(cb => cb.value);
+    
+    // Buat URL dengan parameter
+    const params = new URLSearchParams();
+    if (selectedPeriodes.length) params.set('periode_id', selectedPeriodes.join(','));
+    if (selectedTahun.length) params.set('tahun', selectedTahun.join(','));
+    
+    // Reload halaman dengan parameter baru
+    window.location.href = `${window.location.pathname}?${params}`;
+  });
+
+  // Initialize select all state
+  updateSelectAll();
+});
+</script>

@@ -46,9 +46,15 @@
       >
         <img
           loading="lazy"
-          src="/images/Foto {{akun.nama}}.png" 
+          src="
+            {{#if (eq akun.role "admin")}}
+              https://cdn.builder.io/api/v1/image/assets/TEMP/6f9353d5733ad1909ce73a65f15d002fb86917a5e023e3b7b986a42f3b3b23fe?apiKey=0eb9abb28bf34cd7be47a2dfb2f311cb&
+            {{else}}
+              {{akun.foto}}
+            {{/if}}
+            " 
           class="object-contain shrink-0 aspect-square rounded-3xl w-[50px]"
-          alt="BPS Kota Padang Logo"
+          alt="Foto {{akun.nama}}"
         />
       </button>
 
@@ -62,7 +68,7 @@
           <p class="text-sm font-bold">{{akun.nama}}</p>
         </div>
         <div class="border-t border-gray-200"></div>
-          {{#if (eq role "admin")}}
+          {{#if (eq akun.role "admin")}}
             
           {{else}}
             <a class="flex items-center gap-x-3.5 py-2 px-3 rounded-lg text-sm text-gray-800" href="/users/profil">
