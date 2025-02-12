@@ -48,9 +48,9 @@ async function getVotingResults(pemilihanId, pilihanField) {
     }
   });
 
-  console.log("\nResults utk pilihan ", pilihanField);
-  console.log("Total votes:", totalVotes);
-  console.log(JSON.stringify(results, null, 2));
+  // console.log("\nResults utk pilihan ", pilihanField);
+  // console.log("Total votes:", totalVotes);
+  // console.log(JSON.stringify(results, null, 2));
 
   // Get nama anggota
   const votingResults = await Promise.all(results.map(async (result) => {
@@ -69,6 +69,19 @@ async function getVotingResults(pemilihanId, pilihanField) {
 const startVot1 = async (req, res, next) => {
   try {
     const { id } = req.params;
+
+    // Get pemilihan data
+    const pemilihan = await Pemilihan.findOne({
+      where: { pemilihan_id: id },
+    });
+
+    if (!pemilihan) {
+      return res.status(404).redirect('/admin/pemilihan_berlangsung');
+    }
+
+    if (pemilihan.tahap_pemilihan === 'voting2' || pemilihan.tahap_pemilihan === 'selesai') {
+      return res.redirect(`/admin/pemilihan_berlangsung/${id}/monitor_voting1`);
+    }
     
     await Pemilihan.update({
       tahap_pemilihan: 'voting1'
@@ -101,7 +114,7 @@ const getMonitorVot1 = async (req, res, next) => {
 
     // Redirect if not in voting1 phase
     if (pemilihan.tahap_pemilihan === 'datanilai') {
-      return res.redirect(`/admin/pemilihan_berlangsung/${id}/hasil_kandidat`);
+      return res.redirect(`/admin/pemilihan_berlangsung/${id}/input_penilaian`);
     }
 
     const pemilihanTitle = `${pemilihan.nama_pemilihan} ${pemilihan.Periode.nama_periode} ${pemilihan.tahun}`;
@@ -158,8 +171,8 @@ const getMonitorVot1 = async (req, res, next) => {
       order: [['Anggotum', 'nama', 'ASC']]
     });
 
-    console.log("\nDetail Pemilih");
-    console.log(JSON.stringify(detailPemilihan, null, 2));
+    // console.log("\nDetail Pemilih");
+    // console.log(JSON.stringify(detailPemilihan, null, 2));
 
     // Format data untuk view
     const anggotaList = detailPemilihan.map((detail, index) => ({
@@ -226,8 +239,8 @@ const closeVot1 = async (req, res, next) => {
       ]
     });
 
-    console.log("\nDetail Pemilihan");
-    console.log(JSON.stringify(detailPemilihan, null, 2));
+    // console.log("\nDetail Pemilihan");
+    // console.log(JSON.stringify(detailPemilihan, null, 2));
 
     // Hitung votes untuk setiap pilihan
     const voteCount = await Voting1.findAll({
@@ -242,8 +255,8 @@ const closeVot1 = async (req, res, next) => {
       group: ['pilihan1']
     });
 
-    console.log("\nVote Count");
-    console.log(JSON.stringify(voteCount, null, 2));
+    // console.log("\nVote Count");
+    // console.log(JSON.stringify(voteCount, null, 2));
 
     const voteCounts = {
       pilihan1: {},
@@ -268,8 +281,8 @@ const closeVot1 = async (req, res, next) => {
         }
       });
 
-      console.log(`\nVotes for ${field}`);
-      console.log(JSON.stringify(votes, null, 2));
+      // console.log(`\nVotes for ${field}`);
+      // console.log(JSON.stringify(votes, null, 2));
 
       votes.forEach(vote => {
         const nip = vote.get('nip');
@@ -396,8 +409,8 @@ const getKandidatPenilaianKriteria = async (req, res, next) => {
         transaction
       });
   
-      console.log('\nData Kandidat:');
-      console.log(JSON.stringify(kandidat, null, 2));
+      // console.log('\nData Kandidat:');
+      // console.log(JSON.stringify(kandidat, null, 2));
   
       // Format data untuk view
       const kandidatData = kandidat.map((k, index) => ({
@@ -421,7 +434,7 @@ const getKandidatPenilaianKriteria = async (req, res, next) => {
         pemilihanTitle,
         kandidat: kandidatData,
         idPemilihan: id,
-        akun: req.user
+        akun: req.user,
       });
   
     } catch (error) {
@@ -468,8 +481,8 @@ const setKandidatPenilaianKriteria = async (req, res, next) => {
       }]
     });
 
-    console.log('\nForm Data:');
-    console.log(JSON.stringify(formData, null, 2));
+    // console.log('\nForm Data:');
+    // console.log(JSON.stringify(formData, null, 2));
 
     // Update status untuk setiap kandidat
     const updatePromises = voting1Data.map(async (voting) => {
@@ -510,6 +523,12 @@ const getMonitorVot2 = async (req, res, next) => {
 
     if (!pemilihan) {
       return res.status(404).redirect('/admin/pemilihan_berlangsung');
+    }
+
+    if (pemilihan.tahap_pemilihan === 'voting1') {
+      return res.redirect(`/admin/pemilihan_berlangsung/${id}/monitor_voting1`);
+    } else if (pemilihan.tahap_pemilihan === 'datanilai') {
+      return res.redirect(`/admin/pemilihan_berlangsung/${id}/input_penilaian`);
     }
 
     const pemilihanTitle = `${pemilihan.nama_pemilihan} ${pemilihan.Periode.nama_periode} ${pemilihan.tahun}`;
@@ -597,18 +616,18 @@ const getMonitorVot2 = async (req, res, next) => {
       };
     });
 
-    console.log('\nData Monitor Voting 2:');
-    console.log(JSON.stringify({
-      pemilihanTitle,
-      votingStatus: {
-        isVotingOpen: pemilihan.tahap_pemilihan === 'voting2',
-        totalPengisi,
-        sudahIsi,
-        belumIsi,
-        progressPercentage
-      },
-      anggota: anggotaList
-    }, null, 2));
+    // console.log('\nData Monitor Voting 2:');
+    // console.log(JSON.stringify({
+    //   pemilihanTitle,
+    //   votingStatus: {
+    //     isVotingOpen: pemilihan.tahap_pemilihan === 'voting2',
+    //     totalPengisi,
+    //     sudahIsi,
+    //     belumIsi,
+    //     progressPercentage
+    //   },
+    //   anggota: anggotaList
+    // }, null, 2));
 
     res.render('admin/pemilihan_berlangsung/monitor_voting2', {
       title: 'Monitor Voting 2',
@@ -624,7 +643,7 @@ const getMonitorVot2 = async (req, res, next) => {
       anggota: anggotaList,
       selectedFilter: filter,
       idPemilihan: id,
-      akun: req.user
+      akun: req.user,
     });
 
   } catch (error) {

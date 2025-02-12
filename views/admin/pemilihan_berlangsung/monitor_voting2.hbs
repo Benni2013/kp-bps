@@ -152,8 +152,10 @@
 }
 </style>
 
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 <script>
-    // Auto reload setiap 1 menit
+    // Auto reload setiap 30 detik
 function setupAutoReload() {
   const RELOAD_INTERVAL = 30000; // 30 detik dalam miliseconds
   
@@ -178,7 +180,19 @@ document.addEventListener('DOMContentLoaded', function() {
 
     if (tutupVotingBtn) {
         tutupVotingBtn.addEventListener('click', async function() {
-            if (confirm('Apakah Anda yakin ingin menutup Penilaian Kriteria?')) {
+            // Konfirmasi tutup voting
+            const result = await Swal.fire({
+                title: 'Tutup Penilaian Kriteria?',
+                text: "Anda yakin ingin menutup penilaian kriteria?",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Ya, Tutup!',
+                cancelButtonText: 'Batal'
+            });
+
+            if (result.isConfirmed) {
                 try {
                     const response = await fetch('/admin/pemilihan_berlangsung/{{idPemilihan}}/tutup_voting2', {
                         method: 'POST',
@@ -189,14 +203,23 @@ document.addEventListener('DOMContentLoaded', function() {
 
                     if (response.ok) {
                         const data = await response.json();
-                        alert(data.message);
+                        await Swal.fire({
+                            title: 'Berhasil!',
+                            text: data.message,
+                            icon: 'success',
+                            timer: 1500
+                        });
                         window.location.reload();
                     } else {
-                        alert('Gagal menutup voting');
+                        throw new Error('Gagal menutup penilaian kriteria');
                     }
                 } catch (error) {
                     console.error('Error:', error);
-                    alert('Terjadi kesalahan saat menutup voting');
+                    await Swal.fire({
+                        title: 'Error!',
+                        text: 'Terjadi kesalahan saat menutup penilaian kriteria',
+                        icon: 'error'
+                    });
                 }
             }
         });
@@ -234,7 +257,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // Auto reload setiap 1 menit
+    // Auto reload setiap 30 detik
     setupAutoReload();
 });
 </script>

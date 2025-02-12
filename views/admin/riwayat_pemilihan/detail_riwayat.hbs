@@ -5,7 +5,7 @@
       <!-- Heading section -->
       <div class="flex flex-wrap py-3 mb-8 x-4 gap-5 justify-center items-center w-full max-md:max-w-full">
         <h1 class="text-2xl font-extrabold leading-none text-black text-center">
-          REKAP NILAI AKHIR PEMILIHAN PEGAWAI TELADAN TRIWULAN 1 TAHUN 2024
+          REKAP NILAI AKHIR {{pemilihanTitle}}
         </h1>
       </div>
 
@@ -37,36 +37,24 @@
           </thead>
 
           <tbody class="divide-y divide-gray-200">
-            <tr class="bg-white hover:bg-gray-50">
-              <td class="px-6 py-5 text-center whitespace-nowrap">
-                <span class="font-mono text-sm text-blue-600">10</span>
-              </td>
-              <td class="px-6 py-5 text-center whitespace-nowrap">
-                <p class="text-sm font-bold text-gray-600">Muhammad Raihan Alghifari</p>
-                <p class="text-sm text-gray-500">2211522031</p>
-              </td>
-              <td class="px-6 py-5 text-center whitespace-nowrap">
-                <span class="text-sm font-bold text-gray-600">61135219</span>
-              </td>
-              <td class="px-6 py-5 text-center whitespace-nowrap">
-                <span class="text-sm font-bold text-gray-600">12,9</span>
-              </td>
-            </tr>
-            <tr class="bg-white hover:bg-gray-50">
-              <td class="px-6 py-5 text-center whitespace-nowrap">
-                <span class="font-mono text-sm text-blue-600">11</span>
-              </td>
-              <td class="px-6 py-5 text-center whitespace-nowrap">
-                <p class="text-sm font-bold text-gray-600">Ahmad Fikri</p>
-                <p class="text-sm text-gray-500">2211522032</p>
-              </td>
-              <td class="px-6 py-5 text-center whitespace-nowrap">
-                <span class="text-sm font-bold text-gray-600">59342100</span>
-              </td>
-              <td class="px-6 py-5 text-center whitespace-nowrap">
-                <span class="text-sm font-bold text-gray-600">11,8</span>
-              </td>
-            </tr>
+            {{#each hasilKriteria }}
+              <tr class="bg-white hover:bg-gray-50">
+                <td class="px-6 py-5 text-center whitespace-nowrap">
+                  <span class="font-mono text-sm text-blue-600">{{no}}</span>
+                </td>
+                <td class="px-6 py-5 text-center whitespace-nowrap">
+                  <p class="text-sm font-bold text-gray-600">{{nama}}</p>
+                  <p class="text-sm text-gray-500">{{nip}}</p>
+                </td>
+                <td class="px-6 py-5 text-center whitespace-nowrap">
+                  <span class="text-sm font-bold text-gray-600">{{totalPoin}}</span>
+                </td>
+                <td class="px-6 py-5 text-center whitespace-nowrap">
+                  <span class="text-sm font-bold text-gray-600">{{rataRata}}</span>
+                </td>
+              </tr>
+            {{/each}}
+            
           </tbody>
         </table>
         <!-- End Table -->
@@ -80,7 +68,7 @@
           <p class="font-medium">Keterangan Penilaian:</p>
           <ul class="list-disc ml-5">
             <li>Jumlah poin merupakan akumulasi dari seluruh kategori penilaian</li>
-            <li>Rata-rata dihitung dari total poin dibagi jumlah kategori</li>
+            <li>Rata-rata dihitung dari rata-rata total poin dibagi jumlah kategori x 4, lalu dikali 100</li>
           </ul>
         </div>
 
@@ -88,7 +76,7 @@
         <button
           type="button"
           class="py-2 px-4 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-orange-500 text-white hover:bg-orange-400 focus:outline-none focus:bg-orange-600"
-          onclick="window.location.href='/admin/generate/laporan_hasil_pemilihan'"
+          onclick="window.location.href='/admin/generate/{{idPemilihan}}/rekap_laporan'"
         >
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
             <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5V18a2.25 2.25 0 002.25 2.25h13.5A2.25 2.25 0 0021 18v-1.5m-9-13.5v13.5m0 0l-3.75-3.75m3.75 3.75l3.75-3.75" />

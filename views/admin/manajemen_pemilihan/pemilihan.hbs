@@ -71,6 +71,7 @@
             <th class="py-4 px-6 text-left w-16">NO</th>
             <th class="py-4 px-6 text-left">NAMA PEMILIHAN</th>
             <th class="py-4 px-6 text-left">PERIODE</th>
+            <th class="py-4 px-6 text-left">TANGGAL MULAI</th>
             <th class="py-4 px-6 text-left">STATUS</th>
             <th class="py-4 px-6 text-right">OPSI</th>
           </tr>
@@ -84,6 +85,7 @@
                 {{nama_pemilihan}}
               </td>
               <td class="py-4 px-6">{{periode}} - {{tahun}}</td>
+              <td class="py-4 px-6">{{tanggalMulai}}</td>
               <td class="py-4 px-6">
                 {{#if (eq status 'selesai')}}
                   <span class="inline-flex items-center gap-1.5 py-1 px-3 rounded-full text-sm bg-green-100 text-green-800">

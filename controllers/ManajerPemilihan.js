@@ -51,7 +51,7 @@ const getAllPemilihan = async (req, res, next) => {
         model: Periode,
         attributes: ['nama_periode']
       }],
-      order: [['pemilihan_id', 'DESC']]
+      order: [['tanggal_mulai', 'DESC']]
     });
 
     res.render('admin/manajemen_pemilihan/pemilihan', {
@@ -63,6 +63,11 @@ const getAllPemilihan = async (req, res, next) => {
       dataPemilihan: dataPemilihan.map(p => ({
         ...p.toJSON(),
         periode: p.Periode.nama_periode,
+        tanggalMulai: new Date(p.tanggal_mulai).toLocaleDateString('id-ID', {
+          day: 'numeric',
+          month: 'long',
+          year: 'numeric'
+        }),
         status: p.tahap_pemilihan
       })),
       akun: req.user,

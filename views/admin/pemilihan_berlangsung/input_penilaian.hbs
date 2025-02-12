@@ -95,6 +95,12 @@
   </div>
 </div>
 
+{{!-- Jika format excel salah --}}
+<div id="wrongFormatExcel" class="hidden bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4" role="alert">
+  <span class="block sm:inline"><b>Format Excel Penilaian Salah</b></span>
+  <p class="text-sm mt-1">Pastikan format excel sesuai dengan template yang disediakan.</p>
+</div>
+
 {{!-- Rekap Nilai Anggota --}}
 <div id="rekapNilai" class="w-full max-w-[1200px] mx-auto px-4 hidden">
   <div class="flex flex-col mb-8">
@@ -160,6 +166,33 @@ function updateFileName(input) {
     fileNameDisplay.textContent = '';
     uploadButtonText.textContent = 'Pilih File Excel';
   }
+}
+
+// Add this function to check Excel format
+function validateExcelFormat(worksheet) {
+  const expectedHeaders = ['CKP', 'S', 'I', 'TK', 'CB', 'CM', 'CP', 'CT', 
+                          'TL1', 'TL2', 'TL3', 'TL4', 'PSW1', 'PSW2', 'PSW3', 'PSW4'];
+  
+  // Check row 2 (subheaders)
+  let col = 4; // Start after No, NIP, Nama, Jabatan
+  const range = XLSX.utils.decode_range(worksheet['!ref']);
+  
+  // Get actual headers from row 2
+  const actualHeaders = [];
+  while(col <= range.e.c && col < 20) { // Check first 16 columns after personal data
+    const cell = worksheet[XLSX.utils.encode_cell({r: 1, c: col})];
+    actualHeaders.push(cell?.v || '');
+    col++;
+  }
+
+  // Check if all expected headers exist in correct order
+  for(let i = 0; i < expectedHeaders.length; i++) {
+    if(actualHeaders[i] !== expectedHeaders[i]) {
+      return false;
+    }
+  }
+
+  return true;
 }
 
 // Enable submit button when data is loaded
@@ -256,7 +289,11 @@ function updateTable(data) {
 document.getElementById('uploadButton').addEventListener('click', function() {
   const fileInput = document.getElementById('excel_penilaian');
   const file = fileInput.files[0];
+  const wrongFormatAlert = document.getElementById('wrongFormatExcel');
   
+  // Hide alerts initially
+  wrongFormatAlert.classList.add('hidden');
+
   if (!file) {
     alert('Pilih file Excel terlebih dahulu');
     return;
@@ -268,6 +305,12 @@ document.getElementById('uploadButton').addEventListener('click', function() {
       const data = new Uint8Array(e.target.result);
       const workbook = XLSX.read(data, {type: 'array'});
       const worksheet = workbook.Sheets[workbook.SheetNames[0]];
+
+      // Validate format first
+      if (!validateExcelFormat(worksheet)) {
+        wrongFormatAlert.classList.remove('hidden');
+        return;
+      }
       
       const results = calculateAverages(worksheet);
 

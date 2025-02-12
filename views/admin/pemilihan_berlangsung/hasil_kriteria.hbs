@@ -2,9 +2,13 @@
 <main class="p-8">
     <div class="mb-8">
         <div class="flex justify-between items-center mb-4">
-            <h2 class="text-2xl font-bold">Hasil Penilaian Kriteria</h2>
+            <div class="flex flex-col mb-4">
+                <h2 class="text-2xl font-bold">Hasil Penilaian Kriteria</h2>
+                <p class="text-gray-500 italic mt-1">{{pemilihanTitle}}</p>
+            </div>
+            
             <button type="button" 
-              onclick="window.location.href='/admin/generate/laporan_hasil_pemilihan'"
+              onclick="window.location.href='/admin/generate/{{idPemilihan}}/laporan_hasil_pemilihan'"
               class="inline-flex items-center px-4 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600">
                 <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
@@ -25,58 +29,25 @@
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-200">
-                    <tr>
-                        <td class="px-6 py-4">1</td>
-                        <td class="px-6 py-4">
-                            <div>Frizqya Dela Pratiwi</div>
-                            <div class="text-sm text-gray-500">192312345678900</div>
-                        </td>
-                        <td class="px-6 py-4">2520</td>
-                        <td class="px-6 py-4">90,91</td>
-                    </tr>
-                    <tr>
-                        <td class="px-6 py-4">2</td>
-                        <td class="px-6 py-4">
-                            <div>Annisa Nurul Hakim</div>
-                            <div class="text-sm text-gray-500">192312345678900</div>
-                        </td>
-                        <td class="px-6 py-4">2462</td>
-                        <td class="px-6 py-4">88,82</td>
-                    </tr>
-                    <tr>
-                        <td class="px-6 py-4">3</td>
-                        <td class="px-6 py-4">
-                            <div>Muhammad Raihan Alghifari</div>
-                            <div class="text-sm text-gray-500">192312345678900</div>
-                        </td>
-                        <td class="px-6 py-4">2442</td>
-                        <td class="px-6 py-4">80,10</td>
-                    </tr>
-                    <tr>
-                        <td class="px-6 py-4">4</td>
-                        <td class="px-6 py-4">
-                            <div>Muhammad Raihan Alghifari</div>
-                            <div class="text-sm text-gray-500">192312345678900</div>
-                        </td>
-                        <td class="px-6 py-4">2442</td>
-                        <td class="px-6 py-4">80,10</td>
-                    </tr>
-                    <tr>
-                        <td class="px-6 py-4">5</td>
-                        <td class="px-6 py-4">
-                            <div>Muhammad Raihan Alghifari</div>
-                            <div class="text-sm text-gray-500">192312345678900</div>
-                        </td>
-                        <td class="px-6 py-4">2442</td>
-                        <td class="px-6 py-4">80,10</td>
-                    </tr>
+                    {{#each hasilKriteria }}
+                        <tr>
+                            <td class="px-6 py-4">{{posisi}}</td>
+                            <td class="px-6 py-4">
+                                <div>{{nama}}</div>
+                                <div class="text-sm text-gray-500">{{nip}}</div>
+                            </td>
+                            <td class="px-6 py-4">{{totalPoin}}</td>
+                            <td class="px-6 py-4">{{rataRata}}</td>
+                        </tr>
+                    {{/each}}
+                    
                 </tbody>
             </table>
         </div>
 
         <!-- Action Button -->
         <div class="flex justify-end mt-6">
-            <a href="/admin/pemilihan_berlangsung/kandidat_terpilih" class="inline-flex items-center px-4 py-2 bg-black text-white rounded-lg hover:bg-gray-800">
+            <a href="/admin/pemilihan_berlangsung/{{idPemilihan}}/kandidat_terpilih" class="inline-flex items-center px-4 py-2 bg-black text-white rounded-lg hover:bg-gray-800">
                 Simpan Kandidat Terpilih
                 <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path d="M9 5l7 7-7 7"></path>
