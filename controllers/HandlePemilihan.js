@@ -409,9 +409,18 @@ const getHasilKriteria = async (req, res, next) => {
 
     const pemilihanTitle = `${pemilihan.nama_pemilihan} ${pemilihan.Periode.nama_periode} ${pemilihan.tahun}`;
 
-    // Get jumlah indikator aktif
-    const jumlahIndikator = await Indikator.count({
-      where: { status_inditakor: 'aktif' }
+    // Get jumlah indikator yang digunakan dalam pemilihan
+    const jumlahIndikator = await Voting2.count({
+      where: { 
+        '$DetailPemilihan.pemilihan_id$': id 
+      },
+      include: [{
+        model: DetailPemilihan,
+        required: true,
+        attributes: []
+      }],
+      distinct: true,
+      col: 'indikator_id'
     });
 
     // Get jumlah anggota yang sudah mengisi
@@ -448,7 +457,15 @@ const getHasilKriteria = async (req, res, next) => {
     // Get total poin per kandidat
     const hasilKriteria = await Promise.all(kandidat.map(async (k) => {
       const totalPoin = await Voting2.sum('nilai', {
-        where: { kandidat_id: k.anggota_id }
+        where: { 
+          kandidat_id: k.anggota_id,
+          '$DetailPemilihan.pemilihan_id$': id,
+        },
+        include: [{
+          model: DetailPemilihan,
+          required: true,
+          attributes: []
+        }]
       });
 
       // Hitung rata-rata
@@ -512,8 +529,17 @@ const getPegawaiTerbaik = async (req, res, next) => {
     const pemilihanTitle = `${pemilihan.nama_pemilihan} ${pemilihan.Periode.nama_periode} Tahun ${pemilihan.tahun}`;
 
     // Get jumlah indikator aktif
-    const jumlahIndikator = await Indikator.count({
-      where: { status_inditakor: 'aktif' }
+    const jumlahIndikator = await Voting2.count({
+      where: { 
+        '$DetailPemilihan.pemilihan_id$': id 
+      },
+      include: [{
+        model: DetailPemilihan,
+        required: true,
+        attributes: []
+      }],
+      distinct: true,
+      col: 'indikator_id'
     });
 
     // Get jumlah pengisi penilaian
@@ -550,7 +576,15 @@ const getPegawaiTerbaik = async (req, res, next) => {
     // Get nilai semua kandidat
     const hasilKriteria = await Promise.all(kandidat.map(async (k) => {
       const totalPoin = await Voting2.sum('nilai', {
-        where: { kandidat_id: k.anggota_id }
+        where: { 
+          kandidat_id: k.anggota_id,
+          '$DetailPemilihan.pemilihan_id$': id,
+        },
+        include: [{
+          model: DetailPemilihan,
+          required: true,
+          attributes: []
+        }]
       });
 
       // Hitung rata-rata

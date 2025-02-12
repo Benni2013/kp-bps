@@ -579,8 +579,17 @@ const generateLaporanPenilaianKriteria = async (req, res, next) => {
     }
 
     // Get jumlah indikator aktif
-    const jumlahIndikator = await Indikator.count({
-      where: { status_inditakor: 'aktif' }
+    const jumlahIndikator = await Voting2.count({
+      where: { 
+        '$DetailPemilihan.pemilihan_id$': id 
+      },
+      include: [{
+        model: DetailPemilihan,
+        required: true,
+        attributes: []
+      }],
+      distinct: true,
+      col: 'indikator_id'
     });
 
     // Get jumlah pengisi penilaian
@@ -617,7 +626,15 @@ const generateLaporanPenilaianKriteria = async (req, res, next) => {
     // Hitung hasil kriteria
     const hasilKriteria = await Promise.all(kandidat.map(async (k) => {
       const totalPoin = await Voting2.sum('nilai', {
-        where: { kandidat_id: k.anggota_id }
+        where: { 
+          kandidat_id: k.anggota_id,
+          '$DetailPemilihan.pemilihan_id$': id,
+        },
+        include: [{
+          model: DetailPemilihan,
+          required: true,
+          attributes: []
+        }],
       });
 
       // Hitung rata-rata
@@ -870,8 +887,17 @@ const generateRekapLaporan = async (req, res, next) => {
     }
 
     // Sheet 3: Penilaian Kriteria
-    const jumlahIndikator = await Indikator.count({
-      where: { status_inditakor: 'aktif' }
+    const jumlahIndikator = await Voting2.count({
+      where: { 
+        '$DetailPemilihan.pemilihan_id$': id 
+      },
+      include: [{
+        model: DetailPemilihan,
+        required: true,
+        attributes: []
+      }],
+      distinct: true,
+      col: 'indikator_id'
     });
 
     const jumlahPengisi = await DetailPemilihan.count({
@@ -912,7 +938,15 @@ const generateRekapLaporan = async (req, res, next) => {
       // Hitung hasil kriteria
       const hasilKriteria = await Promise.all(kandidat.map(async (k) => {
         const totalPoin = await Voting2.sum('nilai', {
-          where: { kandidat_id: k.anggota_id }
+          where: { 
+            kandidat_id: k.anggota_id,
+            '$DetailPemilihan.pemilihan_id$': id,
+          },
+          include: [{
+            model: DetailPemilihan,
+            required: true,
+            attributes: []
+          }],
         });
 
         const rataRata = ((totalPoin / jumlahPengisi) / (jumlahIndikator * 4)) * 100;
