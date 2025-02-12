@@ -21,10 +21,27 @@ const getKandidatVot1 = async (req, res, next) => {
         tahap_pemilihan: "voting1",
       },
     });
+
     let role = req.cookies.role;
     const akun = req.user;
-
     if (!pemilihan) {
+      statusnya = false;
+      return res.render("user/voting", {
+        title: "Voting",
+        layout: "layouts/layout",
+        pemilihan,
+        akun,
+        statusnya,
+        role,
+      });
+    }
+    let detail_pemilihan = await DetailPemilihan.findOne({
+      where: {
+        detail_pemilihan_id: pemilihan.pemilihan_id,
+        anggota_id: akun.nip,
+      },
+    });
+    if (!detail_pemilihan) {
       statusnya = false;
       res.render("user/voting", {
         title: "Voting",
@@ -32,10 +49,17 @@ const getKandidatVot1 = async (req, res, next) => {
         pemilihan,
         akun,
         statusnya,
-        role
+        role,
       });
-      console.log("=========================");
     } else {
+      let detail_voting1 = await Voting1.findOne({
+        where: {
+          detail_pemilihan_id: detail_pemilihan.detail_pemilihan_id,
+        },
+      });
+      if (detail_voting1) {
+        res.redirect("/users/pemilihan/hasil-voting");
+      }
       statusnya = true;
       // buat ambil role dari cookie
       let role = req.cookies.role;
@@ -69,11 +93,13 @@ const getKandidatVot1 = async (req, res, next) => {
         data_nilai,
         akun,
         statusnya,
+        pemilihan,
       });
     }
   } catch (error) {
     console.error("getKandidatVot1 validation error:", error);
-    res.redirect("/users/beranda");
+    // res.redirect("/users/beranda");
+    next(error);
   }
 };
 
@@ -168,37 +194,19 @@ const getMyVot = async (req, res, next) => {
 
 const getKandidatKriteria = async (req, res, next) => {
   try {
+    const kandidatKriteria = [];
     let pemilihan = await Pemilihan.findOne({
       where: {
         tahap_pemilihan: "voting2",
       },
     });
 
-    // Get kandidat yang lolos (status_anggota tidak null)
-    let kandidatKriteria = await Voting1.findAll({
-      where: {
-        status_anggota: {
-          [Op.not]: null
-        }
-      },
-      include: [{
-        model: DetailPemilihan,
-        where: { pemilihan_id: pemilihan.pemilihan_id },
-        include: [{
-          model: Anggota,
-          attributes: ['nip', 'nama']
-        }]
-      }]
-    });
-
-    console.log(kandidatKriteria);
-    
     let role = req.cookies.role;
     const akun = req.user;
 
-    if (!pemilihan || kandidatKriteria.length === 0) {
+    if (!pemilihan) {
       statusnya = true;
-      res.render("user/penilaian_kriteria", {
+      return res.render("user/penilaian_kriteria", {
         title: "Penilaian Kriteria",
         layout: "layouts/layout",
         pemilihan,
@@ -213,6 +221,17 @@ const getKandidatKriteria = async (req, res, next) => {
           anggota_id: akun.nip,
         },
       });
+      if (!detail_pemilihan) {
+        statusnya = true;
+        return res.render("user/penilaian_kriteria", {
+          title: "Penilaian Kriteria",
+          layout: "layouts/layout",
+          pemilihan,
+          statusnya,
+          akun,
+          role,
+        });
+      }
       let detail_voting2 = await Voting2.findOne({
         where: {
           detail_pemilihan_id: detail_pemilihan.detail_pemilihan_id,
@@ -229,12 +248,45 @@ const getKandidatKriteria = async (req, res, next) => {
         // buat ambil role dari cookie
         let role = req.cookies.role;
 
-        let kandidatKriteria = await Voting1.findAll({
+        let anggota = await Anggota.findAll({
           where: {
-            status_anggota: "lolos",
+            status_anggota: "aktif",
           },
         });
 
+        for (let i = 0; i < anggota.length; i++) {
+          let kandidat_voting1 = await DetailPemilihan.findOne({
+            where: {
+              pemilihan_id: pemilihan.pemilihan_id,
+              anggota_id: anggota[i].nip,
+            },
+          });
+
+          if (!kandidat_voting1) continue; // Jika tidak ditemukan, lanjut ke iterasi berikutnya
+
+          let anggota_lulus = await Voting1.findOne({
+            where: {
+              detail_pemilihan_id: kandidat_voting1.detail_pemilihan_id,
+              status_anggota: "lolos",
+            },
+          });
+
+          if (anggota_lulus) {
+            console.log("++++++++++ " + anggota_lulus.detail_pemilihan_id);
+
+            // Tambahkan objek kandidat ke dalam array
+            kandidatKriteria.push({
+              detail_pemilihan_id: anggota_lulus.detail_pemilihan_id,
+              anggota_id: anggota[i].nip, // Menyimpan ID anggota agar lebih informatif
+              skor: 0, // Inisialisasi skor (jika perlu dihitung nanti)
+            });
+
+            console.log("----------- " + anggota_lulus.detail_pemilihan_id);
+            console.log("=========== Panjang kandidatKriteria: " + kandidatKriteria.length);
+          } else {
+            console.log("gaada " + i);
+          }
+        }
         for (let j = 0; j < kandidatKriteria.length; j++) {
           let detail_lulus = await DetailPemilihan.findOne({
             where: {
@@ -258,6 +310,7 @@ const getKandidatKriteria = async (req, res, next) => {
           role,
           akun,
           kandidatKriteria,
+          pemilihan,
         });
       }
     }
@@ -269,13 +322,13 @@ const getKandidatKriteria = async (req, res, next) => {
 
 const setPenilaianKriteria = async (req, res, next) => {
   const transaction = await sequelize.transaction();
-  
+
   try {
     // Get pemilihan aktif
     let pemilihan = await Pemilihan.findOne({
       where: {
         tahap_pemilihan: "voting2",
-      }
+      },
     });
 
     if (!pemilihan) {
@@ -289,7 +342,7 @@ const setPenilaianKriteria = async (req, res, next) => {
       where: {
         pemilihan_id: pemilihan.pemilihan_id,
         anggota_id: akun.nip,
-      }
+      },
     });
 
     if (!detail_pemilihan) {
@@ -298,18 +351,22 @@ const setPenilaianKriteria = async (req, res, next) => {
 
     // Get semua kandidat yang lolos
     let kandidatKriteria = await Voting1.findAll({
-      where: { 
+      where: {
         status_anggota: "lolos",
-        '$DetailPemilihan.pemilihan_id$': pemilihan.pemilihan_id
+        "$DetailPemilihan.pemilihan_id$": pemilihan.pemilihan_id,
       },
-      include: [{
-        model: DetailPemilihan,
-        required: true,
-        include: [{
-          model: Anggota,
-          attributes: ['nip', 'nama']
-        }]
-      }]
+      include: [
+        {
+          model: DetailPemilihan,
+          required: true,
+          include: [
+            {
+              model: Anggota,
+              attributes: ["nip", "nama"],
+            },
+          ],
+        },
+      ],
     });
 
     // Get semua indikator aktif
@@ -317,12 +374,12 @@ const setPenilaianKriteria = async (req, res, next) => {
       where: {
         status_inditakor: "aktif",
       },
-      order: [['indikator_id', 'ASC']]
+      order: [["indikator_id", "ASC"]],
     });
 
-    console.log('\nData yang akan diproses:');
-    console.log('Jumlah kandidat:', kandidatKriteria.length);
-    console.log('Jumlah indikator:', indikatorList.length);
+    console.log("\nData yang akan diproses:");
+    console.log("Jumlah kandidat:", kandidatKriteria.length);
+    console.log("Jumlah indikator:", indikatorList.length);
 
     // Proses setiap kombinasi kandidat dan indikator
     const penilaianPromises = [];
@@ -342,13 +399,16 @@ const setPenilaianKriteria = async (req, res, next) => {
         console.log(`Nilai: ${nilai}`);
 
         penilaianPromises.push(
-          Voting2.create({
-            detail_pemilihan_id: detail_pemilihan.detail_pemilihan_id,
-            indikator_id: indikatorList[i].indikator_id,
-            kandidat_id: kandidat.DetailPemilihan.anggota_id,
-            nilai: nilai,
-            waktu_vot2: new Date()
-          }, { transaction })
+          Voting2.create(
+            {
+              detail_pemilihan_id: detail_pemilihan.detail_pemilihan_id,
+              indikator_id: indikatorList[i].indikator_id,
+              kandidat_id: kandidat.DetailPemilihan.anggota_id,
+              nilai: nilai,
+              waktu_vot2: new Date(),
+            },
+            { transaction }
+          )
         );
       }
     }
@@ -357,9 +417,8 @@ const setPenilaianKriteria = async (req, res, next) => {
     await Promise.all(penilaianPromises);
     await transaction.commit();
 
-    console.log('\nSemua penilaian berhasil disimpan');
+    console.log("\nSemua penilaian berhasil disimpan");
     res.redirect("/users/pemilihan/thank-you");
-
   } catch (error) {
     await transaction.rollback();
     console.error("setPenilaianKriteria error:", error);
