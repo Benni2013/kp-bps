@@ -1,6 +1,6 @@
 // UserVoting
 
-// - getKandidatVot1 (utk saat akan milih 3 besar)
+// - getKandidatVot1 (utk saat akan milih 3 besar)                  (done)
 // - setVot1 (simpan pilihan)                                       (done)
 // - getMyVot (lihat kandidat yg dipilih)                           (done)
 // - getKandidatKriteria (untuk saat penilaian kriteria)            (done)
@@ -226,7 +226,7 @@ const getKandidatKriteria = async (req, res, next) => {
     let role = req.cookies.role;
     const akun = req.user;
 
-    if (!pemilihan) {
+    if (!pemilihan || akun.status_anggota == "nonaktif") {
       statusnya = true;
       return res.render("user/penilaian_kriteria", {
         title: "Penilaian Kriteria",

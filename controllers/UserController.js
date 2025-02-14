@@ -318,6 +318,7 @@ const getRiwayat = async (req, res, next) => {
       const indikator = await Indikator.findAll({
         where: { status_inditakor: "aktif" },
       });
+      //ubah agar data anggota yang diambil merupakan anggota yang sudah melakukan voting, bukan anggota yang berstatus aktif
       const anggota = await Anggota.findAll({
         where: { status_anggota: "aktif" },
       });
