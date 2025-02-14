@@ -1,9 +1,56 @@
 <div class="max-w-[85rem] px-4 py-4 sm:px-6 lg:px-8 lg:py-4 mx-auto">
-    <div class="max-w-4xl mb-10">
+    <div class="max-w-4xl mb-10 flex justify-between items-center">
         <h2 class="text-2xl font-bold md:text-4xl md:leading-tight">
             {{pemilihanTitle}}
         </h2>
+        
+        <!-- Dropdown Eligible Voters -->
+        <div class="relative inline-block">
+            <button id="eligibleBtn" class="flex items-start text-sm font-medium leading-none rounded-lg min-h-[40px] text-slate-700">
+                <div class="flex overflow-hidden gap-2 justify-center items-center px-4 py-2.5 bg-white rounded-lg border border-gray-300 border-solid shadow-sm">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z" />
+                    </svg>
+                    <span>Eligible Voters</span>
+                </div>
+            </button>
+
+            <div id="eligibleDropdown" class="hidden absolute right-0 mt-2 w-80 bg-white rounded-lg shadow-xl border border-gray-200 z-50">
+                <div class="p-4">
+                    <h3 class="font-semibold mb-4">Pilih Eligible Voters</h3>
+                    
+                    <label class="flex items-center gap-2 mb-4 pb-2 border-b">
+                        <input type="checkbox" id="selectAllVoters" class="h-4 w-4">
+                        <span class="font-medium">Pilih Semua</span>
+                    </label>
+
+                    <div class="max-h-60 overflow-y-auto mb-4 space-y-2">
+                        {{#each anggotaList}}
+                            <label class="flex items-center gap-2 py-1 px-2 hover:bg-gray-50 rounded cursor-pointer">
+                                <input 
+                                    type="checkbox" 
+                                    name="voters"
+                                    value="{{nip}}"
+                                    class="voter-checkbox h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                                    {{#if (eq status_anggota "aktif")}}checked{{/if}}
+                                />
+                                <span class="flex-1">{{nama}} ({{nip}})</span>
+                            </label>
+                        {{/each}}
+                    </div>
+
+                    <button type="button"
+                        id="saveEligible"
+                        class="w-full py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                    >
+                        Simpan Eligible Voters
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- End Dropdown Eligible Voters -->
     </div>
+
     <div class="grid sm:grid-cols-1 lg:grid-cols-1 gap-6">
         <div class="group flex flex-col bg-gray-200 border border-black shadow-sm rounded-xl hover:shadow-md transition">
             <div class="p-4 md:p-5">
@@ -64,3 +111,74 @@
         </div>
     </div>
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const eligibleBtn = document.getElementById('eligibleBtn');
+    const eligibleDropdown = document.getElementById('eligibleDropdown');
+    const selectAllVoters = document.getElementById('selectAllVoters');
+    const voterCheckboxes = document.querySelectorAll('.voter-checkbox');
+    const saveEligible = document.getElementById('saveEligible');
+
+    // Toggle dropdown
+    eligibleBtn.addEventListener('click', () => {
+        eligibleDropdown.classList.toggle('hidden');
+    });
+
+    // Close dropdown when clicking outside
+    document.addEventListener('click', (e) => {
+        if (!eligibleBtn.contains(e.target) && !eligibleDropdown.contains(e.target)) {
+            eligibleDropdown.classList.add('hidden');
+        }
+    });
+
+    // Select All functionality
+    selectAllVoters.addEventListener('change', (e) => {
+        voterCheckboxes.forEach(checkbox => {
+            checkbox.checked = e.target.checked;
+        });
+    });
+
+    // Update select all when individual checkboxes change
+    function updateSelectAll() {
+        selectAllVoters.checked = [...voterCheckboxes].every(cb => cb.checked);
+    }
+
+    voterCheckboxes.forEach(checkbox => {
+        checkbox.addEventListener('change', updateSelectAll);
+    });
+
+    // Save eligible voters
+    saveEligible.addEventListener('click', async () => {
+        try {
+            const selectedVoters = [...voterCheckboxes].map(cb => ({
+                nip: cb.value,
+                eligible: cb.checked ? 'yes' : 'no'
+            }));
+
+            const response = await fetch('/pemilihan/simpan_eligible_voters', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ voters: selectedVoters })
+            });
+
+            if (response.ok) {
+                alert('Berhasil menyimpan eligible voters');
+                window.location.reload();
+            } else {
+                throw new Error('Gagal menyimpan eligible voters');
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            alert('Terjadi kesalahan saat menyimpan eligible voters ', error.message);
+        }
+    });
+
+    // Initialize select all state
+    updateSelectAll();
+});
+</script>

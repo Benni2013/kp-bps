@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 const { getActivePemilihan,
+        setEligibleVoters,
         getInputPenilaian,
         createDataPenilaian,
         getAllDataPenilaian,
@@ -20,6 +21,9 @@ const { startVot1,
 
 // Route untuk halaman pemilihan berlangsung - GET
 router.get('/', getActivePemilihan);
+
+// Router untuk menyimpan eligible voters - POST
+router.post('/simpan_eligible_voters', setEligibleVoters);
 
 // Router untuk halaman input penilaian - GET
 router.get('/:id/input_penilaian', getInputPenilaian);

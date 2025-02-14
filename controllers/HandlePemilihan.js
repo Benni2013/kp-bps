@@ -42,11 +42,22 @@ const getActivePemilihan = async (req, res, next) => {
     let title = 'Tidak ada pemilihan yang sedang berlangsung';
     let tahapPemilihan = null;
     let idActivePemilihan = null;
+    let anggotaList = [];
 
     if (activePemilihan) {
       idActivePemilihan = activePemilihan.pemilihan_id;
       title = `${activePemilihan.nama_pemilihan} ${activePemilihan.Periode.nama_periode} ${activePemilihan.tahun}`;
       tahapPemilihan = activePemilihan.tahap_pemilihan;
+      anggotaList = await Anggota.findAll({
+          where: { 
+              status_anggota: 'aktif',
+              role: {
+                  [Op.ne]: 'admin'
+              }
+          },
+          attributes: ['nip', 'nama', 'status_anggota', 'status_karyawan',],
+          order: [['nama', 'ASC']]
+      });
     }
 
     res.render('admin/pemilihan_berlangsung/pemilihan_berlangsung', {
@@ -55,6 +66,7 @@ const getActivePemilihan = async (req, res, next) => {
       pemilihanTitle: title,
       tahapPemilihan: tahapPemilihan,
       idActivePemilihan,
+      anggotaList: anggotaList,
       akun: req.user,
     });
 
@@ -62,6 +74,28 @@ const getActivePemilihan = async (req, res, next) => {
     console.error('Error getting active pemilihan:', error);
     next(error);
   }
+};
+
+// Set eligible voters
+const setEligibleVoters = async (req, res, next) => {
+  try {
+    const { voters } = req.body;
+    
+    // Update eligible_voter status untuk setiap anggota
+    await Promise.all(voters.map(voter => {
+        return Anggota.update(
+            { nama: voters.nama,
+              status_anggota: voter.eligible },
+            { where: { nip: voter.nip } }
+        );
+    }));
+
+    res.status(200).json({ message: 'Berhasil menyimpan eligible voters' });
+} catch (error) {
+    console.error('Error saving eligible voters:', error);
+    // res.status(500).json({ message: 'Terjadi kesalahan saat menyimpan eligible voters' });
+    next(error);
+}
 };
 
 // Get input penilaian
@@ -638,6 +672,7 @@ const getPegawaiTerbaik = async (req, res, next) => {
 
 module.exports = {
   getActivePemilihan,
+  setEligibleVoters,
   getInputPenilaian,
   createDataPenilaian,
   getAllDataPenilaian,

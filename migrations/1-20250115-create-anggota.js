@@ -39,11 +39,16 @@ module.exports = {
       foto: {
         type: Sequelize.STRING(255)
       },
-      status_anggota: {
+      status_anggota: {   // untuk status eligible voters
+        type: Sequelize.ENUM('aktif', 'nonaktif'),
+        allowNull: true,
+        defaultValue: 'aktif',
+      },
+      status_karyawan: {  // untuk status karyawan
         type: Sequelize.ENUM('aktif', 'nonaktif'),
         allowNull: false,
-        defaultValue: 'aktif'
-      }
+        defaultValue: 'aktif',
+      },
     });
   },
 

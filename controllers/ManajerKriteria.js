@@ -9,6 +9,16 @@
 const { Indikator, Sequelize } = require('../models');
 const { Op } = Sequelize;
 
+const kategoriList = [
+  "Adaptif",
+  "Akuntabel",
+  "Berorientasi Pelayanan",
+  "Harmonis",
+  "Kolaboratif",
+  "Kompeten",
+  "Loyal",
+];
+
 // Get all kriteria
 const getAllKriteria = async (req, res, next) => {
   try {
@@ -97,17 +107,11 @@ const getOneKriteria = async (req, res, next) => {
       return res.redirect('/admin/manajemen_kriteria');
     }
 
-    // Ambil semua kategori untuk dropdown
-    const categories = await Indikator.findAll({
-      attributes: [[Sequelize.fn('DISTINCT', Sequelize.col('tipe_indikator')), 'tipe_indikator']],
-      raw: true
-    });
-
     res.render('admin/manajemen_kriteria/edit_kriteria', {
       title: 'Edit Kriteria',
       layout: 'layouts/admin.hbs',
       kriteria,
-      categories,
+      kategoriList,
       akun: req.user
     });
   } catch (error) {

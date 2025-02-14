@@ -7,11 +7,32 @@
 // - getAnggotaToChangePassword         (done)
 // - deleteAnggota      (done)
 
-const { Anggota, Sequelize } = require('../models');
+const { Anggota, Pemilihan, DetailPemilihan, Sequelize } = require('../models');
 const { Op } = Sequelize;
 const path = require('path');
 const bcrypt = require('bcrypt');
 const fs = require('fs');
+
+const timList = [
+  "Kepala BPS Kota Padang",
+  "Statistik Pertanian",
+  "Statistik Industri dan Pertambangan Energi dan kontruksi",
+  "Statistik Kesejahteraan Rakyat dan Ketahanan Sosial", 
+  "Statistik Ketenagakerjaan",
+  "Pengolahan",
+  "Diseminasi dan Teknologi Informasi",
+  "Statistik Neraca Produksi",
+  "Statistik Neraca Pengeluaran dan Analisis",
+  "Statistik Distribusi",
+  "Pariwisata dan profiling Statistical Business Register (SBR)",
+  "Statistik Harga",
+  "Pembinaan Statistik Sektoral",
+  "Reformasi Birokrasi, Zona Integritas dan Indikator Strategis",
+  "Kasubag Umum",
+  "Sub Tim SAKIP",
+  "Sub Tim Humas, PPID dan Manajemen Mitra",
+  "Sub Tim EPSS"
+];
 
 // Get all anggota
 const getAllAnggota = async (req, res, next) => {
@@ -134,7 +155,7 @@ const getOneAnggota = async (req, res, next) => {
 
     // Tambah divisiList jika halaman edit
     if (isEdit) {
-      viewData.divisiList = divisiList;
+      viewData.timList = timList;
     }
 
     res.render(`admin/manajemen_anggota/${isEdit ? 'edit' : 'detail'}_anggota`, viewData);
