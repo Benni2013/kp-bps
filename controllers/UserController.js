@@ -25,6 +25,7 @@ const getDataPemilihan = async (req, res, next) => {
           [Op.or]: ["voting1", "voting2"], // pencarian voting
         },
       },
+      order: [["tanggal_mulai", "DESC"]],
     });
     if (!pemilihan) {
       ada = true;
@@ -39,10 +40,12 @@ const getDataPemilihan = async (req, res, next) => {
       let anggota = await Anggota.findAll({
         where: {
           status_anggota: "aktif",
-          divisi: akun.divisi,
           role: {
             [Op.ne]: "admin",
           },
+          ...(akun.divisi !== "Kepala BPS Kota Padang" ? { 
+            divisi: akun.divisi 
+          } : {})
         },
       });
 
@@ -55,6 +58,13 @@ const getDataPemilihan = async (req, res, next) => {
             anggota_id: anggota[i].nip,
           },
         });
+
+        // Skip if detail_pemilihan not found
+        if (!detail_pemilihan) {
+          anggota[i].voting1 = false;
+          anggota[i].voting2 = false;
+          continue;
+        }
 
         let voting1 = await Voting1.findOne({
           where: {

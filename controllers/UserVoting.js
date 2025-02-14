@@ -29,7 +29,7 @@ const getKandidatVot1 = async (req, res, next) => {
 
     console.log("Akun: ", JSON.stringify(akun, null, 2));
 
-    if (!pemilihan) {
+    if (!pemilihan || akun.status_anggota === "nonaktif") {
       statusnya = false;
       console.log("Tidak ada pemilihan yang sedang berjalan.");
       return res.render("user/voting", {
