@@ -8,7 +8,7 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const { Op, where, json } = require("sequelize");
-const { Anggota, Pemilihan, DetailPemilihan, DataNilai, Voting1, Voting2, Indikator, Periode } = require("../models");
+const { Anggota, Pemilihan, DetailPemilihan, DataNilai, Voting1, Voting2, Indikator, Periode, sequelize } = require("../models");
 require("dotenv").config();
 
 const getDataPemilihan = async (req, res, next) => {
@@ -43,9 +43,11 @@ const getDataPemilihan = async (req, res, next) => {
           role: {
             [Op.ne]: "admin",
           },
-          ...(akun.divisi !== "Kepala BPS Kota Padang" ? { 
-            divisi: akun.divisi 
-          } : {})
+          ...(akun.divisi !== "Kepala BPS Kota Padang"
+            ? {
+                divisi: akun.divisi,
+              }
+            : {}),
         },
       });
 
@@ -175,16 +177,18 @@ const getPegawaiTerbaik = async (req, res, next) => {
 
       // Get jumlah indikator aktif
       const jumlahIndikator = await Voting2.count({
-        where: { 
-          '$DetailPemilihan.pemilihan_id$': activePemilihan.pemilihan_id 
+        where: {
+          "$DetailPemilihan.pemilihan_id$": activePemilihan.pemilihan_id,
         },
-        include: [{
-          model: DetailPemilihan,
-          required: true,
-          attributes: []
-        }],
+        include: [
+          {
+            model: DetailPemilihan,
+            required: true,
+            attributes: [],
+          },
+        ],
         distinct: true,
-        col: 'indikator_id'
+        col: "indikator_id",
       });
 
       // Get jumlah pengisi penilaian
@@ -220,21 +224,23 @@ const getPegawaiTerbaik = async (req, res, next) => {
         group: ["DetailPemilihan.detail_pemilihan_id", "Anggotum.nip", "Anggotum.nama", "Anggotum.jabatan", "Anggotum.gender", "Anggotum.foto", "Voting1.status_anggota"],
       });
 
-      console.log(JSON.stringify(kandidat,null,2))
+      console.log(JSON.stringify(kandidat, null, 2));
 
       // Get nilai semua kandidat
       const hasilKriteria = await Promise.all(
         kandidat.map(async (k) => {
           const totalPoin = await Voting2.sum("nilai", {
-            where: { 
+            where: {
               kandidat_id: k.anggota_id,
-              '$DetailPemilihan.pemilihan_id$': activePemilihan.pemilihan_id,
+              "$DetailPemilihan.pemilihan_id$": activePemilihan.pemilihan_id,
             },
-            include: [{
-              model: DetailPemilihan,
-              required: true,
-              attributes: []
-            }]
+            include: [
+              {
+                model: DetailPemilihan,
+                required: true,
+                attributes: [],
+              },
+            ],
           });
 
           // Hitung rata-rata
@@ -263,7 +269,6 @@ const getPegawaiTerbaik = async (req, res, next) => {
         return res.status(404).send("Pemenang tidak ditemukan");
       }
     }
-    
 
     // console.log('\nData Pemenang:');
     // console.log(JSON.stringify(pemenang, null, 2));
@@ -284,131 +289,169 @@ const getPegawaiTerbaik = async (req, res, next) => {
 
 const getRiwayat = async (req, res, next) => {
   try {
-    let total = 0;
+    const periodeList = await Periode.findAll({
+      attributes: ["periode_id", "nama_periode"],
+      order: [["periode_id", "ASC"]],
+    });
+
+    // Get tahun unik dari pemilihan untuk filter
+    const tahunList = await Pemilihan.findAll({
+      attributes: [[sequelize.fn("DISTINCT", sequelize.col("tahun")), "tahun"]],
+      order: [["tahun", "DESC"]],
+    });
     let role = req.cookies.role;
-    const akun = req.user;
-    const final = []; // Inisialisasi array untuk menyimpan data akhir
-    const anggotaSkor = {}; // Objek untuk menyimpan total skor setiap anggota
-    let tahun = await Pemilihan.findAll();
-    let periode = await Periode.findAll();
+    const { periode_id, tahun } = req.query;
 
-    // Ambil data pemilihan yang telah selesai
-    const pemilihan = await Pemilihan.findAll({
-      where: { tahap_pemilihan: "selesai" },
-      order: [['tanggal_mulai', 'DESC']]
-    });
-    const kandidatKriteria = await Voting1.findAll({
-      where: {
-        status_anggota: "lolos",
+    // Convert string parameters to arrays
+    const selectedPeriodes = periode_id ? periode_id.split(",") : [];
+    const selectedTahun = tahun ? tahun.split(",") : [];
+
+    // Apply filter
+    let whereClause = {
+      tahap_pemilihan: {
+        [Op.in]: ["selesai"],
       },
+    };
+
+    if (selectedPeriodes.length > 0) {
+      whereClause.periode_id = {
+        [Op.in]: selectedPeriodes,
+      };
+    }
+
+    if (selectedTahun.length > 0) {
+      whereClause.tahun = {
+        [Op.in]: selectedTahun,
+      };
+    }
+
+    const riwayatPemilihan = await Pemilihan.findAll({
+      where: whereClause,
+      include: [
+        {
+          model: Periode,
+          attributes: ["nama_periode"],
+        },
+      ],
+      order: [["tanggal_mulai", "DESC"]],
     });
 
-    if (!pemilihan) {
-      // Jika tidak ada pemilihan selesai
-      const statusnya = true;
-      return res.render("user/riwayat", {
-        title: "Riwayat Pemilihan",
-        layout: "layouts/layout",
-        role,
-        akun,
-        statusnya,
-      });
-    } else {
-      // Ambil data indikator aktif dan anggota aktif
-      const indikator = await Indikator.findAll({
-        where: { status_inditakor: "aktif" },
-      });
-      //ubah agar data anggota yang diambil merupakan anggota yang sudah melakukan voting, bukan anggota yang berstatus aktif
-      const anggota = await Anggota.findAll({
-        where: { status_anggota: "aktif" },
-      });
+    // Get pemenang untuk setiap pemilihan yang selesai
+    const riwayatData = await Promise.all(
+      riwayatPemilihan.map(async (pemilihan) => {
+        let pemenangData = null;
 
-      // Loop untuk mengumpulkan data detail_pemilihan dan voting2
-      for (let k = 0; k < pemilihan.length; k++) {
-        for (let m = 0; m < kandidatKriteria.length; m++) {
-          let detail_lulus = await DetailPemilihan.findOne({
+        if (pemilihan.tahap_pemilihan === "selesai") {
+          // Get jumlah indikator dan pengisi
+          const jumlahIndikator = await Voting2.count({
             where: {
-              detail_pemilihan_id: kandidatKriteria[m].detail_pemilihan_id,
+              "$DetailPemilihan.pemilihan_id$": pemilihan.pemilihan_id,
             },
-          });
-          kandidatKriteria[m].nip_lulus = detail_lulus.anggota_id;
-        }
-        for (let n = 0; n < kandidatKriteria.length; n++) {
-          kandidatKriteria[n].skor = 0;
-          for (let i = 0; i < anggota.length; i++) {
-            const detail_pemilihan = await DetailPemilihan.findOne({
-              where: {
-                pemilihan_id: pemilihan[k].pemilihan_id,
-                anggota_id: anggota[i].nip,
+            include: [
+              {
+                model: DetailPemilihan,
+                required: true,
+                attributes: [],
               },
-            });
-            if (detail_pemilihan) {
-              for (let j = 0; j < indikator.length; j++) {
-                const voting2 = await Voting2.findOne({
-                  where: {
-                    detail_pemilihan_id: detail_pemilihan.detail_pemilihan_id,
-                    indikator_id: indikator[j].indikator_id,
-                    kandidat_id: kandidatKriteria[n].nip_lulus,
+            ],
+            distinct: true,
+            col: "indikator_id",
+          });
+
+          const jumlahPengisi = await DetailPemilihan.count({
+            where: { pemilihan_id: pemilihan.pemilihan_id },
+            include: [
+              {
+                model: Voting2,
+                required: true,
+              },
+            ],
+            distinct: true,
+          });
+
+          // Get semua kandidat yang lolos
+          const kandidat = await DetailPemilihan.findAll({
+            where: {
+              pemilihan_id: pemilihan.pemilihan_id,
+              "$Voting1.status_anggota$": "lolos",
+            },
+            include: [
+              {
+                model: Anggota,
+                attributes: ["nip", "nama", "gender", "foto", "divisi"], // Include divisi
+              },
+              {
+                model: Voting1,
+                required: true,
+                where: { status_anggota: "lolos" },
+              },
+            ],
+          });
+
+          // Hitung nilai untuk setiap kandidat
+          const hasilKriteria = await Promise.all(
+            kandidat.map(async (k) => {
+              const totalPoin = await Voting2.sum("nilai", {
+                where: {
+                  kandidat_id: k.anggota_id,
+                  "$DetailPemilihan.pemilihan_id$": pemilihan.pemilihan_id,
+                },
+                include: [
+                  {
+                    model: DetailPemilihan,
+                    required: true,
+                    attributes: [],
                   },
-                });
+                ],
+              });
 
-                if (voting2) {
-                  // Tambahkan data ke dalam array final
-                  final.push({
-                    anggota: anggota[i].nip,
-                    indikator: indikator[j].indikator_id,
-                    nilai: voting2.nilai,
-                  });
-                  // Tambahkan skor ke kandidat
-                  kandidatKriteria[n].skor += voting2.nilai;
+              const rataRata = (totalPoin / jumlahPengisi / (jumlahIndikator * 4)) * 100;
 
-                  console.log("zzzzzzzzzzzz" + kandidatKriteria[n].skor);
-                  console.log("++++++++++++" + voting2.kandidat_id);
-                }
-              }
-            }
-          }
-          pemilihan[k].skor_pemenang = kandidatKriteria[n].skor;
-          console.log(">>>>>>>>>>>>>>>>>>>> " + pemilihan[k].skor_pemenang);
+              return {
+                nama: k.Anggotum.nama,
+                divisi: k.Anggotum.divisi, // Include divisi here
+                foto: k.Anggotum.foto || (k.Anggotum.gender === "pria" ? "/default_pp/lk.png" : "/default_pp/pr.png"),
+                rataRata: parseFloat(rataRata.toFixed(2)),
+              };
+            })
+          );
+
+          // Sort dan ambil nilai tertinggi
+          hasilKriteria.sort((a, b) => b.rataRata - a.rataRata);
+          pemenangData = hasilKriteria[0];
         }
-        let topScorer = kandidatKriteria.reduce((highest, kandidat) => {
-          return kandidat.skor > highest.skor ? kandidat : highest;
-        });
-        console.log("<<<<<<<<<<<<<<<<<<< " + topScorer.skor);
-        let idPemenang = await DetailPemilihan.findOne({
-          where: {
-            detail_pemilihan_id: topScorer.detail_pemilihan_id,
-          },
-        });
-        pemilihan[k].id_pemenang = idPemenang.anggota_id;
-        let namaPemenang = await Anggota.findOne({
-          where: {
-            nip: idPemenang.anggota_id,
-          },
-        });
-        pemilihan[k].nama_pemenang = namaPemenang.nama;
-        pemilihan[k].divisi = namaPemenang.divisi;
 
-        console.log("Nama Pemenang:", pemilihan[k].nama_pemenang);
-      }
-      console.log("//////////////////////" + final.length + "///" + pemilihan.length + "///" + anggota.length + "///" + indikator.length);
+        return {
+          id: pemilihan.pemilihan_id,
+          title: `${pemilihan.nama_pemilihan} ${pemilihan.Periode.nama_periode} Tahun ${pemilihan.tahun}`,
+          tanggal: new Date(pemilihan.tanggal_mulai).toLocaleDateString("id-ID", {
+            day: "numeric",
+            month: "long",
+            year: "numeric",
+          }),
+          status: pemilihan.tahap_pemilihan,
+          pemenang: pemenangData,
+        };
+      })
+    );
 
-      res.render("user/riwayat", {
-        title: "Riwayat Pemilihan",
-        layout: "layouts/layout",
-        role,
-        akun,
-        pemilihan,
-        periode,
-        tahun,
-        total,
-      });
-    }
+    res.render("user/riwayat", {
+      title: "Riwayat Pemilihan",
+      layout: "layouts/layout",
+      riwayatPemilihan: riwayatData,
+      periodeList,
+      tahunList: tahunList.map((t) => t.tahun),
+      selectedPeriode: selectedPeriodes,
+      selectedTahun: selectedTahun,
+      akun: req.user,
+      role,
+    });
   } catch (error) {
     console.error("getRiwayat error:", error);
     res.redirect("/users/beranda");
   }
 };
+
 
 const getProfile = async (req, res, next) => {
   try {

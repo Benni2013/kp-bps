@@ -82,7 +82,7 @@ const getAllAnggota = async (req, res, next) => {
       layout: 'layouts/admin.hbs',
       dataAnggota: dataAnggota.map(a => ({
         ...a.dataValues,
-        status: a.status_anggota === 'aktif' // Convert status to boolean
+        status: a.status_karyawan === 'aktif' // Convert status to boolean
       })),
       divisiList: divisiWithCount.map(d => ({
         divisi: d.divisi,
@@ -147,7 +147,7 @@ const getOneAnggota = async (req, res, next) => {
       anggota: {
         ...anggota.dataValues,
         foto_profil: fotoProfil,
-        status: anggota.status_anggota === 'aktif',
+        status: anggota.status_karyawan === 'aktif',
         jenis_kelamin_display: jenis_kelamin,
       },
       akun: req.user
@@ -280,7 +280,7 @@ const editAnggota = async (req, res, next) => {
       role,
       email,
       gender,
-      status_anggota,
+      status_karyawan,
       password_baru // untuk reset password
     } = req.body;
 
@@ -319,7 +319,7 @@ const editAnggota = async (req, res, next) => {
         email,
         gender,
         foto,
-        status_anggota
+        status_karyawan
       });
     }
 

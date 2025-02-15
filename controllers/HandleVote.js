@@ -185,7 +185,7 @@ const getMonitorVot1 = async (req, res, next) => {
 
     // Get hasil voting jika voting sudah tutup
     let hasilVoting = null;
-    if (pemilihan.tahap_pemilihan === 'voting2' || pemilihan.tahap_pemilihan === 'selesai') {
+    if (pemilihan.tahap_pemilihan === 'voting2' || pemilihan.tahap_pemilihan === "voting1" || pemilihan.tahap_pemilihan === 'selesai') {
       const pilihan1Results = await getVotingResults(id, 'pilihan1');
       const pilihan2Results = await getVotingResults(id, 'pilihan2');
       const pilihan3Results = await getVotingResults(id, 'pilihan3');
