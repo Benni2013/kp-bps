@@ -50,7 +50,7 @@ const getActivePemilihan = async (req, res, next) => {
       tahapPemilihan = activePemilihan.tahap_pemilihan;
       anggotaList = await Anggota.findAll({
           where: { 
-              status_anggota: 'aktif',
+              status_karyawan: 'aktif',
               role: {
                   [Op.ne]: 'admin'
               }
@@ -81,21 +81,27 @@ const setEligibleVoters = async (req, res, next) => {
   try {
     const { voters } = req.body;
     
-    // Update eligible_voter status untuk setiap anggota
+    // Update status_anggota untuk setiap anggota
     await Promise.all(voters.map(voter => {
-        return Anggota.update(
-            { nama: voters.nama,
-              status_anggota: voter.eligible },
-            { where: { nip: voter.nip } }
-        );
+      return Anggota.update(
+        { status_anggota: voter.eligible },
+        { 
+          where: { nip: voter.nip }
+        }
+      );
     }));
 
-    res.status(200).json({ message: 'Berhasil menyimpan eligible voters' });
-} catch (error) {
+    res.status(200).json({ 
+      success: true,
+      message: 'Berhasil mengupdate status eligible voters' 
+    });
+  } catch (error) {
     console.error('Error saving eligible voters:', error);
-    // res.status(500).json({ message: 'Terjadi kesalahan saat menyimpan eligible voters' });
-    next(error);
-}
+    res.status(500).json({ 
+      success: false,
+      message: 'Terjadi kesalahan saat mengupdate eligible voters' 
+    });
+  }
 };
 
 // Get input penilaian

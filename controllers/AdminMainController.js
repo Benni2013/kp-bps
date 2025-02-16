@@ -61,10 +61,16 @@ const getDashboardAdmin = async (req, res, next) => {
         model: Anggota,
         where: {
           role: { [Op.ne]: 'admin' },
-          status_anggota: 'aktif'
         }
       }]
     });
+
+    const partisipan = await Anggota.count({
+      where: {
+        role: { [Op.ne]: 'admin' },
+        status_anggota: 'aktif',
+      }    
+    });    
 
     // Get jumlah kandidat eligible untuk pemilihan terbaru
     const kandidatEligible = await DetailPemilihan.count({
@@ -146,7 +152,7 @@ const getDashboardAdmin = async (req, res, next) => {
     res.render('admin/dashboard', {
       title: 'Dashboard Admin',
       layout: 'layouts/admin.hbs',
-      totalAnggota,
+      totalAnggota : partisipan,
       kandidatEligible,
       kandidatTahap1,
       totalKriteria,

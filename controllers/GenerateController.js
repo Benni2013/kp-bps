@@ -18,6 +18,7 @@ const { Anggota,
         Indikator } = require("../models");
 const PDFDocument = require("pdfkit");
 const XLSX = require('xlsx');
+const Excel = require('exceljs');
 const path = require("path");
 const fs = require("fs");
 
@@ -205,7 +206,7 @@ function templateExcel(pemilihan) {
   colWidths[0] = { wch: 5 };  // No.
   colWidths[1] = { wch: 12 }; // NIP
   colWidths[2] = { wch: 20 }; // Nama
-  colWidths[3] = { wch: 30 }; // Jabatan
+  colWidths[3] = { wch: 25 }; // Jabatan
 
   // Set width untuk kolom nilai (4 karakter)
   for (let i = 4; i < mainHeaders.length; i++) {
@@ -246,7 +247,7 @@ const downloadTemplatePenilaian = async (req, res, next) => {
 
     // Generate workbook
     const workbook = templateExcel(pemilihan);
-    
+
     // Set response headers
     res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
     res.setHeader('Content-Disposition', `attachment; filename=penilaian_${pemilihan.nama_pemilihan}_${pemilihan.Periode.nama_periode}_${pemilihan.tahun}.xlsx`);
@@ -293,8 +294,9 @@ const generateLaporanDataNilai = async (req, res, next) => {
       ]
     });
 
-    // Buat workbook baru
-    const workbook = XLSX.utils.book_new();
+    // Create workbook and worksheet
+    const workbook = new Excel.Workbook();
+    const worksheet = workbook.addWorksheet('Data Nilai');
     
     // Buat headers
     const headers = [
@@ -305,12 +307,13 @@ const generateLaporanDataNilai = async (req, res, next) => {
     // Buat second headers dengan nomor kolom
     const secondHeaders = headers.map((_, index) => `(${index + 1})`);
 
-    // Siapkan data untuk worksheet
-    const rows = [headers, secondHeaders];
+    // Add headers to worksheet
+    worksheet.addRow(headers);
+    worksheet.addRow(secondHeaders);
 
     // Tambahkan data
     dataNilai.forEach((data, index) => {
-      const row = [
+      worksheet.addRow([
         index + 1,
         data.Anggotum.nip,
         data.Anggotum.nama,
@@ -319,62 +322,44 @@ const generateLaporanDataNilai = async (req, res, next) => {
         data.DataNilai.score_absen,
         data.DataNilai.score_akhir,
         data.DataNilai.status_anggota === 'eligible' ? 'Eligible' : 'Non-Eligible'
-      ];
-      rows.push(row);
+      ]);
     });
-
-    // Buat worksheet
-    const ws = XLSX.utils.aoa_to_sheet(rows);
 
     // Set column widths
-    const colWidths = [
-      { wch: 5 },  // NO
-      { wch: 12 }, // NIP
-      { wch: 20 }, // NAMA
-      { wch: 30 }, // JABATAN
-      { wch: 12 }, // NILAI CKP
-      { wch: 15 }, // NILAI ABSENSI
-      { wch: 12 }, // TOTAL SKOR
-      { wch: 15 }  // STATUS
+    worksheet.columns = [
+      { width: 5 },  // NO
+      { width: 12 }, // NIP
+      { width: 20 }, // NAMA
+      { width: 30 }, // JABATAN
+      { width: 12 }, // NILAI CKP
+      { width: 15 }, // NILAI ABSENSI
+      { width: 12 }, // TOTAL SKOR
+      { width: 15 }  // STATUS
     ];
-    ws['!cols'] = colWidths;
+    
 
-    // Style untuk seluruh cell
-    for (let i = 0; i < rows.length; i++) {
-      for (let j = 0; j < headers.length; j++) {
-        const cellRef = XLSX.utils.encode_cell({ r: i, c: j });
-        if (!ws[cellRef]) ws[cellRef] = {};
-        if (!ws[cellRef].s) ws[cellRef].s = {};
-        
-        // Basic style untuk semua cell
-        ws[cellRef].s = {
-          alignment: {
-            horizontal: 'center',
-            vertical: 'center'
-          },
-          border: {
-            top: { style: 'thin' },
-            bottom: { style: 'thin' },
-            left: { style: 'thin' },
-            right: { style: 'thin' }
-          }
+    // Style cells
+    worksheet.eachRow((row, rowNumber) => {
+      row.height = 25; // Set row height
+      row.alignment = { vertical: 'middle', horizontal: 'center' };
+      
+      row.eachCell((cell) => {
+        cell.border = {
+          top: { style: 'thin' },
+          bottom: { style: 'thin' },
+          left: { style: 'thin' },
+          right: { style: 'thin' }
         };
-
-        // Bold untuk header
-        if (i === 0) {
-          ws[cellRef].s.font = { bold: true };
+        
+        // Bold for headers
+        if (rowNumber <= 2) {
+          cell.font = { bold: true };
         }
-      }
-    }
-
-    // Tambah worksheet ke workbook
-    XLSX.utils.book_append_sheet(workbook, ws, 'Data Nilai');
+      });
+    });
 
     // Generate buffer
-    const excelBuffer = XLSX.write(workbook, { 
-      type: 'buffer', 
-      bookType: 'xlsx'
-    });
+    const buffer = await workbook.xlsx.writeBuffer();
 
     // Set response headers
     res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
@@ -383,7 +368,7 @@ const generateLaporanDataNilai = async (req, res, next) => {
     );
     
     // Send file
-    res.send(excelBuffer);
+    res.send(buffer);
 
   } catch (error) {
     console.error('Error generating laporan data nilai:', error);
@@ -435,8 +420,9 @@ const generateLaporanVoting1 = async (req, res, next) => {
       order: [['Voting1', 'total_skor', 'DESC']]
     });
 
-    // Buat workbook baru
-    const workbook = XLSX.utils.book_new();
+    // Create workbook and worksheet
+    const workbook = new Excel.Workbook();
+    const worksheet = workbook.addWorksheet('Laporan Voting 1');
     
     // Buat headers
     const headers = [
@@ -449,12 +435,13 @@ const generateLaporanVoting1 = async (req, res, next) => {
     // Buat second headers dengan nomor kolom
     const secondHeaders = headers.map((_, index) => `(${index + 1})`);
 
-    // Siapkan data untuk worksheet
-    const rows = [headers, secondHeaders];
+    // Add headers
+    worksheet.addRow(headers);
+    worksheet.addRow(secondHeaders);
 
-    // Tambahkan data
+    // Add data
     dataVoting.forEach((data, index) => {
-      const row = [
+      worksheet.addRow([
         index + 1,
         data.Anggotum.nip,
         data.Anggotum.nama,
@@ -467,8 +454,7 @@ const generateLaporanVoting1 = async (req, res, next) => {
         data.Voting1?.skor_pil3 || 0,
         data.Voting1?.total_skor || 0,
         // data.Voting1?.status_anggota || '-',
-      ];
-      rows.push(row);
+      ]);
     });
 
     // Tambah baris total partisipan
@@ -479,14 +465,11 @@ const generateLaporanVoting1 = async (req, res, next) => {
       }]
     });
 
-    rows.push([]);
-    rows.push(['', '', 'Jumlah Voters:', totalPartisipan]);
-
-    // Buat worksheet
-    const ws = XLSX.utils.aoa_to_sheet(rows);
+    worksheet.addRow([]);
+    worksheet.addRow(['', '', 'Jumlah Voters:', totalPartisipan]);
 
     // Set column widths
-    const colWidths = [
+    worksheet.columns = [
       { wch: 5 },   // NO
       { wch: 12 },  // NIP
       { wch: 20 },  // NAMA
@@ -500,53 +483,29 @@ const generateLaporanVoting1 = async (req, res, next) => {
       { wch: 12 },  // TOTAL SKOR
       // { wch: 15 }   // STATUS
     ];
-    ws['!cols'] = colWidths;
 
     // Style untuk seluruh cell
-    for (let i = 0; i < rows.length; i++) {
-      for (let j = 0; j < headers.length; j++) {
-        const cellRef = XLSX.utils.encode_cell({ r: i, c: j });
-        if (!ws[cellRef]) ws[cellRef] = {};
-        if (!ws[cellRef].s) ws[cellRef].s = {};
-        
-        // Basic style untuk semua cell
-        ws[cellRef].s = {
-          alignment: {
-            horizontal: 'center',
-            vertical: 'center'
-          },
-          border: {
-            top: { style: 'thin' },
-            bottom: { style: 'thin' },
-            left: { style: 'thin' },
-            right: { style: 'thin' }
-          }
+    worksheet.eachRow((row, rowNumber) => {
+      row.height = 25;
+      row.alignment = { vertical: 'middle', horizontal: 'center' };
+      
+      row.eachCell((cell) => {
+        cell.border = {
+          top: { style: 'thin' },
+          bottom: { style: 'thin' },
+          left: { style: 'thin' },
+          right: { style: 'thin' }
         };
 
-        // Bold untuk header dan second header
-        if (i <= 1) {
-          ws[cellRef].s.font = { bold: true };
+        // Bold for headers and total row
+        if (rowNumber <= 2 || rowNumber === worksheet.rowCount) {
+          cell.font = { bold: true };
         }
-      }
-    }
-
-    // Style untuk baris total partisipan
-    const lastRowIndex = rows.length - 1;
-    for (let j = 0; j < headers.length; j++) {
-      const cellRef = XLSX.utils.encode_cell({ r: lastRowIndex, c: j });
-      if (j === 4 || j === 5) { // Kolom "Jumlah Partisipan" dan nilainya
-        ws[cellRef].s.font = { bold: true };
-      }
-    }
-
-    // Tambah worksheet ke workbook
-    XLSX.utils.book_append_sheet(workbook, ws, 'Laporan Voting 1');
+      });
+    });
 
     // Generate buffer
-    const excelBuffer = XLSX.write(workbook, { 
-      type: 'buffer', 
-      bookType: 'xlsx'
-    });
+    const buffer = await workbook.xlsx.writeBuffer();
 
     // Set response headers
     res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
@@ -555,7 +514,7 @@ const generateLaporanVoting1 = async (req, res, next) => {
     );
     
     // Send file
-    res.send(excelBuffer);
+    res.send(buffer);
 
   } catch (error) {
     console.error('Error generating laporan voting 1:', error);
@@ -658,8 +617,9 @@ const generateLaporanPenilaianKriteria = async (req, res, next) => {
       posisi: index + 1
     }));
 
-    // Buat workbook baru
-    const workbook = XLSX.utils.book_new();
+    // Create workbook and worksheet
+    const workbook = new Excel.Workbook();
+    const worksheet = workbook.addWorksheet('Penilaian Kriteria');
     
     // Buat headers
     const headers = [
@@ -669,86 +629,66 @@ const generateLaporanPenilaianKriteria = async (req, res, next) => {
     // Buat second headers dengan nomor kolom
     const secondHeaders = headers.map((_, index) => `(${index + 1})`);
 
-    // Siapkan data untuk worksheet
-    const rows = [headers, secondHeaders];
+    // Add headers
+    worksheet.addRow(headers);
+    worksheet.addRow(secondHeaders);
 
-    // Tambahkan data
+    // Add data
     hasilKriteriaFinal.forEach(data => {
-      const row = [
+      worksheet.addRow([
         data.posisi,
         data.nip,
         data.nama,
         data.totalPoin,
         data.rataRata
-      ];
-      rows.push(row);
+      ]);
     });
 
-    // Tambah informasi tambahan
-    rows.push([]);
-    rows.push(['','KETERANGAN:']);
-    rows.push(['','Jumlah Indikator: ', jumlahIndikator]);
-    rows.push(['','Jumlah Voters: ', jumlahPengisi]);
-
-    // Buat worksheet
-    const ws = XLSX.utils.aoa_to_sheet(rows);
+    // Add keterangan
+    worksheet.addRow([]);
+    worksheet.addRow(['', 'KETERANGAN:']);
+    worksheet.addRow(['', 'Jumlah Indikator:', jumlahIndikator]);
+    worksheet.addRow(['', 'Jumlah Voters:', jumlahPengisi]);
 
     // Set column widths
-    const colWidths = [
-      { wch: 5 },   // NO
-      { wch: 15 },  // NIP
-      { wch: 20 },  // NAMA
-      { wch: 15 },  // JUMLAH POIN
-      { wch: 15 }   // RATA-RATA
+    worksheet.columns = [
+      { width: 5 },   // NO
+      { width: 15 },  // NIP
+      { width: 20 },  // NAMA
+      { width: 15 },  // JUMLAH POIN
+      { width: 15 }   // RATA-RATA
     ];
-    ws['!cols'] = colWidths;
 
-    // Style untuk seluruh cell
-    for (let i = 0; i < rows.length; i++) {
-      for (let j = 0; j < headers.length; j++) {
-        const cellRef = XLSX.utils.encode_cell({ r: i, c: j });
-        if (!ws[cellRef]) ws[cellRef] = {};
-        if (!ws[cellRef].s) ws[cellRef].s = {};
-        
-        // Basic style untuk semua cell
-        ws[cellRef].s = {
-          alignment: {
-            horizontal: 'center',
-            vertical: 'center'
-          },
-          border: {
-            top: { style: 'thin' },
-            bottom: { style: 'thin' },
-            left: { style: 'thin' },
-            right: { style: 'thin' }
-          }
+    // Style cells
+    worksheet.eachRow((row, rowNumber) => {
+      row.height = 25;
+      row.alignment = { vertical: 'middle', horizontal: 'center' };
+      
+      row.eachCell((cell) => {
+        cell.border = {
+          top: { style: 'thin' },
+          bottom: { style: 'thin' },
+          left: { style: 'thin' },
+          right: { style: 'thin' }
         };
 
-        // Bold untuk header dan second header
-        if (i <= 1) {
-          ws[cellRef].s.font = { bold: true };
+        // Bold for headers
+        if (rowNumber <= 2) {
+          cell.font = { bold: true };
         }
-      }
-    }
+      });
+    });
 
-    // Style untuk keterangan
-    const startKeteranganRow = rows.length - 3;
-    for (let i = startKeteranganRow; i < rows.length; i++) {
-      const cellRef = XLSX.utils.encode_cell({ r: i, c: 0 });
-      if (ws[cellRef]) {
-        ws[cellRef].s.font = { bold: true };
-        ws[cellRef].s.alignment = { horizontal: 'left' };
-      }
+    // Style keterangan rows
+    const keteranganStartRow = worksheet.rowCount - 3;
+    for(let i = keteranganStartRow; i <= worksheet.rowCount; i++) {
+      const row = worksheet.getRow(i);
+      row.getCell(2).alignment = { horizontal: 'left' };
+      row.getCell(2).font = { bold: true };
     }
-
-    // Tambah worksheet ke workbook
-    XLSX.utils.book_append_sheet(workbook, ws, 'Penilaian Kriteria');
 
     // Generate buffer
-    const excelBuffer = XLSX.write(workbook, { 
-      type: 'buffer', 
-      bookType: 'xlsx'
-    });
+    const buffer = await workbook.xlsx.writeBuffer();
 
     // Set response headers
     res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
@@ -757,7 +697,7 @@ const generateLaporanPenilaianKriteria = async (req, res, next) => {
     );
     
     // Send file
-    res.send(excelBuffer);
+    res.send(buffer);
 
   } catch (error) {
     console.error('Error generating laporan penilaian kriteria:', error);
@@ -780,8 +720,71 @@ const generateRekapLaporan = async (req, res, next) => {
       return res.status(404).send('Pemilihan tidak ditemukan');
     }
 
-    // Buat workbook baru untuk rekap
-    const workbook = XLSX.utils.book_new();
+    // Create workbook
+    const workbook = new Excel.Workbook();
+
+    // Helper function to create and style worksheet
+    const createWorksheet = (name, headers, data, options = {}) => {
+      const worksheet = workbook.addWorksheet(name);
+      
+      // Add headers
+      worksheet.addRow(headers);
+      worksheet.addRow(headers.map((_, i) => `(${i + 1})`));
+
+      // Add data
+      if (data.length > 0) {
+        data.forEach(row => worksheet.addRow(row));
+        
+        // Add additional info if exists
+        if (options.additionalInfo) {
+          worksheet.addRow([]);
+          options.additionalInfo.forEach(info => worksheet.addRow(info));
+        }
+      } else {
+        worksheet.addRow([]);
+        worksheet.addRow(['TIDAK ADA DATA PADA TAHAP PEMILIHAN INI']);
+      }
+
+      // Set column widths
+      worksheet.columns = [
+        { width: 5 },  // NO
+        { width: 15 }, // NIP
+        { width: 20 }, // NAMA
+        ...Array(headers.length - 3).fill({ width: 15 })
+      ];
+
+      // Style cells
+      worksheet.eachRow((row, rowNumber) => {
+        row.height = 25;
+        row.alignment = { vertical: 'middle', horizontal: 'center' };
+        
+        row.eachCell((cell) => {
+          cell.border = {
+            top: { style: 'thin' },
+            bottom: { style: 'thin' },
+            left: { style: 'thin' },
+            right: { style: 'thin' }
+          };
+
+          // Bold for headers and special rows
+          if (rowNumber <= 2 || 
+              cell.value === 'TIDAK ADA DATA PADA TAHAP PEMILIHAN INI' ||
+              (options.additionalInfo && rowNumber > worksheet.rowCount - options.additionalInfo.length)) {
+            cell.font = { bold: true };
+          }
+        });
+      });
+
+      // Special alignment for additional info
+      if (options.additionalInfo) {
+        const startRow = worksheet.rowCount - options.additionalInfo.length + 1;
+        for (let i = startRow; i <= worksheet.rowCount; i++) {
+          worksheet.getRow(i).getCell(2).alignment = { horizontal: 'left' };
+        }
+      }
+
+      return worksheet;
+    };
 
     // Sheet 1: Data Nilai
     const dataNilai = await DetailPemilihan.findAll({
@@ -804,28 +807,21 @@ const generateRekapLaporan = async (req, res, next) => {
       'NO', 'NIP', 'NAMA', 'JABATAN', 
       'NILAI CKP', 'NILAI ABSENSI', 'TOTAL SKOR', 'STATUS'
     ];
-    const secondHeadersNilai = headersNilai.map((_, index) => `(${index + 1})`);
-    const rowsNilai = [headersNilai, secondHeadersNilai];
 
-    if (dataNilai.length > 0 && dataNilai.some(d => d.DataNilai)) {
-      dataNilai.forEach((data, index) => {
-        if (data.DataNilai) {
-          rowsNilai.push([
-            index + 1,
-            data.Anggotum.nip,
-            data.Anggotum.nama,
-            data.Anggotum.jabatan || '',
-            data.DataNilai.score_ckp,
-            data.DataNilai.score_absen,
-            data.DataNilai.score_akhir,
-            data.DataNilai.status_anggota === 'eligible' ? 'Eligible' : 'Non-Eligible'
-          ]);
-        }
-      });
-    } else {
-      rowsNilai.push([]);
-      rowsNilai.push(['TIDAK ADA DATA PADA TAHAP PEMILIHAN INI']);
-    }
+    const dataNilaiRows = dataNilai
+      .filter(d => d.DataNilai)
+      .map((data, index) => [
+        index + 1,
+        data.Anggotum.nip,
+        data.Anggotum.nama,
+        data.Anggotum.jabatan || '',
+        data.DataNilai.score_ckp,
+        data.DataNilai.score_absen,
+        data.DataNilai.score_akhir,
+        data.DataNilai.status_anggota === 'eligible' ? 'Eligible' : 'Non-Eligible'
+      ]);
+    
+    createWorksheet('Data Nilai', headersNilai, dataNilaiRows);
 
     // Sheet 2: Voting 1
     const dataVoting1 = await DetailPemilihan.findAll({
@@ -856,35 +852,29 @@ const generateRekapLaporan = async (req, res, next) => {
       'SKOR PILIHAN 1', 'SKOR PILIHAN 2', 'SKOR PILIHAN 3',
       'TOTAL SKOR'
     ];
-    const secondHeadersVoting1 = headersVoting1.map((_, index) => `(${index + 1})`);
-    const rowsVoting1 = [headersVoting1, secondHeadersVoting1];
 
-    if (dataVoting1.length > 0 && dataVoting1.some(d => d.Voting1)) {
-      dataVoting1.forEach((data, index) => {
-        rowsVoting1.push([
-          index + 1,
-          data.Anggotum.nip,
-          data.Anggotum.nama,
-          data.Voting1?.skor_pil1 || 0,
-          data.Voting1?.skor_pil2 || 0,
-          data.Voting1?.skor_pil3 || 0,
-          data.Voting1?.total_skor || 0
-        ]);
-      });
+    const totalVoters = await Voting1.count({
+      include: [{
+        model: DetailPemilihan,
+        where: { pemilihan_id: id }
+      }]
+    });
 
-      // Add total voters
-      const totalVoters = await Voting1.count({
-        include: [{
-          model: DetailPemilihan,
-          where: { pemilihan_id: id }
-        }]
-      });
-      rowsVoting1.push([]);
-      rowsVoting1.push(['', '', 'Jumlah Voters:', totalVoters]);
-    } else {
-      rowsVoting1.push([]);
-      rowsVoting1.push(['TIDAK ADA DATA PADA TAHAP PEMILIHAN INI']);
-    }
+    const dataVoting1Rows = dataVoting1
+      .filter(d => d.Voting1)
+      .map((data, index) => [
+        index + 1,
+        data.Anggotum.nip,
+        data.Anggotum.nama,
+        data.Voting1?.skor_pil1 || 0,
+        data.Voting1?.skor_pil2 || 0,
+        data.Voting1?.skor_pil3 || 0,
+        data.Voting1?.total_skor || 0
+      ]);
+
+    createWorksheet('Voting 1', headersVoting1, dataVoting1Rows, {
+      additionalInfo: [['', '', 'Jumlah Voters:', totalVoters]]
+    });
 
     // Sheet 3: Penilaian Kriteria
     const jumlahIndikator = await Voting2.count({
@@ -931,104 +921,51 @@ const generateRekapLaporan = async (req, res, next) => {
     const headersPenilaian = [
       'NO', 'NIP', 'NAMA', 'JUMLAH POIN', 'RATA-RATA (%)'
     ];
-    const secondHeadersPenilaian = headersPenilaian.map((_, index) => `(${index + 1})`);
-    const rowsPenilaian = [headersPenilaian, secondHeadersPenilaian];
 
-    if (kandidat.length > 0) {
-      // Hitung hasil kriteria
-      const hasilKriteria = await Promise.all(kandidat.map(async (k) => {
-        const totalPoin = await Voting2.sum('nilai', {
-          where: { 
-            kandidat_id: k.anggota_id,
-            '$DetailPemilihan.pemilihan_id$': id,
-          },
-          include: [{
-            model: DetailPemilihan,
-            required: true,
-            attributes: []
-          }],
-        });
-
-        const rataRata = ((totalPoin / jumlahPengisi) / (jumlahIndikator * 4)) * 100;
-
-        return {
-          nama: k.Anggotum.nama,
-          nip: k.Anggotum.nip,
-          totalPoin,
-          rataRata: parseFloat(rataRata.toFixed(2))
-        };
-      }));
-
-      hasilKriteria.sort((a, b) => b.rataRata - a.rataRata);
-
-      hasilKriteria.forEach((data, index) => {
-        rowsPenilaian.push([
-          index + 1,
-          data.nip,
-          data.nama,
-          data.totalPoin,
-          data.rataRata
-        ]);
+    // Hitung hasil kriteria
+    const hasilKriteria = await Promise.all(kandidat.map(async (k) => {
+      const totalPoin = await Voting2.sum('nilai', {
+        where: { 
+          kandidat_id: k.anggota_id,
+          '$DetailPemilihan.pemilihan_id$': id,
+        },
+        include: [{
+          model: DetailPemilihan,
+          required: true,
+          attributes: []
+        }],
       });
 
-      rowsPenilaian.push([]);
-      rowsPenilaian.push(['', 'KETERANGAN:']);
-      rowsPenilaian.push(['', 'Jumlah Indikator:', jumlahIndikator]);
-      rowsPenilaian.push(['', 'Jumlah Voters:', jumlahPengisi]);
-    } else {
-      rowsPenilaian.push([]);
-      rowsPenilaian.push(['TIDAK ADA DATA PADA TAHAP PEMILIHAN INI']);
-    }
+      const rataRata = ((totalPoin / jumlahPengisi) / (jumlahIndikator * 4)) * 100;
 
-    // Buat dan style worksheets
-    const sheets = [
-      { name: 'Data Nilai', rows: rowsNilai },
-      { name: 'Voting 1', rows: rowsVoting1 },
-      { name: 'Penilaian Kriteria', rows: rowsPenilaian }
-    ];
+      return {
+        nama: k.Anggotum.nama,
+        nip: k.Anggotum.nip,
+        totalPoin,
+        rataRata: parseFloat(rataRata.toFixed(2))
+      };
+    }));
 
-    sheets.forEach(sheet => {
-      const ws = XLSX.utils.aoa_to_sheet(sheet.rows);
+    hasilKriteria.sort((a, b) => b.rataRata - a.rataRata);
+    
+    const dataPenilaianRows = hasilKriteria.map((data, index) => [
+      index + 1,
+      data.nip,
+      data.nama,
+      data.totalPoin,
+      data.rataRata
+    ]);
 
-      // Set column widths
-      const colWidths = Array(sheet.rows[0].length).fill({ wch: 15 });
-      colWidths[0] = { wch: 5 }; // NO
-      colWidths[1] = { wch: 15 }; // NIP
-      colWidths[2] = { wch: 20 }; // NAMA
-      ws['!cols'] = colWidths;
-
-      // Style cells
-      for (let i = 0; i < sheet.rows.length; i++) {
-        for (let j = 0; j < sheet.rows[0].length; j++) {
-          const cellRef = XLSX.utils.encode_cell({ r: i, c: j });
-          if (!ws[cellRef]) ws[cellRef] = {};
-          if (!ws[cellRef].s) ws[cellRef].s = {};
-
-          ws[cellRef].s = {
-            alignment: { horizontal: 'center', vertical: 'center' },
-            border: {
-              top: { style: 'thin' },
-              bottom: { style: 'thin' },
-              left: { style: 'thin' },
-              right: { style: 'thin' }
-            }
-          };
-
-          // Bold untuk header dan pesan tidak ada data
-          if (i <= 1 || sheet.rows[i][0] === 'TIDAK ADA DATA PADA TAHAP PEMILIHAN INI') {
-            ws[cellRef].s.font = { bold: true };
-          }
-        }
-      }
-
-      XLSX.utils.book_append_sheet(workbook, ws, sheet.name);
+    createWorksheet('Penilaian Kriteria', headersPenilaian, dataPenilaianRows, {
+      additionalInfo: [
+        ['', 'KETERANGAN:'],
+        ['', 'Jumlah Indikator:', jumlahIndikator],
+        ['', 'Jumlah Voters:', jumlahPengisi]
+      ]
     });
 
-    // Generate buffer
-    const excelBuffer = XLSX.write(workbook, { 
-      type: 'buffer', 
-      bookType: 'xlsx'
-    });
+    // Generate buffer and send response
+    const buffer = await workbook.xlsx.writeBuffer();
 
     // Set response headers
     res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
@@ -1037,7 +974,7 @@ const generateRekapLaporan = async (req, res, next) => {
     );
     
     // Send file
-    res.send(excelBuffer);
+    res.send(buffer);
 
   } catch (error) {
     console.error('Error generating rekap laporan:', error);

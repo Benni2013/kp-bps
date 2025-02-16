@@ -60,7 +60,7 @@ const getAllAnggota = async (req, res, next) => {
       where: whereClause,
       order: [
         ['divisi', 'ASC'],
-        ['nama', 'ASC']
+        ['nip', 'ASC']
       ]
     });
 
@@ -82,7 +82,7 @@ const getAllAnggota = async (req, res, next) => {
       layout: 'layouts/admin.hbs',
       dataAnggota: dataAnggota.map(a => ({
         ...a.dataValues,
-        status: a.status_anggota === 'aktif' // Convert status to boolean
+        status: a.status_karyawan === 'aktif' // Convert status to boolean
       })),
       divisiList: divisiWithCount.map(d => ({
         divisi: d.divisi,
@@ -147,7 +147,7 @@ const getOneAnggota = async (req, res, next) => {
       anggota: {
         ...anggota.dataValues,
         foto_profil: fotoProfil,
-        status: anggota.status_anggota === 'aktif',
+        status: anggota.status_karyawan === 'aktif',
         jenis_kelamin_display: jenis_kelamin,
       },
       akun: req.user
@@ -233,7 +233,8 @@ const createAnggota = async (req, res, next) => {
       divisi,
       jabatan,
       foto,
-      status_anggota: 'aktif'
+      status_anggota: 'aktif',
+      status_karyawan: 'aktif',
     });
 
     res.status(200).json({ success: true });
@@ -319,7 +320,8 @@ const editAnggota = async (req, res, next) => {
         email,
         gender,
         foto,
-        status_anggota
+        status_anggota : status_anggota,
+        status_karyawan: status_anggota,
       });
     }
 
