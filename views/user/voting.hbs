@@ -24,6 +24,7 @@
         <h2 class="text-lg font-semibold">Pilihan ke-1</h2>
         <p class="text-sm text-gray-500">Pilihan ke-1 akan mendapatkan 3 Poin</p>
         <select id="pilihan1" name="pilihan1" class="select-input mt-2 block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-sm">
+          <option value="" disabled selected>-- Pilih Pegawai --</option>
           {{#each data_nilai}}
             <option value="{{this.data_nip_anggota}}">{{this.data_nama_anggota}}</option>
           {{/each}}
@@ -35,6 +36,7 @@
         <h2 class="text-lg font-semibold">Pilihan ke-2</h2>
         <p class="text-sm text-gray-500">Pilihan ke-2 akan mendapatkan 2 Poin</p>
         <select id="pilihan2" name="pilihan2" class="select-input mt-2 block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-sm">
+          <option value="" disabled selected>-- Pilih Pegawai --</option>
           {{#each data_nilai}}
             <option value="{{this.data_nip_anggota}}">{{this.data_nama_anggota}}</option>
           {{/each}}
@@ -46,6 +48,7 @@
         <h2 class="text-lg font-semibold">Pilihan ke-3</h2>
         <p class="text-sm text-gray-500">Pilihan ke-3 akan mendapatkan 1 Poin</p>
         <select id="pilihan3" name="pilihan3" class="select-input mt-2 block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-sm">
+          <option value="" disabled selected>-- Pilih Pegawai --</option>
           {{#each data_nilai}}
             <option value="{{this.data_nip_anggota}}">{{this.data_nama_anggota}}</option>
           {{/each}}

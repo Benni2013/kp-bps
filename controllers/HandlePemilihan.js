@@ -48,16 +48,47 @@ const getActivePemilihan = async (req, res, next) => {
       idActivePemilihan = activePemilihan.pemilihan_id;
       title = `${activePemilihan.nama_pemilihan} ${activePemilihan.Periode.nama_periode} ${activePemilihan.tahun}`;
       tahapPemilihan = activePemilihan.tahap_pemilihan;
-      anggotaList = await Anggota.findAll({
+      // Tambahkan kondisi untuk query anggota berdasarkan tahap pemilihan
+      if (tahapPemilihan === 'voting2') {
+        // Query untuk mendapatkan anggota yang sudah mengisi voting1
+        anggotaList = await DetailPemilihan.findAll({
           where: { 
-              status_karyawan: 'aktif',
-              role: {
-                  [Op.ne]: 'admin'
-              }
+            pemilihan_id: activePemilihan.pemilihan_id 
           },
-          attributes: ['nip', 'nama', 'status_anggota', 'status_karyawan',],
+          include: [
+            {
+              model: Anggota,
+              where: {
+                status_karyawan: 'aktif',
+                role: {
+                  [Op.ne]: 'admin'
+                }
+              },
+              attributes: ['nip', 'nama', 'status_anggota', 'status_karyawan']
+            },
+            {
+              model: Voting1,
+              required: true // Inner join untuk memastikan hanya yang sudah voting1
+            }
+          ],
+          order: [[{ model: Anggota }, 'nama', 'ASC']],
+        }).then(details => 
+          // Map untuk mendapatkan data anggota saja
+          details.map(detail => detail.Anggotum)
+        );
+      } else {
+        // Query normal untuk tahap lain
+        anggotaList = await Anggota.findAll({
+          where: { 
+            status_karyawan: 'aktif',
+            role: {
+              [Op.ne]: 'admin'
+            }
+          },
+          attributes: ['nip', 'nama', 'status_anggota', 'status_karyawan'],
           order: [['nama', 'ASC']]
-      });
+        });
+      };
     }
 
     res.render('admin/pemilihan_berlangsung/pemilihan_berlangsung', {

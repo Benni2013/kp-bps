@@ -19,65 +19,6 @@ const {
 } = require('../models');
 const { Op } = require('sequelize');
 
-// Helper function untuk get hasil voting
-async function getVotingResults(pemilihanId, pilihanField) {
-  const totalVotes = await Voting1.count({
-    include: [{
-      model: DetailPemilihan,
-      where: { pemilihan_id: pemilihanId }
-    }],
-    where: {
-      [pilihanField]: { [Op.ne]: null }
-    }
-  });
-
-  const results = await Voting1.findAll({
-    attributes: [
-      [sequelize.col(`${pilihanField}`), 'nip'],
-      [sequelize.fn('COUNT', sequelize.col('voting1_id')), 'votes']
-    ],
-    include: [{
-      model: DetailPemilihan,
-      where: { pemilihan_id: pemilihanId },
-      required: true
-    }],
-    group: [pilihanField],
-    having: {
-      [pilihanField]: { [Op.ne]: null }
-    }
-  });
-
-  // Get nama anggota dan total skor
-  const votingResults = await Promise.all(results.map(async (result) => {
-    const anggota = await Anggota.findByPk(result.get('nip'));
-    const totalSkor = await getTotalSkorAnggota(pemilihanId, result.get('nip'));
-    
-    return {
-      nama: anggota.nama,
-      votes: parseInt(result.get('votes')),
-      percentage: Math.round((parseInt(result.get('votes')) / totalVotes) * 100),
-      totalSkor: totalSkor
-    };
-  }));
-
-  return votingResults.sort((a, b) => b.votes - a.votes);
-};
-
-// Helper function untuk mendapatkan total skor anggota
-async function getTotalSkorAnggota(pemilihanId, nip) {
-  const voting = await Voting1.findOne({
-    include: [{
-      model: DetailPemilihan,
-      where: { 
-        pemilihan_id: pemilihanId,
-        anggota_id: nip 
-      }
-    }]
-  });
-
-  return voting ? (voting.total_skor || 0) : 0;
-};
-
 // Mulai voting 1
 const startVot1 = async (req, res, next) => {
   try {
@@ -150,7 +91,14 @@ const getMonitorVot1 = async (req, res, next) => {
     let sudahVote = await Voting1.count({
       include: [{
         model: DetailPemilihan,
-        where: { pemilihan_id: id }
+        where: { pemilihan_id: id },
+        include: [{
+          model: Anggota,
+          where: {
+            role: { [Op.ne]: 'admin' },
+            status_anggota: 'aktif'
+          }
+        }],
       }]
     });
 
@@ -279,20 +227,6 @@ const getMonitorVot1 = async (req, res, next) => {
       waktu: detail.Voting1 ? detail.Voting1.waktu_vot1 : '-'
     }));
 
-    // Get hasil voting jika voting sudah tutup
-    let hasilVoting = null;
-    if (pemilihan.tahap_pemilihan === 'voting2' || pemilihan.tahap_pemilihan === 'selesai') {
-      const pilihan1Results = await getVotingResults(id, 'pilihan1');
-      const pilihan2Results = await getVotingResults(id, 'pilihan2');
-      const pilihan3Results = await getVotingResults(id, 'pilihan3');
-
-      hasilVoting = {
-        pilihan1: pilihan1Results,
-        pilihan2: pilihan2Results,
-        pilihan3: pilihan3Results
-      };
-    }
-
     res.render('admin/pemilihan_berlangsung/monitor_voting1', {
       title: 'Monitor Voting 1',
       layout: 'layouts/admin.hbs',
@@ -305,7 +239,6 @@ const getMonitorVot1 = async (req, res, next) => {
         progressPercentage
       },
       anggota: anggotaList,
-      hasilVoting,
       top3Sementara: top3Data,
       selectedFilter: filter,
       idPemilihan: id,
@@ -550,23 +483,23 @@ const setKandidatPenilaianKriteria = async (req, res, next) => {
     const { id } = req.params;
     const formData = req.body;
 
-    // Check apakah sudah ada yang memiliki status_anggota
-    const hasStatusAnggota = await Voting1.findOne({
-      where: {
-        '$DetailPemilihan.pemilihan_id$': id,
-        status_anggota: { [Op.ne]: null }
-      },
-      include: [{
-        model: DetailPemilihan,
-        required: true
-      }]
-    });
+    // // Check apakah sudah ada yang memiliki status_anggota
+    // const hasStatusAnggota = await Voting1.findOne({
+    //   where: {
+    //     '$DetailPemilihan.pemilihan_id$': id,
+    //     status_anggota: { [Op.ne]: null }
+    //   },
+    //   include: [{
+    //     model: DetailPemilihan,
+    //     required: true
+    //   }]
+    // });
 
-    // Jika sudah ada status, redirect ke monitor voting 2
-    if (hasStatusAnggota) {
-      console.log('\nStatus anggota sudah ada, redirect ke monitor voting 2');
-      return res.redirect(`/admin/pemilihan_berlangsung/${id}/monitor_voting2`);
-    }
+    // // Jika sudah ada status, redirect ke monitor voting 2
+    // if (hasStatusAnggota) {
+    //   console.log('\nStatus anggota sudah ada, redirect ke monitor voting 2');
+    //   return res.redirect(`/admin/pemilihan_berlangsung/${id}/monitor_voting2`);
+    // }
 
     // Get semua voting1 untuk pemilihan ini
     const voting1Data = await Voting1.findAll({
@@ -592,6 +525,27 @@ const setKandidatPenilaianKriteria = async (req, res, next) => {
         where: { voting1_id: voting.voting1_id },
         transaction
       });
+    });
+
+    // Find detail pemilihan ids
+    const detailPemilihanIds = await DetailPemilihan.findAll({
+      where: { pemilihan_id: id },
+      attributes: ['detail_pemilihan_id']
+    });
+
+    const ids = detailPemilihanIds.map(d => d.detail_pemilihan_id);
+
+    // Hapus data voting2 yang sudah ada
+    await Voting2.destroy({
+      where: { detail_pemilihan_id: { [Op.in]: ids } },
+      transaction,
+    });
+
+    await Pemilihan.update({
+      tahap_pemilihan: 'voting2'
+    }, {
+      where: { pemilihan_id: id },
+      transaction
     });
 
     await Promise.all(updatePromises);
@@ -644,18 +598,28 @@ const getMonitorVot2 = async (req, res, next) => {
     });
 
     // Get jumlah yang sudah mengisi (distinct detail_pemilihan_id)
-    const sudahIsi = await DetailPemilihan.count({
+    let sudahIsi = await DetailPemilihan.count({
       where: { pemilihan_id: id },
       include: [{
         model: Voting2,
         required: true,
         attributes: []
-      }],
+      },
+      {
+        model: Anggota,
+        where: {
+          role: { [Op.ne]: 'admin' },
+          status_anggota: 'aktif'
+        }
+      }
+    ],
       distinct: true
     });
 
-    const belumIsi = totalPengisi - sudahIsi;
-    const progressPercentage = Math.round((sudahIsi / totalPengisi) * 100);
+    // Normalisasi sudahIsi dan belumIsi
+    sudahIsi = Math.min(sudahIsi, totalPengisi);
+    const belumIsi = Math.max(0, totalPengisi - sudahIsi);
+    const progressPercentage = Math.min(100, Math.round((sudahIsi / totalPengisi) * 100));
 
 
     // Get data anggota dengan status pengisian

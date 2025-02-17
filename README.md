@@ -1,3 +1,3 @@
 # kp-bps
 
-repo utk kp bps padang
+repo utk kp bps padang yak

@@ -16,6 +16,7 @@ const { Anggota,
         Voting1, 
         Voting2, 
         Indikator } = require("../models");
+const { Op } = require("sequelize");
 const PDFDocument = require("pdfkit");
 const XLSX = require('xlsx');
 const Excel = require('exceljs');
@@ -26,9 +27,20 @@ const terimakasih = async (req, res, next) => {
   try {
     let pemilihan = await Pemilihan.findOne({
       where: {
-        tahap_pemilihan: "voting2",
+        [Op.or]: [
+          {tahap_pemilihan: "voting2"},
+          {tahap_pemilihan: "selesai"},
+          ],
       },
+      order: [["tanggal_mulai", "DESC"]],
+      include: [
+        {
+          model: Periode,
+          required: true,
+        },
+      ],
     });
+
     const akun = req.user;
 
     let detail_pemilihan = await DetailPemilihan.findOne({
@@ -50,7 +62,7 @@ const terimakasih = async (req, res, next) => {
     const generateTanggal = new Date(); // Waktu generate file PDF
 
     // Konfigurasi nama file
-    const fileName = `bukti-voting-${Date.now()}.pdf`;
+    const fileName = `bukti-voting-${akun.nama}_${Date.now()}.pdf`;
     const filePath = path.join(__dirname, "../public/files", fileName);
 
     // Buat dokumen PDF
@@ -66,7 +78,10 @@ const terimakasih = async (req, res, next) => {
     doc.moveDown();
 
     doc.fontSize(12).text(`Nama Anggota: ${namaAnggota}`);
-    doc.text("Dengan ini kami sampaikan ucapan terima kasih atas partisipasi Anda dalam pemilihan pegawai terbaik.");
+    doc.moveDown();
+    doc.text("Dengan ini kami sampaikan ucapan terima kasih atas partisipasi Anda dalam pemilihan: ");
+    doc.text("Nama Pemilihan : " + pemilihan.nama_pemilihan);
+    doc.text("Periode               : " + pemilihan.Periode.nama_periode + " Tahun " + pemilihan.tahun);
     doc.text("Surat ini merupakan bukti bahwa Anda telah selesai melakukan voting.");
     doc.moveDown();
 
@@ -101,7 +116,8 @@ const terimakasih = async (req, res, next) => {
     });
   } catch (error) {
     console.error("Generate terimakasih error:", error);
-    res.redirect("users/beranda");
+    // res.redirect("users/beranda");
+    next(error);
   }
 };
 
@@ -328,7 +344,7 @@ const generateLaporanDataNilai = async (req, res, next) => {
     // Set column widths
     worksheet.columns = [
       { width: 5 },  // NO
-      { width: 12 }, // NIP
+      { width: 15 }, // NIP
       { width: 20 }, // NAMA
       { width: 30 }, // JABATAN
       { width: 12 }, // NILAI CKP
@@ -470,18 +486,18 @@ const generateLaporanVoting1 = async (req, res, next) => {
 
     // Set column widths
     worksheet.columns = [
-      { wch: 5 },   // NO
-      { wch: 12 },  // NIP
-      { wch: 20 },  // NAMA
-      // { wch: 30 },  // JABATAN
-      // { wch: 30 },  // PILIHAN 1
-      // { wch: 30 },  // PILIHAN 2
-      // { wch: 30 },  // PILIHAN 3
-      { wch: 15 },  // SKOR PILIHAN 1
-      { wch: 15 },  // SKOR PILIHAN 2
-      { wch: 15 },  // SKOR PILIHAN 3
-      { wch: 12 },  // TOTAL SKOR
-      // { wch: 15 }   // STATUS
+      { width: 5 },   // NO
+      { width: 15 },  // NIP
+      { width: 20 },  // NAMA
+      // { width: 30 },  // JABATAN
+      // { width: 30 },  // PILIHAN 1
+      // { width: 30 },  // PILIHAN 2
+      // { width: 30 },  // PILIHAN 3
+      { width: 15 },  // SKOR PILIHAN 1
+      { width: 15 },  // SKOR PILIHAN 2
+      { width: 15 },  // SKOR PILIHAN 3
+      { width: 12 },  // TOTAL SKOR
+      // { width: 15 }   // STATUS
     ];
 
     // Style untuk seluruh cell

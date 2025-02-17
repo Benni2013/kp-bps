@@ -281,7 +281,7 @@ const editAnggota = async (req, res, next) => {
       role,
       email,
       gender,
-      status_anggota,
+      status_karyawan,
       password_baru // untuk reset password
     } = req.body;
 

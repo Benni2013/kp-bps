@@ -114,29 +114,45 @@ const getDashboardAdmin = async (req, res, next) => {
     });
 
     // Get jumlah yang sudah voting 1
-    const sudahVoting1 = await DetailPemilihan.count({
+    let sudahVoting1 = await DetailPemilihan.count({
       where: { pemilihan_id: pemilihanAktif.pemilihan_id },
       include: [{
         model: Voting1,
         required: true
+      }, {
+        model: Anggota,
+        where: {
+          role: { [Op.ne]: 'admin' },
+          status_anggota: 'aktif'
+        }
       }]
     });
 
     // Get jumlah yang sudah voting 2
-    const sudahVoting2 = await DetailPemilihan.count({
+    let sudahVoting2 = await DetailPemilihan.count({
       where: { pemilihan_id: pemilihanAktif.pemilihan_id },
       include: [{
         model: Voting2,
         required: true
+      }, {
+        model: Anggota,
+        where: {
+          role: { [Op.ne]: 'admin' },
+          status_anggota: 'aktif'
+        }
       }],
       distinct: true
     });
 
+    // Normalisasi jumlah voting 1 dan 2
+    sudahVoting1 = Math.min(sudahVoting1, partisipan);
+    sudahVoting2 = Math.min(sudahVoting2, partisipan);
+
     const progressData = {
       totalPartisipan: totalAnggota,
       progressInputNilai: Math.round((sudahInputNilai / totalAnggota) * 100),
-      progressVoting1: Math.round((sudahVoting1 / totalAnggota) * 100),
-      progressVoting2: Math.round((sudahVoting2 / totalAnggota) * 100)
+      progressVoting1: Math.round((sudahVoting1 / partisipan) * 100),
+      progressVoting2: Math.round((sudahVoting2 / partisipan) * 100)
     };
 
     // console.log('\nData Dashboard:');

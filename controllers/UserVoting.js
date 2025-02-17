@@ -1,6 +1,6 @@
 // UserVoting
 
-// - getKandidatVot1 (utk saat akan milih 3 besar)
+// - getKandidatVot1 (utk saat akan milih 3 besar)                  (done)
 // - setVot1 (simpan pilihan)                                       (done)
 // - getMyVot (lihat kandidat yg dipilih)                           (done)
 // - getKandidatKriteria (untuk saat penilaian kriteria)            (done)
@@ -9,7 +9,7 @@
 
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const { Anggota, Pemilihan, DetailPemilihan, DataNilai, Voting1, Voting2, Indikator, sequelize } = require("../models");
+const { Anggota, Pemilihan, Periode, DetailPemilihan, DataNilai, Voting1, Voting2, Indikator, sequelize } = require("../models");
 require("dotenv").config();
 const { Op } = require("sequelize");
 
@@ -219,14 +219,36 @@ const getKandidatKriteria = async (req, res, next) => {
     const kandidatKriteria = [];
     let pemilihan = await Pemilihan.findOne({
       where: {
-        tahap_pemilihan: "voting2",
+        tahap_pemilihan: { [Op.ne]: "tutup" },
       },
+      order: [["tanggal_mulai", "DESC"]],
     });
+
+    console.log("\n\nPemilihan: ", JSON.stringify(pemilihan, null, 2));
 
     let role = req.cookies.role;
     const akun = req.user;
 
-    if (!pemilihan) {
+    let jmlKandidat = 0;
+
+    if (pemilihan) {
+      jmlKandidat = await Voting1.count({
+        where: {
+          status_anggota: "lolos",
+          "$DetailPemilihan.pemilihan_id$": pemilihan.pemilihan_id,
+        },
+        include: [
+          {
+            model: DetailPemilihan,
+            required: true,
+          }
+        ],
+      });
+    }
+
+    console.log("\n\nJumlah kandidat yang lolos: " + jmlKandidat + "\n\n");
+
+    if (!pemilihan || akun.status_anggota == "nonaktif" || jmlKandidat === 0 || pemilihan.tahap_pemilihan === "voting1") {
       statusnya = true;
       return res.render("user/penilaian_kriteria", {
         title: "Penilaian Kriteria",
@@ -259,7 +281,14 @@ const getKandidatKriteria = async (req, res, next) => {
           detail_pemilihan_id: detail_pemilihan.detail_pemilihan_id,
         },
       });
-      if (detail_voting2) {
+
+      let mengisiVot1 = await Voting1.findOne({
+        where: {
+          detail_pemilihan_id: detail_pemilihan.detail_pemilihan_id,
+          },
+      });
+      
+      if (detail_voting2 || pemilihan.tahap_pemilihan === "selesai") {
         return res.redirect("/users/pemilihan/thank-you");
       } else {
         let inditakor = await Indikator.findAll({
@@ -339,7 +368,8 @@ const getKandidatKriteria = async (req, res, next) => {
     }
   } catch (error) {
     console.error("getKandidatKriteria validation error:", error);
-    res.redirect("/users/beranda");
+    // res.redirect("/users/beranda");
+    next(error);
   }
 };
 
@@ -352,6 +382,7 @@ const setPenilaianKriteria = async (req, res, next) => {
       where: {
         tahap_pemilihan: "voting2",
       },
+      order: [["tanggal_mulai", "DESC"]],
     });
 
     if (!pemilihan) {
@@ -445,7 +476,8 @@ const setPenilaianKriteria = async (req, res, next) => {
   } catch (error) {
     await transaction.rollback();
     console.error("setPenilaianKriteria error:", error);
-    res.redirect("/users/beranda");
+    // res.redirect("/users/beranda");
+    next(error);
   }
 };
 
@@ -453,9 +485,24 @@ const getMyPenilaianKriteria = async (req, res, next) => {
   try {
     let pemilihan = await Pemilihan.findOne({
       where: {
-        tahap_pemilihan: "voting2",
+        [Op.or]: [
+          {tahap_pemilihan: "voting2"},
+          {tahap_pemilihan: "selesai"},
+          ],
       },
+      order: [["tanggal_mulai", "DESC"]],
+      include: [
+        {
+          model: Periode,
+          required: true,
+        },
+      ],
     });
+
+    let statusPemilihan = pemilihan.tahap_pemilihan;
+    let pemilihanTitle = `${pemilihan.nama_pemilihan} ${pemilihan.Periode.nama_periode} ${pemilihan.tahun} - ${statusPemilihan === 'selesai' ? 'Pemilihan Terakhir' : 'Pemilihan Saat Ini'}`;
+    
+
     const akun = req.user;
 
     let detail_pemilihan = await DetailPemilihan.findOne({
@@ -470,17 +517,31 @@ const getMyPenilaianKriteria = async (req, res, next) => {
         detail_pemilihan_id: detail_pemilihan.detail_pemilihan_id,
       },
     });
+
+    console.log("Waktu voting: ", JSON.stringify(waktu_voting, null, 2));
+
     let role = req.cookies.role;
+    let pesan = '';
+
+    if (!waktu_voting) {
+      pesan = 'Anda tidak melakukan penilaian kriteria.';
+    }
+
+    console.log("Pesan: ", pesan);
+
     res.render("user/thank-you", {
       title: "Thank You",
       layout: "layouts/layout",
       role,
       akun,
+      pemilihanTitle,
       waktu_voting,
+      pesan,
     });
   } catch (error) {
     console.error("getMyVot validation error:", error);
-    res.redirect("/users/beranda");
+    // res.redirect("/users/beranda");
+    next(error);
   }
 };
 
