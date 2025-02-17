@@ -11,7 +11,7 @@
 E-Voisy adalah aplikasi web yang dikembangkan untuk memfasilitasi proses pemilihan pegawai terbaik di BPS Kota Padang. Sistem ini menyediakan platform digital yang andal dan efisien untuk melakukan proses voting dan penilaian pegawai.
 
 ### 🎯 Fitur Utama
-
+ 
 - Manajemen Anggota
 - Sistem voting 2 tahap
 - Penilaian berbasis kriteria
