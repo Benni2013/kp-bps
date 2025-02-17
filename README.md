@@ -12,7 +12,6 @@ E-Voisy adalah aplikasi web yang dikembangkan untuk memfasilitasi proses pemilih
 
 ### 🎯 Fitur Utama
  
-- Manajemen Anggota
 - Sistem voting 2 tahap
 - Penilaian berbasis kriteria
 - Monitoring hasil voting real-time
