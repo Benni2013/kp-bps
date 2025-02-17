@@ -39,7 +39,7 @@ const getAllPemilihan = async (req, res, next) => {
     const activeAnggota = await Anggota.count({
       where: {
         [Op.and]: [
-          { status_anggota: 'aktif' },
+          { status_karyawan: 'aktif' },
           { role: { [Op.ne]: 'admin' } }
         ]
       }
@@ -124,12 +124,7 @@ const createPemilihan = async (req, res, next) => {
 
     // Get all active non-admin anggota
     const activeAnggota = await Anggota.findAll({
-      where: {
-        [Op.and]: [
-          { status_anggota: 'aktif' },
-          { role: { [Op.ne]: 'admin' } }
-        ]
-      }
+      where: { role: { [Op.ne]: 'admin' } }
     });
 
     // Create detail_pemilihan for each anggota

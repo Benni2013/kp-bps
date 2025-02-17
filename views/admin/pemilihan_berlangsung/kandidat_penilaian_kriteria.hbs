@@ -48,9 +48,7 @@
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 text-center">{{total}}</td>
                         <td class="px-6 py-4 whitespace-nowrap text-center">
                             <input 
-                                {{#if status}}
-                                    disabled 
-                                {{#if (eq status 'lolos')}}checked{{/if}}{{/if}}
+                                {{#if (eq status 'lolos')}}checked{{/if}}
                                 type="checkbox" 
                                 name="kandidat_{{id}}"
                                 class="shrink-0 border-gray-700 rounded text-blue-600 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none">
@@ -62,9 +60,17 @@
         </div>
     </div>
 
-    <div class="mt-6 flex justify-end">
+    <div class="mt-6 flex justify-between">
+        <a href="/admin/pemilihan_berlangsung/{{idPemilihan}}/monitor_voting1" >
+            <button 
+            type="button" 
+            class="bg-gray-300 hover:bg-gray-400 text-black px-6 py-3 rounded-lg mr-4">
+            Kembali
+            </button>
+        </a>
+
         <button type="submit" 
-        class="inline-flex items-center gap-x-2 py-2.5 px-4 text-sm font-semibold rounded-lg border border-transparent bg-black text-white hover:bg-gray-900 disabled:opacity-50 disabled:pointer-events-none">
+            class="inline-flex items-center gap-x-2 py-2.5 px-4 text-sm font-semibold rounded-lg border border-transparent bg-black text-white hover:bg-gray-900 disabled:opacity-50 disabled:pointer-events-none">
             Lanjutkan ke Penilaian Kriteria ->
             {{!-- <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />

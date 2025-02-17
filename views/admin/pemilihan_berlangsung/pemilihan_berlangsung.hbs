@@ -1,5 +1,5 @@
 <div class="max-w-[85rem] px-4 py-4 sm:px-6 lg:px-8 lg:py-4 mx-auto">
-    <div class="max-w-4xl mb-10 flex justify-between items-center">
+    <div class="max-w-4xl mb-10 flex justify-between items-center gap-12">
         <h2 class="text-2xl font-bold md:text-4xl md:leading-tight">
             {{pemilihanTitle}}
         </h2>
@@ -155,10 +155,10 @@ document.addEventListener('DOMContentLoaded', function() {
         try {
             const selectedVoters = [...voterCheckboxes].map(cb => ({
                 nip: cb.value,
-                eligible: cb.checked ? 'yes' : 'no'
+                eligible: cb.checked ? 'aktif' : 'nonaktif'
             }));
 
-            const response = await fetch('/pemilihan/simpan_eligible_voters', {
+            const response = await fetch('/admin/pemilihan_berlangsung/simpan_eligible_voters', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -166,15 +166,26 @@ document.addEventListener('DOMContentLoaded', function() {
                 body: JSON.stringify({ voters: selectedVoters })
             });
 
-            if (response.ok) {
-                alert('Berhasil menyimpan eligible voters');
+            const result = await response.json();
+
+            if (result.success) {
+                await Swal.fire({
+                    title: 'Berhasil!',
+                    text: result.message,
+                    icon: 'success',
+                    timer: 1500
+                });
                 window.location.reload();
             } else {
-                throw new Error('Gagal menyimpan eligible voters');
+                throw new Error(result.message);
             }
         } catch (error) {
             console.error('Error:', error);
-            alert('Terjadi kesalahan saat menyimpan eligible voters ', error.message);
+            await Swal.fire({
+                title: 'Error!',
+                text: error.message || 'Terjadi kesalahan saat menyimpan eligible voters',
+                icon: 'error'
+            });
         }
     });
 

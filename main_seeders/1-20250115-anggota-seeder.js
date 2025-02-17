@@ -14,8 +14,9 @@ module.exports = {
         password: await bcrypt.hash('admin', 10),
         role: 'admin',
         jabatan: 'Admin WEB E-Voisy',
-        divisi: 'Inti',
-        status_anggota: 'aktif'
+        divisi: 'Admin WEB',
+        status_anggota: 'aktif',
+        status_karyawan: 'aktif',
       },
     ];
 

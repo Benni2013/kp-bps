@@ -51,7 +51,7 @@ const getDataPemilihan = async (req, res, next) => {
         },
       });
 
-      console.log("Anggota Saya : ", JSON.stringify(anggota, null, 2));
+      // console.log("Anggota Saya : ", JSON.stringify(anggota, null, 2));
 
       for (let i = 0; i < anggota.length; i++) {
         let detail_pemilihan = await DetailPemilihan.findOne({

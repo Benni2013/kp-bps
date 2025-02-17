@@ -15,7 +15,8 @@ module.exports = {
         role: 'biasa',
         jabatan: 'Pengolah Data',
         divisi: 'Inti',
-        status_anggota: 'aktif'
+        status_anggota: 'aktif',
+        status_karyawan: 'aktif',
       },
       {
         nip: '340013515',
@@ -25,7 +26,8 @@ module.exports = {
         role: 'biasa',
         jabatan: 'Statistisi Ahli Muda',
         divisi: 'Inti',
-        status_anggota: 'aktif'
+        status_anggota: 'aktif',
+        status_karyawan: 'aktif',
       },
       {
         nip: '340014375',
@@ -35,7 +37,8 @@ module.exports = {
         role: 'biasa',
         jabatan: 'Pengolah Data',
         divisi: 'Inti',
-        status_anggota: 'aktif'
+        status_anggota: 'aktif',
+        status_karyawan: 'aktif',
       },
       {
         nip: '340015616',
@@ -45,7 +48,8 @@ module.exports = {
         role: 'biasa',
         jabatan: 'Statistisi Ahli Muda',
         divisi: 'Inti',
-        status_anggota: 'aktif'
+        status_anggota: 'aktif',
+        status_karyawan: 'aktif',
       },
       {
         nip: '340015808',
@@ -55,7 +59,8 @@ module.exports = {
         role: 'supervisor',
         jabatan: 'Kepala BPS Kabupaten/Kota',
         divisi: 'Inti',
-        status_anggota: 'aktif'
+        status_anggota: 'aktif',
+        status_karyawan: 'aktif',
       },
       {
         nip: '101010',
@@ -64,8 +69,9 @@ module.exports = {
         password: await bcrypt.hash('admin', 10),
         role: 'admin',
         jabatan: 'Admin WEB E-Voisy',
-        divisi: 'Inti',
-        status_anggota: 'aktif'
+        divisi: 'Admin Web',
+        status_anggota: 'aktif',
+        status_karyawan: 'aktif',
       }
     ];
 

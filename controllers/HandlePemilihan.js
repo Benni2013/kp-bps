@@ -48,16 +48,47 @@ const getActivePemilihan = async (req, res, next) => {
       idActivePemilihan = activePemilihan.pemilihan_id;
       title = `${activePemilihan.nama_pemilihan} ${activePemilihan.Periode.nama_periode} ${activePemilihan.tahun}`;
       tahapPemilihan = activePemilihan.tahap_pemilihan;
-      anggotaList = await Anggota.findAll({
+      // Tambahkan kondisi untuk query anggota berdasarkan tahap pemilihan
+      if (tahapPemilihan === 'voting2') {
+        // Query untuk mendapatkan anggota yang sudah mengisi voting1
+        anggotaList = await DetailPemilihan.findAll({
           where: { 
-              status_anggota: 'aktif',
-              role: {
-                  [Op.ne]: 'admin'
-              }
+            pemilihan_id: activePemilihan.pemilihan_id 
           },
-          attributes: ['nip', 'nama', 'status_anggota', 'status_karyawan',],
+          include: [
+            {
+              model: Anggota,
+              where: {
+                status_karyawan: 'aktif',
+                role: {
+                  [Op.ne]: 'admin'
+                }
+              },
+              attributes: ['nip', 'nama', 'status_anggota', 'status_karyawan']
+            },
+            {
+              model: Voting1,
+              required: true // Inner join untuk memastikan hanya yang sudah voting1
+            }
+          ],
+          order: [[{ model: Anggota }, 'nama', 'ASC']],
+        }).then(details => 
+          // Map untuk mendapatkan data anggota saja
+          details.map(detail => detail.Anggotum)
+        );
+      } else {
+        // Query normal untuk tahap lain
+        anggotaList = await Anggota.findAll({
+          where: { 
+            status_karyawan: 'aktif',
+            role: {
+              [Op.ne]: 'admin'
+            }
+          },
+          attributes: ['nip', 'nama', 'status_anggota', 'status_karyawan'],
           order: [['nama', 'ASC']]
-      });
+        });
+      };
     }
 
     res.render('admin/pemilihan_berlangsung/pemilihan_berlangsung', {
@@ -81,21 +112,27 @@ const setEligibleVoters = async (req, res, next) => {
   try {
     const { voters } = req.body;
     
-    // Update eligible_voter status untuk setiap anggota
+    // Update status_anggota untuk setiap anggota
     await Promise.all(voters.map(voter => {
-        return Anggota.update(
-            { nama: voters.nama,
-              status_anggota: voter.eligible },
-            { where: { nip: voter.nip } }
-        );
+      return Anggota.update(
+        { status_anggota: voter.eligible },
+        { 
+          where: { nip: voter.nip }
+        }
+      );
     }));
 
-    res.status(200).json({ message: 'Berhasil menyimpan eligible voters' });
-} catch (error) {
+    res.status(200).json({ 
+      success: true,
+      message: 'Berhasil mengupdate status eligible voters' 
+    });
+  } catch (error) {
     console.error('Error saving eligible voters:', error);
-    // res.status(500).json({ message: 'Terjadi kesalahan saat menyimpan eligible voters' });
-    next(error);
-}
+    res.status(500).json({ 
+      success: false,
+      message: 'Terjadi kesalahan saat mengupdate eligible voters' 
+    });
+  }
 };
 
 // Get input penilaian

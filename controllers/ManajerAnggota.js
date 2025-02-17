@@ -60,7 +60,7 @@ const getAllAnggota = async (req, res, next) => {
       where: whereClause,
       order: [
         ['divisi', 'ASC'],
-        ['nama', 'ASC']
+        ['nip', 'ASC']
       ]
     });
 
@@ -233,7 +233,8 @@ const createAnggota = async (req, res, next) => {
       divisi,
       jabatan,
       foto,
-      status_anggota: 'aktif'
+      status_anggota: 'aktif',
+      status_karyawan: 'aktif',
     });
 
     res.status(200).json({ success: true });
@@ -319,7 +320,8 @@ const editAnggota = async (req, res, next) => {
         email,
         gender,
         foto,
-        status_karyawan
+        status_anggota : status_anggota,
+        status_karyawan: status_anggota,
       });
     }
 

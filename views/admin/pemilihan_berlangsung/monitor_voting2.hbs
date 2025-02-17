@@ -127,21 +127,35 @@
     </div>
     {{!-- Akhir Table Section --}}
 
-    {{#if votingStatus.isVotingOpen}}
-        
-    {{else}}
-        {{!-- Tombol Lihat Hasil Penilaian Kriteria --}}
-        <div class="lg:col-span-2 flex justify-end mt-4">
-            <a href="/admin/pemilihan_berlangsung/{{idPemilihan}}/hasil_kriteria" 
-            class="inline-flex items-center gap-x-2 py-2.5 px-4 text-sm font-semibold rounded-lg border border-transparent bg-black text-white hover:bg-gray-900 disabled:opacity-50 disabled:pointer-events-none">
-                Lihat Hasil Penilaian Kriteria
-                <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
-                </svg>
+    {{!-- Tombol Kembali --}}
+    <div class="flex mt-4 justify-between">
+        <div class="justify-start">
+            <a href="/admin/pemilihan_berlangsung/{{idPemilihan}}/kandidat_penilaian_kriteria" >
+                <button 
+                type="button" 
+                class="bg-gray-300 hover:bg-gray-400 text-black px-6 py-3 rounded-lg mr-4">
+                Kembali
+                </button>
             </a>
         </div>
-        {{!-- Akhir Tombol Lihat Hasil Penilaian Kriteria --}}
-    {{/if}}
+        {{#if votingStatus.isVotingOpen}}
+        
+        {{else}}
+            {{!-- Tombol Lihat Hasil Penilaian Kriteria --}}
+            <div class="lg:col-span-2 flex justify-end">
+                <a href="/admin/pemilihan_berlangsung/{{idPemilihan}}/hasil_kriteria" 
+                class="inline-flex items-center gap-x-2 py-2.5 px-4 text-sm font-semibold rounded-lg border border-transparent bg-black text-white hover:bg-gray-900 disabled:opacity-50 disabled:pointer-events-none">
+                    Lihat Hasil Penilaian Kriteria
+                    <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+                    </svg>
+                </a>
+            </div>
+            {{!-- Akhir Tombol Lihat Hasil Penilaian Kriteria --}}
+        {{/if}}
+    </div>
+
+    
     
 </div>
 

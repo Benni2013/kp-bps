@@ -22,9 +22,9 @@
         
         <div class="bg-white border rounded-lg shadow-sm p-6">
             <!-- Table -->
-            <div class="overflow-x-auto border border-gray-500 rounded-xl">
+            <div class="overflow-y-auto max-h-[500px] border border-gray-500 rounded-xl">
                 <table class="w-full">
-                    <thead class="bg-gray-100 border-b border-gray-500 divide">
+                    <thead class="bg-gray-100 border-b border-gray-500 divide sticky top-0 z-10">
                         <tr>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">NO</th>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">NAMA/NIP</th>
@@ -50,7 +50,15 @@
             </div>
 
             <!-- Action Button -->
-            <div class="flex justify-end mt-6">
+            <div class="flex justify-between mt-6">
+                <a href="/admin/pemilihan_berlangsung/{{idPemilihan}}/hasil_penilaian" >
+                    <button 
+                    type="button" 
+                    class="bg-gray-300 hover:bg-gray-400 text-black px-6 py-3 rounded-lg mr-4">
+                    Kembali
+                    </button>
+                </a>
+
                 <form action="/admin/pemilihan_berlangsung/{{idPemilihan}}/start_voting1" method="POST">
                     <button type="submit" 
                             class="inline-flex items-center px-4 py-2 bg-black text-white rounded-lg hover:bg-gray-800">
