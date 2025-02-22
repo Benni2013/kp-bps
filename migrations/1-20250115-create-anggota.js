@@ -37,7 +37,7 @@ module.exports = {
         type: Sequelize.STRING(255)
       },
       foto: {
-        type: Sequelize.STRING(255)
+        type: Sequelize.STRING(500)
       },
       status_anggota: {   // untuk status eligible voters
         type: Sequelize.ENUM('aktif', 'nonaktif'),

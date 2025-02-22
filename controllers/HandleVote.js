@@ -7,6 +7,7 @@
 // - setKandidatPenilaianKeriteria (menentukan kandidat vote 2)  (done)
 // - getMonitorVot2     (done)
 // - closeVot2          (done)
+// - getHasilKriteria (tabel nilai akhir)                       (done)
 
 const { 
   Pemilihan, 
@@ -745,6 +746,124 @@ const closeVot2 = async (req, res, next) => {
   }
 };
 
+// Get hasil kriteria
+const getHasilKriteria = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+
+    // Get pemilihan data dengan periode
+    const pemilihan = await Pemilihan.findOne({
+      where: { pemilihan_id: id },
+      include: [{ model: Periode }]
+    });
+
+    if (!pemilihan) {
+      return res.status(404).redirect('/admin/pemilihan_berlangsung');
+    }
+
+    const pemilihanTitle = `${pemilihan.nama_pemilihan} ${pemilihan.Periode.nama_periode} ${pemilihan.tahun}`;
+
+    // Get jumlah indikator yang digunakan dalam pemilihan
+    const jumlahIndikator = await Voting2.count({
+      where: { 
+        '$DetailPemilihan.pemilihan_id$': id 
+      },
+      include: [{
+        model: DetailPemilihan,
+        required: true,
+        attributes: []
+      }],
+      distinct: true,
+      col: 'indikator_id'
+    });
+
+    // Get jumlah anggota yang sudah mengisi
+    const jumlahPengisi = await DetailPemilihan.count({
+      where: { pemilihan_id: id },
+      include: [{
+        model: Voting2,
+        required: true,
+        attributes: []
+      }],
+      distinct: true
+    });
+
+    // Get kandidat dengan total poin
+    const kandidat = await DetailPemilihan.findAll({
+      where: { 
+        pemilihan_id: id,
+        '$Voting1.status_anggota$': 'lolos'
+      },
+      include: [
+        {
+          model: Anggota,
+          attributes: ['nip', 'nama']
+        },
+        {
+          model: Voting1,
+          required: true,
+          attributes: ['status_anggota']
+        }
+      ],
+      group: ['DetailPemilihan.detail_pemilihan_id', 'Anggotum.nip', 'Anggotum.nama', 'Voting1.status_anggota']
+    });
+
+    // Get total poin per kandidat
+    const hasilKriteria = await Promise.all(kandidat.map(async (k) => {
+      const totalPoin = await Voting2.sum('nilai', {
+        where: { 
+          kandidat_id: k.anggota_id,
+          '$DetailPemilihan.pemilihan_id$': id,
+        },
+        include: [{
+          model: DetailPemilihan,
+          required: true,
+          attributes: []
+        }]
+      });
+
+      // Hitung rata-rata
+      // ((total poin / jumlah pengisi) / (jumlah kriteria * 4)) * 100
+      const rataRata = ((totalPoin / jumlahPengisi) / (jumlahIndikator * 4)) * 100;
+
+      return {
+        nama: k.Anggotum.nama,
+        nip: k.Anggotum.nip,
+        totalPoin,
+        rataRata: rataRata.toFixed(2)
+      };
+    }));
+
+    // Sort berdasarkan rata-rata tertinggi
+    hasilKriteria.sort((a, b) => b.rataRata - a.rataRata);
+
+    // Add posisi/ranking
+    const hasilKriteriaFinal = hasilKriteria.map((hasil, index) => ({
+      ...hasil,
+      posisi: index + 1
+    }));
+
+    // console.log('\nHasil Kriteria:');
+    // console.log(JSON.stringify({
+    //   jumlahIndikator,
+    //   jumlahPengisi,
+    //   hasil: hasilKriteriaFinal
+    // }, null, 2));
+
+    res.render('admin/pemilihan_berlangsung/hasil_kriteria', {
+      title: 'Hasil Penilaian Kriteria',
+      layout: 'layouts/admin.hbs',
+      pemilihanTitle,
+      hasilKriteria: hasilKriteriaFinal,
+      idPemilihan: id,
+      akun: req.user,
+    });
+
+  } catch (error) {
+    console.error('Error getting hasil kriteria:', error);
+    next(error);
+  }
+};
 
 module.exports = {
   startVot1,
@@ -754,4 +873,5 @@ module.exports = {
   setKandidatPenilaianKriteria,
   getMonitorVot2,
   closeVot2,
+  getHasilKriteria,
 };

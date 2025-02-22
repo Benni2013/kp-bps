@@ -58,3 +58,9 @@ typings/
 
 # next.js build output
 .next
+
+# ignore .env file
+.env
+
+# ignor seeders anggota
+seeders/1-20250115-anggota-seeder.js
