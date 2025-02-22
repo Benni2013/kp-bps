@@ -36,7 +36,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING(255)
     },
     foto: {
-      type: DataTypes.STRING(255)
+      type: DataTypes.STRING(500)
     },
     status_anggota: {     // untuk status eligible voters
       type: DataTypes.ENUM('aktif', 'nonaktif'),

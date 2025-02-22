@@ -7,6 +7,8 @@
 
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const fs = require('fs');
+const path = require('path');
 const { Anggota } = require('../models');
 require('dotenv').config();
 
@@ -18,15 +20,22 @@ const middlewareValidation = async (req, res, next) => {
       return res.redirect('/auth/login');
     }
 
-    const decoded = jwt.verify(token, process.env.SECRET_KEY);
+    const decoded = jwt.verify(token, process.env.SECRET_KEY || 'secret_key@bps1371');
     const anggota = await Anggota.findByPk(decoded.nip);
     
     if (!anggota) {
       return res.redirect('/auth/login');
     }
 
+    if (!anggota.foto || !fs.existsSync(path.join(__dirname, '../public', anggota.foto)) && !anggota.foto.toLowerCase().includes('http')) {
+      const defaultPath = '/default_pp/';
+      anggota.foto = defaultPath + (anggota.gender === 'wanita' ? 'pr.png' : 'lk.png');
+    }
+
     // Simpan data user untuk digunakan di route lain
     req.user = anggota;
+
+
     next();
   } catch (error) {
     console.error('Middleware validation error:', error);
@@ -42,7 +51,7 @@ const isAdmin = async (req, res, next) => {
       return res.redirect('/auth/login');
     }
 
-    const decoded = jwt.verify(token, process.env.SECRET_KEY);
+    const decoded = jwt.verify(token, process.env.SECRET_KEY || 'secret_key@bps1371');
     const anggota = await Anggota.findByPk(decoded.nip);
     
     if (!anggota || anggota.role !== 'admin') {
@@ -64,7 +73,7 @@ const isSupervisor = async (req, res, next) => {
       return res.redirect('/auth/login');
     }
 
-    const decoded = jwt.verify(token, process.env.SECRET_KEY);
+    const decoded = jwt.verify(token, process.env.SECRET_KEY || 'secret_key@bps1371');
     const anggota = await Anggota.findByPk(decoded.nip);
     
     if (!anggota || anggota.role !== 'supervisor') {
@@ -109,7 +118,7 @@ const login = async (req, res) => {
         nip: anggota.nip, 
         role: anggota.role,
       },
-      process.env.SECRET_KEY,
+      process.env.SECRET_KEY || 'secret_key@bps1371',
       { expiresIn: '1d' }
     );
 

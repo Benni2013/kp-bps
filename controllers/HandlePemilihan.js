@@ -5,7 +5,6 @@
 // - createDataPenilaian (post excel template)                  (done)
 // - getAllDataPenilaian (hasil penilaian)                      (done)
 // - getAllKandidatEligible (halaman kandidat eligible)         (done)
-// - getHasilKriteria (tabel nilai akhir)                       (done)
 // - getPegawaiTerbaik (bisa juga pakai controller user)        (done)
 
 const { Pemilihan, 
@@ -19,6 +18,8 @@ const { Pemilihan,
         sequelize 
       } = require('../models');
 const { Op } = require('sequelize');
+const fs = require('fs');
+const path = require('path');
 
 // Get active pemilihan
 const getActivePemilihan = async (req, res, next) => {
@@ -463,125 +464,6 @@ const getAllKandidatEligible = async (req, res, next) => {
   }
 };
 
-// Get hasil kriteria
-const getHasilKriteria = async (req, res, next) => {
-  try {
-    const { id } = req.params;
-
-    // Get pemilihan data dengan periode
-    const pemilihan = await Pemilihan.findOne({
-      where: { pemilihan_id: id },
-      include: [{ model: Periode }]
-    });
-
-    if (!pemilihan) {
-      return res.status(404).redirect('/admin/pemilihan_berlangsung');
-    }
-
-    const pemilihanTitle = `${pemilihan.nama_pemilihan} ${pemilihan.Periode.nama_periode} ${pemilihan.tahun}`;
-
-    // Get jumlah indikator yang digunakan dalam pemilihan
-    const jumlahIndikator = await Voting2.count({
-      where: { 
-        '$DetailPemilihan.pemilihan_id$': id 
-      },
-      include: [{
-        model: DetailPemilihan,
-        required: true,
-        attributes: []
-      }],
-      distinct: true,
-      col: 'indikator_id'
-    });
-
-    // Get jumlah anggota yang sudah mengisi
-    const jumlahPengisi = await DetailPemilihan.count({
-      where: { pemilihan_id: id },
-      include: [{
-        model: Voting2,
-        required: true,
-        attributes: []
-      }],
-      distinct: true
-    });
-
-    // Get kandidat dengan total poin
-    const kandidat = await DetailPemilihan.findAll({
-      where: { 
-        pemilihan_id: id,
-        '$Voting1.status_anggota$': 'lolos'
-      },
-      include: [
-        {
-          model: Anggota,
-          attributes: ['nip', 'nama']
-        },
-        {
-          model: Voting1,
-          required: true,
-          attributes: ['status_anggota']
-        }
-      ],
-      group: ['DetailPemilihan.detail_pemilihan_id', 'Anggotum.nip', 'Anggotum.nama', 'Voting1.status_anggota']
-    });
-
-    // Get total poin per kandidat
-    const hasilKriteria = await Promise.all(kandidat.map(async (k) => {
-      const totalPoin = await Voting2.sum('nilai', {
-        where: { 
-          kandidat_id: k.anggota_id,
-          '$DetailPemilihan.pemilihan_id$': id,
-        },
-        include: [{
-          model: DetailPemilihan,
-          required: true,
-          attributes: []
-        }]
-      });
-
-      // Hitung rata-rata
-      // ((total poin / jumlah pengisi) / (jumlah kriteria * 4)) * 100
-      const rataRata = ((totalPoin / jumlahPengisi) / (jumlahIndikator * 4)) * 100;
-
-      return {
-        nama: k.Anggotum.nama,
-        nip: k.Anggotum.nip,
-        totalPoin,
-        rataRata: rataRata.toFixed(2)
-      };
-    }));
-
-    // Sort berdasarkan rata-rata tertinggi
-    hasilKriteria.sort((a, b) => b.rataRata - a.rataRata);
-
-    // Add posisi/ranking
-    const hasilKriteriaFinal = hasilKriteria.map((hasil, index) => ({
-      ...hasil,
-      posisi: index + 1
-    }));
-
-    // console.log('\nHasil Kriteria:');
-    // console.log(JSON.stringify({
-    //   jumlahIndikator,
-    //   jumlahPengisi,
-    //   hasil: hasilKriteriaFinal
-    // }, null, 2));
-
-    res.render('admin/pemilihan_berlangsung/hasil_kriteria', {
-      title: 'Hasil Penilaian Kriteria',
-      layout: 'layouts/admin.hbs',
-      pemilihanTitle,
-      hasilKriteria: hasilKriteriaFinal,
-      idPemilihan: id,
-      akun: req.user,
-    });
-
-  } catch (error) {
-    console.error('Error getting hasil kriteria:', error);
-    next(error);
-  }
-};
-
 // Get pegawai terbaik
 const getPegawaiTerbaik = async (req, res, next) => {
   try {
@@ -661,13 +543,17 @@ const getPegawaiTerbaik = async (req, res, next) => {
       // Hitung rata-rata
       const rataRata = ((totalPoin / jumlahPengisi) / (jumlahIndikator * 4)) * 100;
 
-      let foto_default = k.Anggotum.gender === 'pria' ? '/default_pp/lk.png' : '/default_pp/pr.png';
+      let foto = k.Anggotum.foto;
+      if (!foto || !fs.existsSync(path.join(__dirname, '../public', foto)) && !foto.toLowerCase().includes('http')) {
+        const defaultPath = '/default_pp/';
+        foto = defaultPath + (k.Anggotum.gender === 'wanita' ? 'pr.png' : 'lk.png');
+      };
 
       return {
         nama: k.Anggotum.nama,
         nip: k.Anggotum.nip,
         jabatan: k.Anggotum.jabatan,
-        foto: k.Anggotum.foto || foto_default,
+        foto: foto,
         totalPoin,
         rataRata: parseFloat(rataRata.toFixed(2))
       };
@@ -714,6 +600,5 @@ module.exports = {
   createDataPenilaian,
   getAllDataPenilaian,
   getAllKandidatEligible,
-  getHasilKriteria,
   getPegawaiTerbaik,
 };

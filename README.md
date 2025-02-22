@@ -42,31 +42,28 @@ npm install
 3. Konfigurasi database
 - Buat file `.env` di root folder jika tidak ada
 ```env
-PORT=your_port
+PORT= 'your_port'
 
-DB_USERNAME='your_username'
-DB_PASSWORD='your_password'
-DB_DATABASE='your_database'
-DB_HOST='localhost/your_hostDB'
-
-NODE_ENV = 'development'
+NODE_ENV = 'development' # atau 'production' / 'test'
 DEBUG = True
 SECRET_KEY = 'your_secret_key'
 ```
+- Buka file `config/config.json` dan ubah konfigurasi database sesuai kebutuhan
 
 4. Persiapan data awal
 ```bash
-# Backup folder seeders yang ada (jika perlu)
-mv seeders seeders_backup
-
-# Rename folder main_seeders menjadi seeders
-mv main_seeders seeders
 
 # Jalankan migrasi database
 npx sequelize-cli db:migrate
 
 # Jalankan seeder
 npx sequelize-cli db:seed:all
+
+# atau jalankan seeder dengan prompt berikut jika tidak memasukkan data ke db config development
+npx cross-env NODE_ENV=[your_config] sequelize-cli db:seed:all
+
+# contoh:
+npx cross-env NODE_ENV=test sequelize-cli db:seed:all
 ```
 
 5. Jalankan aplikasi

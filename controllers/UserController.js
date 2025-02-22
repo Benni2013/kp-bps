@@ -7,6 +7,8 @@
 
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const fs = require("fs");
+const path = require("path");
 const { Op, where, json } = require("sequelize");
 const { Anggota, Pemilihan, DetailPemilihan, DataNilai, Voting1, Voting2, Indikator, Periode, sequelize } = require("../models");
 require("dotenv").config();
@@ -43,11 +45,11 @@ const getDataPemilihan = async (req, res, next) => {
           role: {
             [Op.ne]: "admin",
           },
-          ...(akun.divisi !== "Kepala BPS Kota Padang"
-            ? {
-                divisi: akun.divisi,
-              }
-            : {}),
+          // ...(akun.divisi !== "Kepala BPS Kota Padang"
+          //   ? {
+          //       divisi: akun.divisi,
+          //     }
+          //   : {}),
         },
       });
 
@@ -170,7 +172,14 @@ const getPegawaiTerbaik = async (req, res, next) => {
     let pemilihanTitle = null;
 
     if (!activePemilihan) {
-      return next(eror);
+      return res.render("user/beranda", {
+        title: "Beranda",
+        pegawaiTerbaik: pemenang,
+        layout: "layouts/layout",
+        pemilihanTitle,
+        pemenang,
+        akun: req.user,
+      });
     }
     if (activePemilihan.tahap_pemilihan === "selesai") {
       pemilihanTitle = `${activePemilihan.nama_pemilihan} ${activePemilihan.Periode.nama_periode} Tahun ${activePemilihan.tahun}`;
@@ -246,13 +255,17 @@ const getPegawaiTerbaik = async (req, res, next) => {
           // Hitung rata-rata
           const rataRata = (totalPoin / jumlahPengisi / (jumlahIndikator * 4)) * 100;
 
-          let foto_default = k.Anggotum.gender === "pria" ? "/default_pp/lk.png" : "/default_pp/pr.png";
+          let foto = k.Anggotum.foto;
+          if (!foto || !fs.existsSync(path.join(__dirname, '../public', foto)) && !foto.toLowerCase().includes('http')) {
+            const defaultPath = '/default_pp/';
+            foto = defaultPath + (k.Anggotum.gender === 'wanita' ? 'pr.png' : 'lk.png');
+          };
 
           return {
             nama: k.Anggotum.nama,
             nip: k.Anggotum.nip,
             jabatan: k.Anggotum.jabatan,
-            foto: k.Anggotum.foto || foto_default,
+            foto: foto,
             totalPoin,
             rataRata: parseFloat(rataRata.toFixed(2)),
           };

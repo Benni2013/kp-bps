@@ -7,7 +7,6 @@ const { getActivePemilihan,
         createDataPenilaian,
         getAllDataPenilaian,
         getAllKandidatEligible,
-        getHasilKriteria,
         getPegawaiTerbaik,
       } = require('../controllers/HandlePemilihan');
 const { startVot1,
@@ -17,6 +16,7 @@ const { startVot1,
         setKandidatPenilaianKriteria,
         getMonitorVot2,
         closeVot2,
+        getHasilKriteria,
       } = require('../controllers/HandleVote');
 
 // Route untuk halaman pemilihan berlangsung - GET

@@ -14,7 +14,6 @@ const bcrypt = require('bcrypt');
 const fs = require('fs');
 
 const timList = [
-  "Kepala BPS Kota Padang",
   "Statistik Pertanian",
   "Statistik Industri dan Pertambangan Energi dan kontruksi",
   "Statistik Kesejahteraan Rakyat dan Ketahanan Sosial", 
@@ -31,7 +30,8 @@ const timList = [
   "Kasubag Umum",
   "Sub Tim SAKIP",
   "Sub Tim Humas, PPID dan Manajemen Mitra",
-  "Sub Tim EPSS"
+  "Sub Tim EPSS",
+  "Kepala BPS Kota Padang",
 ];
 
 // Get all anggota
@@ -110,22 +110,23 @@ const getOneAnggota = async (req, res, next) => {
 
     // Set foto profil default berdasarkan jenis kelamin
     let fotoProfil = anggota.foto;
-    if (!fotoProfil) {
+    console.log('\n\n Foto profil:', fs.existsSync(path.join(__dirname, '../public', fotoProfil)));
+    if (!fotoProfil || !fs.existsSync(path.join(__dirname, '../public', fotoProfil)) && !fotoProfil.toLowerCase().includes('http')) {
       const defaultPath = '/default_pp/';
       fotoProfil = defaultPath + (anggota.gender === 'wanita' ? 'pr.png' : 'lk.png');
     }
 
+    console.log('\n\n Foto profil:', fotoProfil);
+
     // Jika request dari halaman edit, ambil data divisi untuk dropdown
     const isEdit = req.path.includes('edit');
-    let divisiList = [];
+    let combinedTimList = [...timList];
     if (isEdit) {
-      divisiList = await Anggota.findAll({
-        attributes: [[Sequelize.fn('DISTINCT', Sequelize.col('divisi')), 'divisi']],
-        raw: true,
-        where: {
-          role: { [Op.ne]: 'admin' }
-        },
-      });
+      // Check if anggota's divisi exists in timList
+      if (anggota.divisi && !timList.includes(anggota.divisi)) {
+        combinedTimList.push(anggota.divisi);
+      }
+
     }
 
     let jenis_kelamin = '';
@@ -155,7 +156,7 @@ const getOneAnggota = async (req, res, next) => {
 
     // Tambah divisiList jika halaman edit
     if (isEdit) {
-      viewData.timList = timList;
+      viewData.timList = combinedTimList;
     }
 
     res.render(`admin/manajemen_anggota/${isEdit ? 'edit' : 'detail'}_anggota`, viewData);
