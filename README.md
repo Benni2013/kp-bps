@@ -81,7 +81,7 @@ Aplikasi akan berjalan di `http://localhost:3000` atau di port yang telah dikonf
 ├── seeders/            # Data awal
 └── config/            # Konfigurasi database
 ```
-
+ 
 ## 🛠️ Teknologi yang Digunakan
 
 - **Backend**: Node.js, Express.js
