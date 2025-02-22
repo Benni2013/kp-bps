@@ -64,3 +64,6 @@ typings/
 
 # ignor seeders anggota
 seeders/1-20250115-anggota-seeder.js
+
+# ignore seeders_test
+seeders_test/
