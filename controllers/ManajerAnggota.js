@@ -321,8 +321,8 @@ const editAnggota = async (req, res, next) => {
         email,
         gender,
         foto,
-        status_anggota : status_anggota,
-        status_karyawan: status_anggota,
+        status_anggota : status_karyawan,
+        status_karyawan: status_karyawan,
       });
     }
 
