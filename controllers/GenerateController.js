@@ -758,7 +758,7 @@ const generateRekapLaporan = async (req, res, next) => {
         }
       } else {
         worksheet.addRow([]);
-        worksheet.addRow(['TIDAK ADA DATA PADA TAHAP PEMILIHAN INI']);
+        worksheet.addRow(['', 'TIDAK ADA DATA PADA TAHAP PEMILIHAN INI']);
       }
 
       // Set column widths
