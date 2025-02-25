@@ -9,6 +9,8 @@
 
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const fs = require("fs");
+const path = require("path");
 const { Anggota, Pemilihan, Periode, DetailPemilihan, DataNilai, Voting1, Voting2, Indikator, sequelize } = require("../models");
 require("dotenv").config();
 const { Op } = require("sequelize");
@@ -353,7 +355,12 @@ const getKandidatKriteria = async (req, res, next) => {
             },
           });
           kandidatKriteria[i].nama = nama_lulus.nama;
-          kandidatKriteria[i].foto = nama_lulus.foto;
+          let foto_kandidat = nama_lulus.foto;
+          if (!foto_kandidat || !fs.existsSync(path.join(__dirname, '../public', foto_kandidat)) && !foto_kandidat.toLowerCase().includes('http')) {
+            const defaultPath = '/default_pp/';
+            foto_kandidat = defaultPath + (nama_lulus.gender === 'wanita' ? 'pr.png' : 'lk.png');
+          };
+          kandidatKriteria[i].foto = foto_kandidat;
         }
         res.render("user/penilaian_kriteria", {
           title: "Penilaian Kriteria",
