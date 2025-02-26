@@ -150,9 +150,9 @@ const getDashboardAdmin = async (req, res, next) => {
 
     const progressData = {
       totalPartisipan: totalAnggota,
-      progressInputNilai: Math.round((sudahInputNilai / totalAnggota) * 100),
-      progressVoting1: Math.round((sudahVoting1 / partisipan) * 100),
-      progressVoting2: Math.round((sudahVoting2 / partisipan) * 100)
+      progressInputNilai: Math.min(100, Math.round((sudahInputNilai / totalAnggota) * 100)),
+      progressVoting1: Math.min(100, Math.round((sudahVoting1 / partisipan) * 100)),
+      progressVoting2: Math.min(100, Math.round((sudahVoting2 / partisipan) * 100)),
     };
 
     // console.log('\nData Dashboard:');
