@@ -85,7 +85,7 @@ const getDashboardAdmin = async (req, res, next) => {
     });
 
     // Get jumlah kandidat lolos tahap 1 untuk pemilihan terbaru
-    const kandidatTahap1 = await DetailPemilihan.count({
+    const kandidatTahap2 = await DetailPemilihan.count({
       where: { pemilihan_id: pemilihanAktif.pemilihan_id },
       include: [{
         model: Voting1,
@@ -170,7 +170,7 @@ const getDashboardAdmin = async (req, res, next) => {
       layout: 'layouts/admin.hbs',
       totalAnggota : partisipan,
       kandidatEligible,
-      kandidatTahap1,
+      kandidatTahap2,
       totalKriteria,
       progressData,
       pemilihanTitle,

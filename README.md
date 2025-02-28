@@ -73,6 +73,17 @@ npm start
 
 Aplikasi akan berjalan di `http://localhost:3000` atau di port yang telah dikonfigurasi di file `.env`.
 
+### Langkah Reset data admin jika lupa password atau kendala lainnya
+1. Buat file dengan nama `update-admin-seeder.js` di folder seeders (Bisa DM Benni Putra Chaniago untuk mendapatkan file tersebut)
+2. Jalankan perintah berikut di terminal:
+```bash
+npx sequelize-cli db:seed --seed update-admin-seeder.js
+```
+3. Jika ingin membatalkan perubahan:
+```bash
+npx sequelize-cli db:seed:undo --seed update-admin-seeder.js
+```
+
 ## 📚 Struktur Database
 
 ```

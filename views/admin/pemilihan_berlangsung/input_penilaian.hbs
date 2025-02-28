@@ -235,7 +235,7 @@ function calculateAverages(worksheet) {
       // CKP ada di setiap 16 kolom pertama dari setiap bulan
       if((col - 4) % 16 === 0) {
         const ckpValue = worksheet[XLSX.utils.encode_cell({r: row, c: col})]?.v || 0;
-        if(ckpValue > 0) {
+        if(ckpValue > -1) {
           person.ckpTotal += parseFloat(ckpValue);
           person.monthCount++;
         }

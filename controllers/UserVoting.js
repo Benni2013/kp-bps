@@ -410,6 +410,19 @@ const setPenilaianKriteria = async (req, res, next) => {
       throw new Error("Detail pemilihan tidak ditemukan.");
     }
 
+    // Cek apakah anggota ini sudah pernah memberikan penilaian pada pemilihan ini
+    const existingVotes = await Voting2.findOne({
+      where: {
+        detail_pemilihan_id: detail_pemilihan.detail_pemilihan_id
+      }
+    });
+
+    if (existingVotes) {
+      console.log("\n\nAnda sudah memberikan penilaian pada pemilihan ini.\n\n");
+      await transaction.rollback();
+      return res.redirect("/users/pemilihan/thank-you");
+    }
+
     // Get semua kandidat yang lolos
     let kandidatKriteria = await Voting1.findAll({
       where: {
