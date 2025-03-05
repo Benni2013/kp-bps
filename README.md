@@ -69,6 +69,9 @@ npx cross-env NODE_ENV=test sequelize-cli db:seed:all
 5. Jalankan aplikasi
 ```bash
 npm start
+
+# atau jalankan nodemon
+nodemon start
 ```
 
 Aplikasi akan berjalan di `http://localhost:3000` atau di port yang telah dikonfigurasi di file `.env`.
@@ -78,10 +81,6 @@ Aplikasi akan berjalan di `http://localhost:3000` atau di port yang telah dikonf
 2. Jalankan perintah berikut di terminal:
 ```bash
 npx sequelize-cli db:seed --seed update-admin-seeder.js
-```
-3. Jika ingin membatalkan perubahan:
-```bash
-npx sequelize-cli db:seed:undo --seed update-admin-seeder.js
 ```
 
 ## 📚 Struktur Database
