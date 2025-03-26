@@ -7,9 +7,9 @@
             <p class="text-gray-500 italic mt-1">{{pemilihanTitle}}</p>
         </div>
         
-        <div class="bg-white rounded-lg shadow-sm p-6">
+        <div class="bg-white rounded-lg p-4">
             {{!-- Search & Filter Section --}}
-            <div class="flex flex-wrap gap-5 justify-between mt-2 w-full whitespace-nowrap max-md:max-w-full">
+            <div class="flex flex-wrap gap-5 justify-between w-full whitespace-nowrap max-md:max-w-full">
                 <form 
                 class="flex flex-col text-base leading-normal text-gray-500" 
                 role="search"
@@ -19,12 +19,12 @@
                 <div class="flex flex-col w-full">
                     <label for="searchKandidat" class="sr-only">Search Kriteria</label>
                     <div class="flex gap-2 items-center px-3.5 py-2.5 w-full bg-white rounded-lg border-gray-300 border-solid">
-                    <div class="flex flex-1 shrink gap-2 items-center self-stretch my-auto w-full basis-0 min-w-[240px]">
+                    <div class="flex flex-1 shrink gap-2 items-center self-stretch my-auto w-full basis-0 min-w-min">
                         <img
                         loading="lazy"
                         src="https://cdn.builder.io/api/v1/image/assets/TEMP/c3298dfdfad3de5332e45e084e12d2172f36afb3b78a8a3653d0a71b92ee77ff?placeholderIfAbsent=true&apiKey=0eb9abb28bf34cd7be47a2dfb2f311cb"
                         alt="Search Kriteria"
-                        class="object-contain shrink-0 self-stretch my-auto aspect-square w-[18px]"
+                        class="object-contain shrink-0 self-stretch my-auto aspect-square w-5"
                         />
                         <input 
                         type="search" 
@@ -40,7 +40,7 @@
 
                 <!-- Filter Section -->
                 <div class="relative inline-block">
-                    <button id="filterBtn" class="flex items-start text-sm mt-6 font-medium leading-none rounded-lg min-h-[40px] text-slate-700">
+                    <button id="filterBtn" class="flex items-start text-sm mt-2 font-medium leading-none rounded-lg min-h-min text-slate-700">
                         <div class="flex overflow-hidden gap-2 justify-center items-center px-4 py-2.5 bg-white rounded-lg border border-gray-300 border-solid shadow-sm">
                         <img 
                             loading="lazy" 
@@ -90,7 +90,7 @@
             </div>
 
             <!-- Table -->
-            <div class="overflow-y-auto max-h-[500px] border border-gray-500 rounded-xl">
+            <div class="overflow-y-auto max-h-min border border-gray-500 rounded-xl">
                 <table class="w-full">
                     <thead class="bg-gray-100 border-b border-gray-500 divide sticky top-0 z-10">
                         <tr>

@@ -1,5 +1,5 @@
 <!-- Layout utama -->
-<div class="max-w-[85rem] px-4 py-10 sm:px-6 lg:px-8 lg:py-2 mx-auto">
+<div class="max-w-7xl px-4 py-10 sm:px-6 lg:px-8 lg:py-2 mx-auto">
     <!-- Card Progress untuk Voting sudah tutup -->
     <div class="bg-white border border-black rounded-xl shadow-sm p-4 md:p-5 mb-6">
         <div class="flex justify-between items-center mb-6">
@@ -56,7 +56,7 @@
                 <div class="relative p-2">
                     <button 
                         id="filterBtn"
-                        class="flex items-start text-sm font-medium leading-none rounded-lg min-h-[40px] text-slate-700" 
+                        class="flex items-start text-sm font-medium leading-none rounded-lg min-h-min text-slate-700" 
                         aria-label="Filter Voting 1">
                     <div class="flex overflow-hidden gap-2 justify-center items-center px-4 py-2.5 bg-white rounded-lg border border-gray-300 border-solid shadow-sm">
                         <img 
@@ -158,13 +158,16 @@
                 </button>
             </a>
 
-            <a href="/admin/pemilihan_berlangsung/{{idPemilihan}}/kandidat_penilaian_kriteria" 
-            class="inline-flex items-center gap-x-2 py-2.5 px-4 text-sm font-semibold rounded-lg border border-transparent bg-black text-white hover:bg-gray-900 disabled:opacity-50 disabled:pointer-events-none">
-                Lihat Detail Hasil Voting Tahap 1
-                <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
-                </svg>
-            </a>
+            {{#unless votingStatus.isVotingOpen}}
+                <a href="/admin/pemilihan_berlangsung/{{idPemilihan}}/kandidat_penilaian_kriteria" 
+                class="inline-flex items-center gap-x-2 py-2.5 px-4 text-sm font-semibold rounded-lg border border-transparent bg-black text-white hover:bg-gray-900 disabled:opacity-50 disabled:pointer-events-none">
+                    Lihat Detail Hasil Voting Tahap 1
+                    <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+                    </svg>
+                </a>
+            {{/unless}}
+            
         </div>
     </div>
     {{!-- Akhir Card Progress untuk Voting sudah tutup --}}
