@@ -228,6 +228,8 @@
 </div>
 <!-- End Modal -->
 
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 <script>
 // Add preview function
 function previewImage(input) {
@@ -284,13 +286,21 @@ async function handleSubmit(event) {
     const result = await response.json();
 
     if (result.success) {
-      const modal = document.getElementById('successModal');
-      modal.classList.remove('hidden');
-      modal.classList.add('block');
+      //const modal = document.getElementById('successModal');
+      //modal.classList.remove('hidden');
+      //modal.classList.add('block');
+
+      await Swal.fire({
+        title: 'Berhasil!',
+        text: 'Anggota Berhasil Diperbarui',
+        icon: 'success',
+        timer: 1000
+      });
+      window.location.href = '/admin/manajemen_anggota';
       
-      setTimeout(() => {
-        window.location.href = '/admin/manajemen_anggota';
-      }, 1000);
+      //setTimeout(() => {
+      //  window.location.href = '/admin/manajemen_anggota';
+      //}, 1000);
     } else {
       const errorDiv = document.getElementById('error-message');
       const errorSpan = document.getElementById('error-text');

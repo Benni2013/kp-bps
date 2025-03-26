@@ -114,6 +114,8 @@
 </div>
 {{!-- End Success Popup --}}
 
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 <script>
 // Format tanggal
 document.getElementById('tanggalMulai').addEventListener('change', function(e) {
@@ -152,14 +154,22 @@ async function handleSubmit(event) {
     const result = await response.json();
 
     if (result.success) {
-      const modal = document.getElementById('successModal');
-      modal.classList.remove('hidden');
-      modal.classList.add('block');
+      //const modal = document.getElementById('successModal');
+      //modal.classList.remove('hidden');
+      //modal.classList.add('block');
+
+      await Swal.fire({
+          title: 'Berhasil!',
+          text: 'Pemilihan Berhasil Dibuat',
+          icon: 'success',
+          timer: 1000
+      });
+      window.location.href = '/admin/manajemen_pemilihan';
       
       // setelah 1 detik, redirect ke halaman manajemen_pemilihan
-      setTimeout(() => {
-        window.location.href = '/admin/manajemen_pemilihan';
-      }, 1000);
+      //setTimeout(() => {
+      //  window.location.href = '/admin/manajemen_pemilihan';
+      //}, 1000);
     } else {
       console.error('Update failed:', result.message);
     }
